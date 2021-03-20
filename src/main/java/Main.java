@@ -1,8 +1,9 @@
-import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Main {
 
     /**
+     * todo: Implement the program described below
      * That is, the input to your program is a movie category (e.g., Adventure) 
      * and the occupation of the user (e.g., educator). The expected output is 
      * the average rating score of all movies in the given category rated by 
@@ -13,18 +14,71 @@ public class Main {
      * must be only one.
      * @param args
      */
+
+    // xxx.yyy.YourClass Adventure educator
+    // args[0] = genre, args[1] = occupation
     public static void main(String[] args) { 
-        /**
-         * todo: We have to process args properly
-         * ? How?
-         */
+        String[] genres = args[0].split("|");
+        String work = args[1];
+
+        HashMap<String, Integer> workID = null;
+        setOccupationHash(workID); // now workID contains all mappings
+
+
+    }
+
+    // This function returns userID-s with matching occupation
+    private static ArrayList<Integer> getUsers(int occupation) {
+
+    }
+
+    // This function returns movieID-s with matching genres
+    private static ArrayList<Integer> getMovies(String[] genres) {
+
+    }
+
+    // This function simply maps occupation name to its category 
+    private static void setOccupationHash(HashMap<String, Integer> hashmap) {
+        if (hashmap == null) {
+            // ! Subject to change depending on profs answer
+            hashmap = new HashMap<>();
+            hashmap.put("other",  0);
+            hashmap.put("academic",  1);
+            hashmap.put("educator",  1);
+            hashmap.put("artist",  2);
+            hashmap.put("clerical",  3);
+            hashmap.put("admin",  3);
+            hashmap.put("college",  4);
+            hashmap.put("grad student",  4);
+            hashmap.put("customer service",  5);
+            hashmap.put("doctor",  6);
+            hashmap.put("health care",  6);
+            hashmap.put("executive",  7);
+            hashmap.put("managerial",  7);
+            hashmap.put("farmer",  8);
+            hashmap.put("homemaker",  9);
+            hashmap.put("K-12 student", 10);
+            hashmap.put("lawyer", 11);
+            hashmap.put("programmer", 12);
+            hashmap.put("retired", 13);
+            hashmap.put("sales", 14);
+            hashmap.put("marketing", 14);
+            hashmap.put("scientist", 15);
+            hashmap.put("self-employed", 1);
+            hashmap.put("technician", 17);
+            hashmap.put("engineer", 17);
+            hashmap.put("tradesman", 18);
+            hashmap.put("craftsman", 18);
+            hashmap.put("unemployed", 19);
+            hashmap.put("writer", 20);
+        }
     }
 }
 
 
 /**
  * My guess about the format of .dat files
- *! --user.dat--
+ *! --users.dat--
  * UserID::Gender::Age::Occupation::Zip-code
  * 
  * * Age is chosen as:
@@ -59,7 +113,6 @@ public class Main {
  * 19:  "unemployed"
  * 20:  "writer"
  * 
- * 
  *! --ratings.dat--
  * UserID::MovieID::Rating::Timestamp
  * 
@@ -73,32 +126,3 @@ public class Main {
  * MovieID::Title::Genres
  * 
  */
-
-
-
-class Movie {
-    public final int id;
-    public final String title;
-    ArrayList<String> genre;
-
-    public Movie(int id, String title) {
-        this.id = id;
-        this.title = title;
-        genre = new ArrayList<>(3);
-    }
-
-    public void addGenre(String _genre) {
-        genre.add(_genre);
-    }
-
-    public boolean isOfGenre(String _genre) {
-        return genre.contains(_genre);
-    }
-}
-
-class User {
-    public final int id, age;
-    public final char gender;
-    // ? What to do with occupation?
-    // ? Do we need zip-code?
-}
