@@ -1,3 +1,10 @@
+import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Main {
@@ -28,13 +35,32 @@ public class Main {
     }
 
     // This function returns userID-s with matching occupation
-    private static ArrayList<Integer> getUsers(int occupation) {
-
+    private static ArrayList<Integer> getUsers(int occupation) throws IOException {
+        BufferedReader scan = new BufferedReader(new FileReader("data/users.dat"));
+        ArrayList<Integer> list = new ArrayList<Integer>();
+        String string;
+        while ((string = scan.readLine()) != null) {
+            String[] user = string.split("::");
+            if (Integer.parseInt(user[3]) == occupation) list.add(Integer.parseInt(user[0]));
+        }
+        return list;
     }
 
     // This function returns movieID-s with matching genres
-    private static ArrayList<Integer> getMovies(String[] genres) {
-
+    private static ArrayList<Integer> getMovies(String[] genres) throws IOException {
+        BufferedReader scan = new BufferedReader(new FileReader("data/movies.dat"));
+        ArrayList<Integer> list = new ArrayList<Integer>();
+        boolean contains;
+        String string;
+        while ((string = scan.readLine()) != null) {
+            String[] movie = string.split("::");
+            contains = true;
+            for (String genre : genres) {
+                if (!movie[2].contains(genre)) contains = false;
+            }
+            if (contains) list.add(Integer.parseInt(movie[0]));
+        }
+        return list;
     }
 
     // This function simply maps occupation name to its category 
