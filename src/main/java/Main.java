@@ -64,7 +64,7 @@ public class Main {
         // ! --ratings.dat--
         // UserID::MovieID::Rating::Timestamp
 
-        BufferedReader scan = new BufferedReader(new FileReader(new File("../../../data/ratings.dat")));
+        BufferedReader scan = new BufferedReader(new FileReader(new File("data/ratings.dat")));
         int count = 0, i, j, sum = 0;
         String line;
         while ((line = scan.readLine()) != null) {
@@ -86,7 +86,7 @@ public class Main {
         // ! --users.dat--
         // UserID::Gender::Age::Occupation::Zip-code
 
-        BufferedReader scan = new BufferedReader(new FileReader( new File("../../../data/users.dat")));
+        BufferedReader scan = new BufferedReader(new FileReader( new File("data/users.dat")));
         ArrayList<Integer> list = new ArrayList<Integer>();
         String line;
         while ((line = scan.readLine()) != null) {
@@ -102,7 +102,7 @@ public class Main {
         // ! --movies.dat--
         // MovieID::Title::Genres
 
-        BufferedReader scan = new BufferedReader(new FileReader(new File("../../../data/movies.dat")));
+        BufferedReader scan = new BufferedReader(new FileReader(new File("data/movies.dat")));
         ArrayList<Integer> list = new ArrayList<Integer>();
         boolean contains;
         String line;
