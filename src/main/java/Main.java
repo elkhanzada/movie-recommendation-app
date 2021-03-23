@@ -1,7 +1,5 @@
 import java.io.BufferedReader;
-import java.io.DataInputStream;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -26,33 +24,48 @@ public class Main {
 
     // xxx.yyy.YourClass Adventure educator
     // args[0] = genre, args[1] = occupation
-    public static void main(String[] args) { 
-        String[] genres = args[0].split("|");
-        String work = args[1];
-
-        HashMap<String, Integer> workID = new HashMap<>();
-        setOccupationHash(workID); // now workID contains all mappings
-
-        try { 
-            ArrayList<Integer> userID = getUsers(workID.get(work));
-            ArrayList<Integer> movieID = getMovies(genres);
-            Collections.sort(userID);
-            Collections.sort(movieID);
-
-            System.out.println(scanRatings(userID, movieID));
-
-        } catch (IOException e) {
-            // todo: Proper error handling
-            System.out.println("Some error happened");
+    public static void main(String[] args) {
+        if (args.length != 2) {
+            System.out.println("Please, pass exactly 2 arguments!");
+            System.out.print("Try to remove spaces between occupations ");
+            System.out.print("consisting of several words, such as ");
+            System.out.println("\"college student\" -> \"collegestudent\"");
         }
+        else {
+            String[] genres = args[0].split("&");
+            String work = args[1];
 
+            HashMap<String, Integer> workID = new HashMap<>();
+            setOccupationHash(workID); // now workID contains all mappings
+
+            try { 
+                ArrayList<Integer> userID = getUsers(workID.get(work));
+                ArrayList<Integer> movieID = getMovies(genres);
+                Collections.sort(userID);
+                Collections.sort(movieID);
+
+                System.out.printf("The average rating for %s is: %f\n", args[1], scanRatings(userID, movieID));
+
+            } catch (IOException e) {
+                // todo: Proper error handling
+                System.out.println("Some error happened");
+                e.printStackTrace();
+            } catch (NullPointerException e) {
+                // todo: Find the source of a bug
+                System.out.println("Null pointer exception somewhere");
+                e.printStackTrace();
+            }
+            
+        }
     }
 
     // This method scans "ratings.dat" file and returns the average
     private static double scanRatings(ArrayList<Integer> userID, ArrayList<Integer> movieID) throws IOException {
-        BufferedReader scan = new BufferedReader(new FileReader("data/users.dat"));
-        double res, sum = 0;
-        int count = 0, i, j;
+        // ! --ratings.dat--
+        // UserID::MovieID::Rating::Timestamp
+
+        BufferedReader scan = new BufferedReader(new FileReader(new File("../../../data/ratings.dat")));
+        int count = 0, i, j, sum = 0;
         String line;
         while ((line = scan.readLine()) != null) {
             String[] rating = line.split("::");
@@ -60,16 +73,20 @@ public class Main {
             i = Collections.binarySearch(userID, Integer.parseInt(rating[0]));
             j = Collections.binarySearch(movieID, Integer.parseInt(rating[1]));
             if (i > -1 && j > -1) { // if we find corresponding movie and user;
-
+                sum += Integer.parseInt(rating[2]);
+                count++;
             }
         }
         scan.close();
-        return res;
+        return (double)(sum) / (double)(count);
     }
 
     // This function returns userID-s with matching occupation
     private static ArrayList<Integer> getUsers(int occupation) throws IOException {
-        BufferedReader scan = new BufferedReader(new FileReader("data/users.dat"));
+        // ! --users.dat--
+        // UserID::Gender::Age::Occupation::Zip-code
+
+        BufferedReader scan = new BufferedReader(new FileReader( new File("../../../data/users.dat")));
         ArrayList<Integer> list = new ArrayList<Integer>();
         String line;
         while ((line = scan.readLine()) != null) {
@@ -82,7 +99,10 @@ public class Main {
 
     // This function returns movieID-s with matching genres
     private static ArrayList<Integer> getMovies(String[] genres) throws IOException {
-        BufferedReader scan = new BufferedReader(new FileReader("data/movies.dat"));
+        // ! --movies.dat--
+        // MovieID::Title::Genres
+
+        BufferedReader scan = new BufferedReader(new FileReader(new File("../../../data/movies.dat")));
         ArrayList<Integer> list = new ArrayList<Integer>();
         boolean contains;
         String line;
@@ -90,7 +110,7 @@ public class Main {
             String[] movie = line.split("::");
             contains = true;
             for (String genre : genres) {
-                if (!movie[2].contains(genre)) contains = false;
+                if (!movie[2].toLowerCase().contains(genre.toLowerCase())) contains = false;
             }
             if (contains) list.add(Integer.parseInt(movie[0]));
         }
@@ -102,7 +122,6 @@ public class Main {
     private static void setOccupationHash(HashMap<String, Integer> hashmap) {
         if (hashmap.isEmpty()) {
             // ! Subject to change depending on profs answer
-            hashmap = new HashMap<>();
             hashmap.put("other",  0);
             hashmap.put("academic",  1);
             hashmap.put("educator",  1);
@@ -114,12 +133,12 @@ public class Main {
             hashmap.put("gradstudent",  4);
             hashmap.put("customerservice",  5);
             hashmap.put("doctor",  6);
-            hashmap.put("health care",  6);
+            hashmap.put("healthcare",  6);
             hashmap.put("executive",  7);
             hashmap.put("managerial",  7);
             hashmap.put("farmer",  8);
             hashmap.put("homemaker",  9);
-            hashmap.put("K-12 student", 10);
+            hashmap.put("k-12student", 10);
             hashmap.put("lawyer", 11);
             hashmap.put("programmer", 12);
             hashmap.put("retired", 13);
@@ -140,8 +159,7 @@ public class Main {
 
 /**
  * My guess about the format of .dat files
- *! --users.dat--
- * UserID::Gender::Age::Occupation::Zip-code
+ *
  * 
  * * Age is chosen as:
  *  1:  "Under 18"
@@ -184,7 +202,6 @@ public class Main {
  * * Timestamp is represented in seconds since the epoch as returned by time(2)
  * * Each user has at least 20 ratings
  * 
- *! --movies.dat--
- * MovieID::Title::Genres
+ *
  * 
  */
