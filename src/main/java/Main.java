@@ -32,8 +32,8 @@ public class Main {
             System.out.println("\"college student\" -> \"collegestudent\"");
         }
         else {
-            String[] genres = args[0].split("&");
-            String work = args[1];
+            String[] genres = args[0].split("/");
+            String work = args[1].toLowerCase();
 
             HashMap<String, Integer> workID = new HashMap<>();
             setOccupationHash(workID); // now workID contains all mappings
@@ -44,7 +44,7 @@ public class Main {
                 Collections.sort(userID);
                 Collections.sort(movieID);
 
-                System.out.printf("The average rating for %s is: %f\n", args[1], scanRatings(userID, movieID));
+                System.out.printf("The average rating for %s is: %f\n", work, scanRatings(userID, movieID));
 
             } catch (IOException e) {
                 // todo: Proper error handling
@@ -155,53 +155,3 @@ public class Main {
         }
     }
 }
-
-
-/**
- * My guess about the format of .dat files
- *
- * 
- * * Age is chosen as:
- *  1:  "Under 18"
- * 18:  "18-24"
- * 25:  "25-34"
- * 35:  "35-44"
- * 45:  "45-49"
- * 50:  "50-55"
- * 56:  "56+"
- * 
- * * Occupation is chosen from the following choices:
- *  0:  "other" or not specified
- *  1:  "academic/educator"
- *  2:  "artist"
- *  3:  "clerical/admin"
- *  4:  "college/grad student"
- *  5:  "customer service"
- *  6:  "doctor/health care"
- *  7:  "executive/managerial"
- *  8:  "farmer"
- *  9:  "homemaker"
- * 10:  "K-12 student"
- * 11:  "lawyer"
- * 12:  "programmer"
- * 13:  "retired"
- * 14:  "sales/marketing"
- * 15:  "scientist"
- * 16:  "self-employed"
- * 17:  "technician/engineer"
- * 18:  "tradesman/craftsman"
- * 19:  "unemployed"
- * 20:  "writer"
- * 
- *! --ratings.dat--
- * UserID::MovieID::Rating::Timestamp
- * 
- * * UserIDs range between 1 and 6040 
- * * MovieIDs range between 1 and 3952
- * * Ratings are made on a 5-star scale (whole-star ratings only)
- * * Timestamp is represented in seconds since the epoch as returned by time(2)
- * * Each user has at least 20 ratings
- * 
- *
- * 
- */
