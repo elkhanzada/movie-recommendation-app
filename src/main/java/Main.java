@@ -44,7 +44,7 @@ public class Main {
                 Collections.sort(userID);
                 Collections.sort(movieID);
 
-                System.out.printf("The average rating for %s is: %f\n", work, scanRatings(userID, movieID));
+                System.out.printf("The average rating for %s is: %f\n", args[1], scanRatings(userID, movieID));
 
             } catch (IOException e) {
                 // todo: Proper error handling
