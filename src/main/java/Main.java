@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 public class Main {
@@ -20,6 +21,7 @@ public class Main {
      * that belong to both Adventure and Comedy categories. The occupation input 
      * must be only one.
      * @param args
+     * @throws IOException
      */
 
     // xxx.yyy.YourClass Adventure educator
@@ -28,21 +30,53 @@ public class Main {
         String[] genres = args[0].split("|");
         String work = args[1];
 
-        HashMap<String, Integer> workID = null;
+        HashMap<String, Integer> workID = new HashMap<>();
         setOccupationHash(workID); // now workID contains all mappings
 
+        try { 
+            ArrayList<Integer> userID = getUsers(workID.get(work));
+            ArrayList<Integer> movieID = getMovies(genres);
+            Collections.sort(userID);
+            Collections.sort(movieID);
 
+            System.out.println(scanRatings(userID, movieID));
+
+        } catch (IOException e) {
+            // todo: Proper error handling
+            System.out.println("Some error happened");
+        }
+
+    }
+
+    // This method scans "ratings.dat" file and returns the average
+    private static double scanRatings(ArrayList<Integer> userID, ArrayList<Integer> movieID) throws IOException {
+        BufferedReader scan = new BufferedReader(new FileReader("data/users.dat"));
+        double res, sum = 0;
+        int count = 0, i, j;
+        String line;
+        while ((line = scan.readLine()) != null) {
+            String[] rating = line.split("::");
+            // Collections.binarySearch() returns a negative number if the item not found;
+            i = Collections.binarySearch(userID, Integer.parseInt(rating[0]));
+            j = Collections.binarySearch(movieID, Integer.parseInt(rating[1]));
+            if (i > -1 && j > -1) { // if we find corresponding movie and user;
+
+            }
+        }
+        scan.close();
+        return res;
     }
 
     // This function returns userID-s with matching occupation
     private static ArrayList<Integer> getUsers(int occupation) throws IOException {
         BufferedReader scan = new BufferedReader(new FileReader("data/users.dat"));
         ArrayList<Integer> list = new ArrayList<Integer>();
-        String string;
-        while ((string = scan.readLine()) != null) {
-            String[] user = string.split("::");
+        String line;
+        while ((line = scan.readLine()) != null) {
+            String[] user = line.split("::");
             if (Integer.parseInt(user[3]) == occupation) list.add(Integer.parseInt(user[0]));
         }
+        scan.close();
         return list;
     }
 
@@ -51,21 +85,22 @@ public class Main {
         BufferedReader scan = new BufferedReader(new FileReader("data/movies.dat"));
         ArrayList<Integer> list = new ArrayList<Integer>();
         boolean contains;
-        String string;
-        while ((string = scan.readLine()) != null) {
-            String[] movie = string.split("::");
+        String line;
+        while ((line = scan.readLine()) != null) {
+            String[] movie = line.split("::");
             contains = true;
             for (String genre : genres) {
                 if (!movie[2].contains(genre)) contains = false;
             }
             if (contains) list.add(Integer.parseInt(movie[0]));
         }
+        scan.close();
         return list;
     }
 
     // This function simply maps occupation name to its category 
     private static void setOccupationHash(HashMap<String, Integer> hashmap) {
-        if (hashmap == null) {
+        if (hashmap.isEmpty()) {
             // ! Subject to change depending on profs answer
             hashmap = new HashMap<>();
             hashmap.put("other",  0);
@@ -74,9 +109,10 @@ public class Main {
             hashmap.put("artist",  2);
             hashmap.put("clerical",  3);
             hashmap.put("admin",  3);
+            hashmap.put("collegestudent",  4);
             hashmap.put("college",  4);
-            hashmap.put("grad student",  4);
-            hashmap.put("customer service",  5);
+            hashmap.put("gradstudent",  4);
+            hashmap.put("customerservice",  5);
             hashmap.put("doctor",  6);
             hashmap.put("health care",  6);
             hashmap.put("executive",  7);
