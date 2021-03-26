@@ -2,28 +2,65 @@ import org.junit.Test;
 import org.junit.Assert;
 public class MainTest {
     @Test
-    public void testMainNullNull(){
+    public void testNullNull(){
         try{
             Main.main(new String[]{null,null});
-            Assert.fail();
         }catch (Exception e){
 
         }
     }
     @Test
-    public void testMainNullString(){
+    public void testNullString(){
         try{
             Main.main(new String[]{null,"Adventure"});
-            Assert.fail();
+        }
+        catch (Exception e){
+        }
+    }
+    @Test
+    public void testStringNull(){
+        try{
+            Main.main(new String[]{"Adventure",null});
         }catch (Exception e){
 
         }
     }
     @Test
-    public void testMainStringNull(){
+    public void testEmptyEmpty(){
         try{
-            Main.main(new String[]{"Adventure",null});
-            Assert.fail();
+            Main.main(new String[]{"",""});
+        }catch (Exception e){
+
+        }
+    }
+    @Test
+    public void testEmptyString(){
+        try{
+            Main.main(new String[]{"","educator"});
+        }catch (Exception e){
+
+        }
+    }
+    @Test
+    public void testStringEmpty(){
+        try{
+            Main.main(new String[]{"Adventure",""});
+        }catch (Exception e){
+
+        }
+    }
+    @Test
+    public void testSplitSplit(){
+        try{
+            Main.main(new String[]{"|","|"});
+        }catch (Exception e){
+
+        }
+    }
+    @Test
+    public void testSplitString(){
+        try{
+            Main.main(new String[]{"|","educator"});
         }catch (Exception e){
 
         }
