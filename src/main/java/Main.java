@@ -26,20 +26,35 @@ public class Main {
     // args[0] = genre, args[1] = occupation
     public static void main(String[] args) {
         if (args.length != 2) {
+	//-------------------------------------------------------------------
+	//are these messages enough for case with !=2 args?		
+	//-------------------------------------------------------------------
             System.out.println("Please, pass exactly 2 arguments!");
             System.out.print("Try to remove spaces between occupations ");
             System.out.print("consisting of several words, such as ");
             System.out.println("\"college student\" -> \"collegestudent\"");
         }
         else {
-            String[] genres = args[0].split("/");
+            String[] genres = args[0].split("|");
             String work = args[1].toLowerCase();
-
+  	    //-------------------------------------------------------------------
+	    //toLowerCase may fail for ! character? or \?		
+	    //-------------------------------------------------------------------
             HashMap<String, Integer> workID = new HashMap<>();
             setOccupationHash(workID); // now workID contains all mappings
-
-            try { 
-                ArrayList<Integer> userID = getUsers(workID.get(work));
+            try {
+		int occup_id = workID.get(work);
+		if(occup_id == null){
+			//either some wrong string, or other type of occupation
+			if(work.length() > 50){
+				System.out.println("There is no such occupation (name is too long)");
+				return;	
+			}
+			else{
+				occup_id = 0;
+			}
+		}
+                ArrayList<Integer> userID = getUsers(occup_id);
                 ArrayList<Integer> movieID = getMovies(genres);
                 Collections.sort(userID);
                 Collections.sort(movieID);
