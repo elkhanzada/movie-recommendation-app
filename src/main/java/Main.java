@@ -30,8 +30,7 @@ public class Main {
 	//are these messages enough for case with !=2 args?		
 	//-------------------------------------------------------------------
             System.out.println("Please, pass exactly 2 arguments!");
-            System.out.print("Try to remove spaces between occupations ");
-            System.out.print("consisting of several words, such as ");
+            System.out.print("Try to remove spaces between occupations consisting of several words, such as ");
             System.out.println("\"college student\" -> \"collegestudent\"");
         }
         else{	   
@@ -75,6 +74,7 @@ public class Main {
 			//if the genre string is too long
 			if(genre.length > 50){
 				System.out.println("There are no movies with genre " + genre);
+				System.out.println("Use '|' character to split genres");
 				return;
 			}
 		}
