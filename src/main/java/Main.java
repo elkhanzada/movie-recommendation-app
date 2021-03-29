@@ -34,16 +34,24 @@ public class Main {
             System.out.print("consisting of several words, such as ");
             System.out.println("\"college student\" -> \"collegestudent\"");
         }
-        else {
-            String[] genres = args[0].split("|");
-            String work = args[1].toLowerCase();
-  	    //-------------------------------------------------------------------
+        else{	   
+      	   try{
+	    	args[0].split("|");
+		args[1].toLowerCase();
+	    }catch(Exception e){
+		System.out.println("Something wrong with input");
+		return;
+	    }
+	    String[] genres = args[0].split("|");
+       	    String work = args[1].toLowerCase(); 
+	    //-------------------------------------------------------------------
 	    //toLowerCase may fail for ! character? or \?		
 	    //-------------------------------------------------------------------
             HashMap<String, Integer> workID = new HashMap<>();
             setOccupationHash(workID); // now workID contains all mappings
             try {
-		int occup_id = workID.get(work);
+		Integer occup_id = workID.get(work);
+		//START CHECK FOR OCCUPATION INPUT
 		if(occup_id == null){
 			//either some wrong string, or other type of occupation
 			if(work.length() > 50){
@@ -54,13 +62,27 @@ public class Main {
 				occup_id = 0;
 			}
 		}
+		//END
+
+		//START CHECK FOR GENRE INPUT
+		if(genres.length > 10){
+			//if too many genres
+			System.out.println("There are no movies that have entered amount of genres");
+			return;
+		}
+		for(String genre : genres){
+			//if the genre string is too long
+			if(genre.length > 50){
+				System.out.println("There are no movies with such genres");
+				return;
+			}
+		}
+		//END
                 ArrayList<Integer> userID = getUsers(occup_id);
                 ArrayList<Integer> movieID = getMovies(genres);
                 Collections.sort(userID);
                 Collections.sort(movieID);
-
                 System.out.printf("The average rating for %s is: %f\n", args[1], scanRatings(userID, movieID));
-
             } catch (IOException e) {
                 // todo: Proper error handling
                 System.out.println("Some error happened");
@@ -80,7 +102,10 @@ public class Main {
         // UserID::MovieID::Rating::Timestamp
 
         BufferedReader scan = new BufferedReader(new FileReader(new File("data/ratings.dat")));
-        int count = 0, i, j, sum = 0;
+        int count = 0;
+        int i = 0;
+       	int j = 0;
+        int sum = 0;
         String line;
         while ((line = scan.readLine()) != null) {
             String[] rating = line.split("::");
@@ -97,7 +122,7 @@ public class Main {
     }
 
     // This function returns userID-s with matching occupation
-    private static ArrayList<Integer> getUsers(int occupation) throws IOException {
+    private static ArrayList<Integer> getUsers(Integer occupation) throws IOException {
         // ! --users.dat--
         // UserID::Gender::Age::Occupation::Zip-code
 
