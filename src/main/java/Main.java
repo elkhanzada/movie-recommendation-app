@@ -141,17 +141,33 @@ public class Main {
     private static ArrayList<Integer> getMovies(String[] genres) throws IOException {
         // ! --movies.dat--
         // MovieID::Title::Genres
-
         BufferedReader scan = new BufferedReader(new FileReader(new File("data/movies.dat")));
         ArrayList<Integer> list = new ArrayList<Integer>();
         boolean contains;
         String line;
         while ((line = scan.readLine()) != null) {
             String[] movie = line.split("::");
+	    String[] genres_list = movie[2].split("|");
             contains = true;
-            for (String genre : genres) {
-                if (!movie[2].toLowerCase().contains(genre.toLowerCase())) contains = false;
-            }
+	    if(genres_list.length < genres.length()){
+		contains = false;
+	    }else{
+		for(String s : genres){
+			boolean found = false;
+			for(String g: genres_list){
+				if(s == g){
+					found = true;
+				}
+			}
+			if(!found){
+				contains = false;
+				break;
+			}
+		}
+	    }	
+            //for (String genre : genres) {
+            //    if (!movie[2].toLowerCase().contains(genre.toLowerCase())) contains = false;
+            //}
             if (contains) list.add(Integer.parseInt(movie[0]));
         }
         scan.close();
