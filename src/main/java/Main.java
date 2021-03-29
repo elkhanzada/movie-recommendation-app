@@ -60,6 +60,7 @@ public class Main {
 			}
 			else{
 				occup_id = 0;
+				System.out.println("Since we can't recognize occupation " + work + ", we will regard it as 'others'"); 
 			}
 		}
 		//END
@@ -73,7 +74,7 @@ public class Main {
 		for(String genre : genres){
 			//if the genre string is too long
 			if(genre.length > 50){
-				System.out.println("There are no movies with such genres");
+				System.out.println("There are no movies with genre " + genre);
 				return;
 			}
 		}
@@ -81,6 +82,11 @@ public class Main {
                 ArrayList<Integer> userID = getUsers(occup_id);
                 ArrayList<Integer> movieID = getMovies(genres);
                 Collections.sort(userID);
+		//Check if movieID is empty
+		if(movieID.size() <= 0){
+			System.out.printf("No movie found that satisfies requested genres");
+			return;
+		}	
                 Collections.sort(movieID);
                 System.out.printf("The average rating for %s is: %f\n", args[1], scanRatings(userID, movieID));
             } catch (IOException e) {
