@@ -65,6 +65,10 @@ public class Main {
 		//END
 
 		//START CHECK FOR GENRE INPUT
+		if(genres.length == 0){
+			System.out.println("Please enter valid input");
+			return;
+		}
 		if(genres.length > 10){
 			//if too many genres
 			System.out.println("There are no movies that have entered amount of genres");
@@ -72,7 +76,7 @@ public class Main {
 		}
 		for(String genre : genres){
 			//if the genre string is too long
-			if(genre.length > 50){
+			if(genre.length() > 50){
 				System.out.println("There are no movies with genre " + genre);
 				System.out.println("Use '|' character to split genres");
 				return;
@@ -84,7 +88,7 @@ public class Main {
                 Collections.sort(userID);
 		//Check if movieID is empty
 		if(movieID.size() <= 0){
-			System.out.printf("No movie found that satisfies requested genres");
+			System.out.println("No movie found that satisfies requested genres");
 			return;
 		}	
                 Collections.sort(movieID);
@@ -155,7 +159,7 @@ public class Main {
             String[] movie = line.split("::");
 	    String[] genres_list = movie[2].split("|");
             contains = true;
-	    if(genres_list.length < genres.length()){
+	    if(genres_list.length < genres.length){
 		contains = false;
 	    }else{
 		for(String s : genres){
