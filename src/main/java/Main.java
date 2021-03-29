@@ -41,7 +41,7 @@ public class Main {
 		System.out.println("Something wrong with input");
 		return;
 	    }
-	    String[] genres = args[0].split("|");
+	    String[] genres = args[0].split("\\|");
        	    String work = args[1].toLowerCase(); 
 	    //-------------------------------------------------------------------
 	    //toLowerCase may fail for ! character? or \?		
