@@ -75,6 +75,7 @@ public class Main {
 				System.out.println("Use '|' character to split genres");
 				return;
 			}
+			
 		}
 		//END
                 ArrayList<Integer> userID = getUsers(occup_id);
@@ -155,6 +156,9 @@ public class Main {
 	    String[] genres_list = movie[2].split("\\|");
             contains = true;
             for(String s : genres){
+		if(s.length() == 0){
+			continue;
+		}
 		boolean found = false;
 		for(String g: genres_list){
 			if(s.toLowerCase().equals(g.toLowerCase())){
@@ -165,7 +169,7 @@ public class Main {
 			contains = false;
 			break;
 		}
-	}
+	    }
 	    
             //for (String genre : genres) {
             //    if (!movie[2].toLowerCase().contains(genre.toLowerCase())) contains = false;
