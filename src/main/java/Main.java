@@ -82,7 +82,7 @@ public class Main {
                 Collections.sort(userID);
 		//Check if movieID is empty
 		if(movieID.size() <= 0){
-			System.out.println("No movie found that satisfies requested genres");
+			System.out.println("No movie found that satisfies requested genres: " + args[0]);
 			return;
 		}	
                 Collections.sort(movieID);
@@ -152,7 +152,7 @@ public class Main {
         String line;
         while ((line = scan.readLine()) != null) {
             String[] movie = line.split("::");
-	    String[] genres_list = movie[2].split("|");
+	    String[] genres_list = movie[2].split("\\|");
             contains = true;
 	    if(genres_list.length < genres.length){
 		contains = false;
@@ -160,7 +160,7 @@ public class Main {
 		for(String s : genres){
 			boolean found = false;
 			for(String g: genres_list){
-				if(s == g){
+				if(s.toLowerCase().equals(g.toLowerCase())){
 					found = true;
 				}
 			}
