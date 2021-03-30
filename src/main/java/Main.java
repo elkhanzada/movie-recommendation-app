@@ -154,22 +154,19 @@ public class Main {
             String[] movie = line.split("::");
 	    String[] genres_list = movie[2].split("\\|");
             contains = true;
-	    if(genres_list.length < genres.length){
-		contains = false;
-	    }else{
-		for(String s : genres){
-			boolean found = false;
-			for(String g: genres_list){
-				if(s.toLowerCase().equals(g.toLowerCase())){
-					found = true;
-				}
-			}
-			if(!found){
-				contains = false;
-				break;
+            for(String s : genres){
+		boolean found = false;
+		for(String g: genres_list){
+			if(s.toLowerCase().equals(g.toLowerCase())){
+				found = true;
 			}
 		}
-	    }	
+		if(!found){
+			contains = false;
+			break;
+		}
+	}
+	    
             //for (String genre : genres) {
             //    if (!movie[2].toLowerCase().contains(genre.toLowerCase())) contains = false;
             //}
