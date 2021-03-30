@@ -62,6 +62,7 @@ These are the all available occupations we currently have
 | writer               |
 | other                |
 
+# Troubleshooting
 Cases when user input very long string may cause something (i dont know!) in split, get functions.@#$%^&(^%$#@//\/\/\/\/\\/.].].]}>}>}gnlfgjn(*&^%^&*(GHSDFG @#$^&()&^%$#±/\/\/\/
 
 Input requirements:
