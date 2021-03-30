@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.lang.Math;
 
 public class Main {
 
@@ -33,14 +34,7 @@ public class Main {
             System.out.print("Try to remove spaces between occupations consisting of several words, such as ");
             System.out.println("\"college student\" -> \"collegestudent\"");
         }
-        else{	   
-      	   try{
-	    	args[0].split("|");
-		args[1].toLowerCase();
-	    }catch(Exception e){
-		System.out.println("Something wrong with input");
-		return;
-	    }
+        else{	    
 	    String[] genres = args[0].split("\\|");
        	    String work = args[1].toLowerCase(); 
 	    //-------------------------------------------------------------------
@@ -128,7 +122,8 @@ public class Main {
             }
         }
         scan.close();
-        return (double)(sum) / (double)(count);
+        double not_rounded =  (double)(sum) / (double)(count);
+    	return (double)Math.round(not_rounded * 100.0) / 100.0;
     }
 
     // This function returns userID-s with matching occupation

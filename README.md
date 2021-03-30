@@ -10,6 +10,10 @@ Input requirements:
 5) If occupation string is not one of specified user occupations (not an educator, student or else), then we regard it as 'others' case and we give id 0 to this occupation. The characters in the occupation string can be arbitrary, and the only restriction is in the length of string (not more than 50)
 6) If the list of genres requested does not correspond to any movie, we print out warning message and terminate program
 
+Output:
+1) If every input requirement is satisfied, then the program will output average score rounded to 2 decimals.
+
+
 - If the user enters an occupation that is not specified in our users list (not an educator, actor or else), then that occupation should be considered as "other" and have an id 0. However, we added an additional check for the 'other' case which is, if an input is too long (>50) then it is obviously some nonexistent occupation. In this case (nonexistent occupaton), we throw warning message that string is too long and terminate the programm. In any other case, even if the input for occupation has some characters like $, ^, we will consider is as an 'other' section. (We couldn't exlude such cases because example as K-12student showed us that input can contain characters and numbers.
 
 
