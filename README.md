@@ -24,7 +24,7 @@ Once you are in the container, please run ```run.sh``` script as follows
 $ . run.sh
 ```
 It will print output for the example arguments
-### Usage
+# Usage
 Our tool takes into two arguments as follows
 ```bash
 $ java -cp target/group9-1.0-SNAPSHOT.jar Main [genre] [occupation]
