@@ -44,6 +44,7 @@ public class Main {
             setOccupationHash(workID); // now workID contains all mappings
             try {
 		Integer occup_id = workID.get(work);
+		boolean is_other = false;
 		//START CHECK FOR OCCUPATION INPUT
 		if(occup_id == null){
 			//either some wrong string, or other type of occupation
@@ -52,8 +53,9 @@ public class Main {
 				return;	
 			}
 			else{
+				is_other = true;
 				occup_id = 0;
-				System.out.println("Since we can't recognize occupation " + work + ", we will regard it as 'others'"); 
+				System.out.println("Since we can't recognize occupation " + work + ", we will regard it as 'other'"); 
 			}
 		}
 		//END
@@ -65,9 +67,10 @@ public class Main {
 		}
 		if(genres.length > 10){
 			//if too many genres
-			System.out.println("There are no movies that have entered amount of genres");
+			System.out.println("Input for genre is too long, please try to include a genre not more that one time.");
 			return;
 		}
+		boolean is_empty = true;
 		for(String genre : genres){
 			//if the genre string is too long
 			if(genre.length() > 50){
@@ -75,7 +78,14 @@ public class Main {
 				System.out.println("Use '|' character to split genres");
 				return;
 			}
+			if(genre.length() > 0){
+				is_empty = false;
+			}
 			
+		}
+		if(is_empty){
+			System.out.println("Please enter valid input");
+			return;
 		}
 		//END
                 ArrayList<Integer> userID = getUsers(occup_id);
@@ -87,7 +97,13 @@ public class Main {
 			return;
 		}	
                 Collections.sort(movieID);
-                System.out.printf("The average rating for %s is: %f\n", args[1], scanRatings(userID, movieID));
+		String output;
+		if(is_other){
+			output = "other";
+		}else{
+			output = args[1];
+		}
+                System.out.printf("The average rating for %s is: %f\n", output, scanRatings(userID, movieID));
             } catch (IOException e) {
                 // todo: Proper error handling
                 System.out.println("Some error happened");
