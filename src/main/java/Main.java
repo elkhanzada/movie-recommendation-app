@@ -103,7 +103,7 @@ public class Main {
 		}else{
 			output = args[1];
 		}
-                System.out.printf("The average rating for %s is: %f\n", output, scanRatings(userID, movieID));
+                System.out.printf("The average rating for %s is: %.2f\n", output, scanRatings(userID, movieID));
             } catch (IOException e) {
                 // todo: Proper error handling
                 System.out.println("Some error happened");
@@ -139,8 +139,9 @@ public class Main {
             }
         }
         scan.close();
-        double not_rounded =  (double)(sum) / (double)(count);
-    	return (double)Math.round(not_rounded * 100.0) / 100.0;
+       // double not_rounded =  (double)(sum) / (double)(count);
+       //return Math.round(not_rounded * 100.0) / 100.0;
+        return (double)sum / (double)count;
     }
 
     // This function returns userID-s with matching occupation
