@@ -25,7 +25,7 @@ Once you are in the container, please run ```run.sh``` script as follows
 ```bash
 $ . run.sh
 ```
-It will print output for the example arguments
+It will print output for the example arguments (Adventure educator)
 # Usage
 Our tool takes into two arguments as follows
 ```bash
