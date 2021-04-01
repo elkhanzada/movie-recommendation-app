@@ -3,6 +3,7 @@ In this repository, we give average rating score of the movies which are rated b
 # Instruction for those who do not use docker
 ### Requirement
 Java 1.11 (Please set ```JAVA_HOME``` before running the code)
+\
 Maven
 ### Check out the source code
 ```bash
