@@ -78,3 +78,10 @@ Input requirements:
 
 Output:
 1) If every input requirement is satisfied, then the program will output average score rounded to 2 decimals.
+
+
+
+Contribution:
+- Kasymzhan Abdyldayev (20182002) - Algorithm implementation
+- Elkhan Ismayilzada (20182010) - Initial setup, Testing, readme
+- Aibar Oshakbayev (20182021) - Error handling, readme
