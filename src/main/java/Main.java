@@ -43,7 +43,10 @@ public class Main {
             //Elkhan's code
             if(args.length==3) {
                 gender = args[0].toLowerCase();
-                age = Integer.parseInt(args[1]);
+                if (args[1].length()>0)
+                    age = Integer.parseInt(args[1]);
+                else
+                    age = -1;
                 work = args[2].toLowerCase();
             }else {
                 gender = args[0].toLowerCase();
@@ -102,7 +105,7 @@ public class Main {
 		}
 		//END
                 //Elkhan's code
-                ArrayList<Integer> userID = getUsers(occup_id,age,gender);
+                ArrayList<Integer> userID = getUsers(work,occup_id,age,gender);
                 HashMap<Integer, String> movies = args.length==4?getMovies(genres):getMovies();
                 Collections.sort(userID);
                 ArrayList<Integer> movieID = new ArrayList<>(movies.keySet());
@@ -120,11 +123,15 @@ public class Main {
 			output = args[1];
 		}
                 System.out.printf("The average rating for %s is: %.2f\n", output, scanRatings(userID, movieID));
-		        HashMap<Integer, Integer> ratings = getRatings(userID,movieID);
+		        HashMap<Integer, Integer[]> ratings = getRatings(userID,movieID);
 		        //Elkhan's code
 		        int count = 0;
+                HashMap<Integer, Double> scores = new HashMap<>();
                 for(Integer k : ratings.keySet()){
-                    if(ratings.get(k)==5){
+                    scores.put(k,(double)ratings.get(k)[0]/(double)ratings.get(k)[1]);
+                }
+                for(Integer k : scores.keySet()){
+                    if(scores.get(k)>4){
                         printMovie(k,movies);
                         count++;
                     }
@@ -181,7 +188,7 @@ public class Main {
         return (double)sum / (double)count;
     }
     // Elkhan's code
-    private static HashMap<Integer, Integer> getRatings(ArrayList<Integer> userID, ArrayList<Integer> movieID) throws IOException {
+    private static HashMap<Integer, Integer[]> getRatings(ArrayList<Integer> userID, ArrayList<Integer> movieID) throws IOException {
         // ! --ratings.dat--
         // UserID::MovieID::Rating::Timestamp
 
@@ -191,15 +198,17 @@ public class Main {
        	int j = 0;
         int sum = 0;
         String line;
-        HashMap<Integer,Integer> ratingList = new HashMap<>();
+        HashMap<Integer,Integer[]> ratingList = new HashMap<>();
         while ((line = scan.readLine()) != null) {
             String[] rating = line.split("::");
             // Collections.binarySearch() returns a negative number if the item not found;
             i = Collections.binarySearch(userID, Integer.parseInt(rating[0]));
             j = Collections.binarySearch(movieID, Integer.parseInt(rating[1]));
             if (i > -1 && j > -1) { // if we find corresponding movie and user;
-                if(Integer.parseInt(rating[2])>=3)
-                ratingList.put(Integer.parseInt(rating[1]), Integer.parseInt(rating[2]));
+                if(!ratingList.containsKey(Integer.parseInt(rating[1])))
+                    ratingList.put(Integer.parseInt(rating[1]), new Integer[]{Integer.parseInt(rating[2]),1});
+                else
+                    ratingList.put(Integer.parseInt(rating[1]), new Integer[]{ratingList.get(Integer.parseInt(rating[1]))[0]+Integer.parseInt(rating[2]),ratingList.get(Integer.parseInt(rating[1]))[1]+1});
                 count++;
             }
         }
@@ -225,7 +234,7 @@ public class Main {
         return list;
     }
     //Elkhan's code
-    private static ArrayList<Integer> getUsers(Integer occupation, Integer age, String gender) throws IOException {
+    private static ArrayList<Integer> getUsers(String work,Integer occupation, Integer age, String gender) throws IOException {
         // ! --users.dat--
         // UserID::Gender::Age::Occupation::Zip-code
 
@@ -242,10 +251,10 @@ public class Main {
         String line;
         while ((line = scan.readLine()) != null) {
             String[] user = line.split("::");
-            if (Integer.parseInt(user[3]) == occupation &&
-                    agelist.get(Integer.parseInt(user[2]))[0]<=age &&
-                    agelist.get(Integer.parseInt(user[2]))[1]>=age &&
-                    gender.toLowerCase().equals(user[1].toLowerCase())) list.add(Integer.parseInt(user[0]));
+            if ((Integer.parseInt(user[3]) == occupation || work.length()==0) &&
+                    ((age==-1) || (agelist.get(Integer.parseInt(user[2]))[0]<=age &&
+                    agelist.get(Integer.parseInt(user[2]))[1]>=age)) &&
+                    (gender.length()==0||gender.toLowerCase().equals(user[1].toLowerCase()))) list.add(Integer.parseInt(user[0]));
         }
         scan.close();
         return list;
