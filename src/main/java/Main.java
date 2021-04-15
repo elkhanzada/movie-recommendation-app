@@ -102,14 +102,16 @@ public class Main {
 		}
 		//END
                 ArrayList<Integer> userID = getUsers(occup_id,age,gender);
-                ArrayList<Integer> movieID = args.length==4?getMovies(genres):getMovies();
+                HashMap<Integer, String> movies = args.length==4?getMovies(genres):getMovies();
                 Collections.sort(userID);
+                ArrayList<Integer> movieID = new ArrayList<>(movies.keySet());
 		//Check if movieID is empty
 		if(movieID.size() <= 0){
 			System.out.println("No movie found that satisfies requested genres: " + args[0]);
 			return;
 		}	
-                Collections.sort(movieID);
+
+		        Collections.sort(movieID);
 		String output;
 		if(is_other){
 			output = "other";
@@ -118,8 +120,13 @@ public class Main {
 		}
                 System.out.printf("The average rating for %s is: %.2f\n", output, scanRatings(userID, movieID));
 		        HashMap<Integer, Integer> ratings = getRatings(userID,movieID);
+		        int count = 0;
                 for(Integer k : ratings.keySet()){
-                    System.out.println(k + " " + ratings.get(k));
+                    if(ratings.get(k)==5){
+                        printMovie(k,movies);
+                        count++;
+                    }
+                    if(count==10) break;
                 }
             } catch (IOException e) {
                 // todo: Proper error handling
@@ -131,6 +138,17 @@ public class Main {
                 e.printStackTrace();
             }
             
+        }
+    }
+    //Elkhan's code
+    private static void printMovie(Integer chosenMovie, HashMap<Integer,String> movies) throws IOException {
+        BufferedReader scan = new BufferedReader(new FileReader(new File("data/links.dat")));
+        String line;
+        while((line=scan.readLine())!=null){
+            int movieID = Integer.parseInt(line.split("::")[0]);
+            if(chosenMovie==movieID){
+                System.out.println(movies.get(chosenMovie)+" ( http://www.imdb.com/title/tt"+line.split("::")[1]+ " )");
+            }
         }
     }
 
@@ -232,11 +250,11 @@ public class Main {
     }
 
     // This function returns movieID-s with matching genres
-    private static ArrayList<Integer> getMovies(String[] genres) throws IOException {
+    private static HashMap<Integer, String> getMovies(String[] genres) throws IOException {
         // ! --movies.dat--
         // MovieID::Title::Genres
         BufferedReader scan = new BufferedReader(new FileReader(new File("data/movies.dat")));
-        ArrayList<Integer> list = new ArrayList<Integer>();
+        HashMap<Integer, String> list = new HashMap<>();
         boolean contains;
         String line;
         while ((line = scan.readLine()) != null) {
@@ -262,22 +280,22 @@ public class Main {
             //for (String genre : genres) {
             //    if (!movie[2].toLowerCase().contains(genre.toLowerCase())) contains = false;
             //}
-            if (contains) list.add(Integer.parseInt(movie[0]));
+            if (contains) list.put(Integer.parseInt(movie[0]),movie[1]);
         }
         scan.close();
         return list;
     }
     //Elkhan's code
-    private static ArrayList<Integer> getMovies() throws IOException {
+    private static HashMap<Integer, String> getMovies() throws IOException {
         // ! --movies.dat--
         // MovieID::Title::Genres
         BufferedReader scan = new BufferedReader(new FileReader(new File("data/movies.dat")));
-        ArrayList<Integer> list = new ArrayList<Integer>();
+        HashMap<Integer, String> list = new HashMap<>();
         boolean contains;
         String line;
         while ((line = scan.readLine()) != null) {
             String[] movie = line.split("::");
-            list.add(Integer.parseInt(movie[0]));
+            list.put(Integer.parseInt(movie[0]),movie[1]);
         }
         scan.close();
         return list;
