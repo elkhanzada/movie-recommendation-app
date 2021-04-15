@@ -3,6 +3,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.lang.Math;
@@ -224,7 +225,7 @@ public class Main {
             if (Integer.parseInt(user[3]) == occupation &&
                     agelist.get(Integer.parseInt(user[2]))[0]<=age &&
                     agelist.get(Integer.parseInt(user[2]))[1]>=age &&
-                    gender.toLowerCase().equals(user[1])) list.add(Integer.parseInt(user[0]));
+                    gender.toLowerCase().equals(user[1].toLowerCase())) list.add(Integer.parseInt(user[0]));
         }
         scan.close();
         return list;
