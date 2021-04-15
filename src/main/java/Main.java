@@ -104,6 +104,10 @@ public class Main {
 			output = args[1];
 		}
                 System.out.printf("The average rating for %s is: %.2f\n", output, scanRatings(userID, movieID));
+		        HashMap<Integer, Integer> ratings = getRatings(userID,movieID);
+                for(Integer k : ratings.keySet()){
+                    System.out.println(k + " " + ratings.get(k));
+                }
             } catch (IOException e) {
                 // todo: Proper error handling
                 System.out.println("Some error happened");
@@ -143,6 +147,34 @@ public class Main {
        //return Math.round(not_rounded * 100.0) / 100.0;
         return (double)sum / (double)count;
     }
+    // This method scans "ratings.dat" file and returns the average
+    private static HashMap<Integer, Integer> getRatings(ArrayList<Integer> userID, ArrayList<Integer> movieID) throws IOException {
+        // ! --ratings.dat--
+        // UserID::MovieID::Rating::Timestamp
+
+        BufferedReader scan = new BufferedReader(new FileReader(new File("data/ratings.dat")));
+        int count = 0;
+        int i = 0;
+       	int j = 0;
+        int sum = 0;
+        String line;
+        HashMap<Integer,Integer> ratingList = new HashMap<>();
+        while ((line = scan.readLine()) != null) {
+            String[] rating = line.split("::");
+            // Collections.binarySearch() returns a negative number if the item not found;
+            i = Collections.binarySearch(userID, Integer.parseInt(rating[0]));
+            j = Collections.binarySearch(movieID, Integer.parseInt(rating[1]));
+            if (i > -1 && j > -1) { // if we find corresponding movie and user;
+                if(Integer.parseInt(rating[2])>=3)
+                ratingList.put(Integer.parseInt(rating[1]), Integer.parseInt(rating[2]));
+                count++;
+            }
+        }
+        scan.close();
+       // double not_rounded =  (double)(sum) / (double)(count);
+       //return Math.round(not_rounded * 100.0) / 100.0;
+        return ratingList;
+    }
 
     // This function returns userID-s with matching occupation
     private static ArrayList<Integer> getUsers(Integer occupation) throws IOException {
@@ -151,6 +183,21 @@ public class Main {
 
         BufferedReader scan = new BufferedReader(new FileReader( new File("data/users.dat")));
         ArrayList<Integer> list = new ArrayList<Integer>();
+        String line;
+        while ((line = scan.readLine()) != null) {
+            String[] user = line.split("::");
+            if (Integer.parseInt(user[3]) == occupation) list.add(Integer.parseInt(user[0]));
+        }
+        scan.close();
+        return list;
+    }
+    private static ArrayList<Integer> getUsers(Integer occupation, Integer age, String gender) throws IOException {
+        // ! --users.dat--
+        // UserID::Gender::Age::Occupation::Zip-code
+
+        BufferedReader scan = new BufferedReader(new FileReader( new File("data/users.dat")));
+        ArrayList<Integer> list = new ArrayList<Integer>();
+        HashMap<Integer, Integer[]> agelist = new HashMap<>();
         String line;
         while ((line = scan.readLine()) != null) {
             String[] user = line.split("::");
