@@ -101,6 +101,7 @@ public class Main {
 			}
 		}
 		//END
+                //Elkhan's code
                 ArrayList<Integer> userID = getUsers(occup_id,age,gender);
                 HashMap<Integer, String> movies = args.length==4?getMovies(genres):getMovies();
                 Collections.sort(userID);
@@ -120,6 +121,7 @@ public class Main {
 		}
                 System.out.printf("The average rating for %s is: %.2f\n", output, scanRatings(userID, movieID));
 		        HashMap<Integer, Integer> ratings = getRatings(userID,movieID);
+		        //Elkhan's code
 		        int count = 0;
                 for(Integer k : ratings.keySet()){
                     if(ratings.get(k)==5){
