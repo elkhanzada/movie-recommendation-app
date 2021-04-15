@@ -26,18 +26,58 @@ public class Main {
     // xxx.yyy.YourClass Adventure educator
     // args[0] = genre, args[1] = occupation
     public static void main(String[] args) {
-        if (args.length != 3) {
+        String gender;
+        int age;
+        String work;
+        String[] genres = new String[5];
+        if (args.length != 3 && args.length!=4) {
 	//-------------------------------------------------------------------
 	//are these messages enough for case with !=2 args?		
 	//-------------------------------------------------------------------
-            System.out.println("Please, pass exactly 2 arguments!");
+            System.out.println("Please, pass exactly 3 or 4 arguments!");
             System.out.print("Try to remove spaces between occupations consisting of several words, such as ");
             System.out.println("\"college student\" -> \"collegestudent\"");
         }
-        else{	    
-	    String[] genres = args[0].split("\\|");
-       	    String work = args[1].toLowerCase();
-       	    String gender = args[2].toLowerCase();
+        else{
+            //Elkhan's code
+            if(args.length==3) {
+                gender = args[0].toLowerCase();
+                age = Integer.parseInt(args[1]);
+                work = args[2].toLowerCase();
+            }else {
+                gender = args[0].toLowerCase();
+                age = Integer.parseInt(args[1]);
+                work = args[2].toLowerCase();
+                genres = args[3].toLowerCase().split("\\|");
+                //START CHECK FOR GENRE INPUT
+                if(genres.length == 0){
+                    System.out.println("Please enter valid input");
+                    return;
+                }
+                if(genres.length > 10){
+                    //if too many genres
+                    System.out.println("Input for genre is too long, please try to include a genre not more that one time.");
+                    return;
+                }
+                boolean is_empty = true;
+                for(String genre : genres){
+                    //if the genre string is too long
+                    if(genre.length() > 50){
+                        System.out.println("There are no movies with genre " + genre);
+                        System.out.println("Use '|' character to split genres");
+                        return;
+                    }
+                    if(genre.length() > 0){
+                        is_empty = false;
+                    }
+
+                }
+                if(is_empty){
+                    System.out.println("Please enter valid input");
+                    return;
+                }
+                //END
+            }
 	    //-------------------------------------------------------------------
 	    //toLowerCase may fail for ! character? or \?		
 	    //-------------------------------------------------------------------
@@ -60,37 +100,8 @@ public class Main {
 			}
 		}
 		//END
-
-		//START CHECK FOR GENRE INPUT
-		if(genres.length == 0){
-			System.out.println("Please enter valid input");
-			return;
-		}
-		if(genres.length > 10){
-			//if too many genres
-			System.out.println("Input for genre is too long, please try to include a genre not more that one time.");
-			return;
-		}
-		boolean is_empty = true;
-		for(String genre : genres){
-			//if the genre string is too long
-			if(genre.length() > 50){
-				System.out.println("There are no movies with genre " + genre);
-				System.out.println("Use '|' character to split genres");
-				return;
-			}
-			if(genre.length() > 0){
-				is_empty = false;
-			}
-			
-		}
-		if(is_empty){
-			System.out.println("Please enter valid input");
-			return;
-		}
-		//END
-                ArrayList<Integer> userID = getUsers(occup_id);
-                ArrayList<Integer> movieID = getMovies(genres);
+                ArrayList<Integer> userID = getUsers(occup_id,age,gender);
+                ArrayList<Integer> movieID = args.length==4?getMovies(genres):getMovies();
                 Collections.sort(userID);
 		//Check if movieID is empty
 		if(movieID.size() <= 0){
@@ -251,6 +262,21 @@ public class Main {
             //    if (!movie[2].toLowerCase().contains(genre.toLowerCase())) contains = false;
             //}
             if (contains) list.add(Integer.parseInt(movie[0]));
+        }
+        scan.close();
+        return list;
+    }
+    //Elkhan's code
+    private static ArrayList<Integer> getMovies() throws IOException {
+        // ! --movies.dat--
+        // MovieID::Title::Genres
+        BufferedReader scan = new BufferedReader(new FileReader(new File("data/movies.dat")));
+        ArrayList<Integer> list = new ArrayList<Integer>();
+        boolean contains;
+        String line;
+        while ((line = scan.readLine()) != null) {
+            String[] movie = line.split("::");
+            list.add(Integer.parseInt(movie[0]));
         }
         scan.close();
         return list;
