@@ -26,7 +26,7 @@ public class Main {
     // xxx.yyy.YourClass Adventure educator
     // args[0] = genre, args[1] = occupation
     public static void main(String[] args) {
-        if (args.length != 2) {
+        if (args.length != 3) {
 	//-------------------------------------------------------------------
 	//are these messages enough for case with !=2 args?		
 	//-------------------------------------------------------------------
@@ -36,7 +36,8 @@ public class Main {
         }
         else{	    
 	    String[] genres = args[0].split("\\|");
-       	    String work = args[1].toLowerCase(); 
+       	    String work = args[1].toLowerCase();
+       	    String gender = args[2].toLowerCase();
 	    //-------------------------------------------------------------------
 	    //toLowerCase may fail for ! character? or \?		
 	    //-------------------------------------------------------------------
@@ -147,7 +148,7 @@ public class Main {
        //return Math.round(not_rounded * 100.0) / 100.0;
         return (double)sum / (double)count;
     }
-    // This method scans "ratings.dat" file and returns the average
+    // Elkhan's code
     private static HashMap<Integer, Integer> getRatings(ArrayList<Integer> userID, ArrayList<Integer> movieID) throws IOException {
         // ! --ratings.dat--
         // UserID::MovieID::Rating::Timestamp
@@ -191,6 +192,7 @@ public class Main {
         scan.close();
         return list;
     }
+    //Elkhan's code
     private static ArrayList<Integer> getUsers(Integer occupation, Integer age, String gender) throws IOException {
         // ! --users.dat--
         // UserID::Gender::Age::Occupation::Zip-code
@@ -198,10 +200,20 @@ public class Main {
         BufferedReader scan = new BufferedReader(new FileReader( new File("data/users.dat")));
         ArrayList<Integer> list = new ArrayList<Integer>();
         HashMap<Integer, Integer[]> agelist = new HashMap<>();
+        agelist.put(1, new Integer[]{1,17});
+        agelist.put(18, new Integer[]{18,24});
+        agelist.put(25, new Integer[]{25,34});
+        agelist.put(35, new Integer[]{35,44});
+        agelist.put(45, new Integer[]{45,49});
+        agelist.put(50, new Integer[]{50,55});
+        agelist.put(56, new Integer[]{56,Integer.MAX_VALUE});
         String line;
         while ((line = scan.readLine()) != null) {
             String[] user = line.split("::");
-            if (Integer.parseInt(user[3]) == occupation) list.add(Integer.parseInt(user[0]));
+            if (Integer.parseInt(user[3]) == occupation &&
+                    agelist.get(Integer.parseInt(user[2]))[0]<=age &&
+                    agelist.get(Integer.parseInt(user[2]))[1]>=age &&
+                    gender.toLowerCase().equals(user[1])) list.add(Integer.parseInt(user[0]));
         }
         scan.close();
         return list;
