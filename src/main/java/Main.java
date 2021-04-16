@@ -50,7 +50,10 @@ public class Main {
                 work = args[2].toLowerCase();
             } else {
                 gender = args[0].toLowerCase();
-                age = Integer.parseInt(args[1]);
+                if (args[1].length() > 0)
+                    age = Integer.parseInt(args[1]);
+                else
+                    age = -1;
                 work = args[2].toLowerCase();
                 genres = args[3].toLowerCase().split("\\|");
                 //START CHECK FOR GENRE INPUT
@@ -219,21 +222,21 @@ public class Main {
         return ratingList;
     }
 
-    // This function returns userID-s with matching occupation
-    private static ArrayList<Integer> getUsers(Integer occupation) throws IOException {
-        // ! --users.dat--
-        // UserID::Gender::Age::Occupation::Zip-code
-
-        BufferedReader scan = new BufferedReader(new FileReader(new File("data/users.dat")));
-        ArrayList<Integer> list = new ArrayList<Integer>();
-        String line;
-        while ((line = scan.readLine()) != null) {
-            String[] user = line.split("::");
-            if (Integer.parseInt(user[3]) == occupation) list.add(Integer.parseInt(user[0]));
-        }
-        scan.close();
-        return list;
-    }
+//    // This function returns userID-s with matching occupation
+//    private static ArrayList<Integer> getUsers(Integer occupation) throws IOException {
+//        // ! --users.dat--
+//        // UserID::Gender::Age::Occupation::Zip-code
+//
+//        BufferedReader scan = new BufferedReader(new FileReader(new File("data/users.dat")));
+//        ArrayList<Integer> list = new ArrayList<Integer>();
+//        String line;
+//        while ((line = scan.readLine()) != null) {
+//            String[] user = line.split("::");
+//            if (Integer.parseInt(user[3]) == occupation) list.add(Integer.parseInt(user[0]));
+//        }
+//        scan.close();
+//        return list;
+//    }
 
     //Elkhan's code
     private static ArrayList<Integer> getUsers(String work, Integer occupation, Integer age, String gender) throws IOException {
