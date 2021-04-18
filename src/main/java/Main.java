@@ -26,7 +26,8 @@ public class Main {
     // xxx.yyy.YourClass Adventure educator
     // args[0] = genre, args[1] = occupation
     public static void main(String[] args) {
-        if (args.length != 2) {
+        Aibar
+	if (args.length != 2) {
 	//-------------------------------------------------------------------
 	//are these messages enough for case with !=2 args?		
 	//-------------------------------------------------------------------
