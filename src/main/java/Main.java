@@ -26,21 +26,14 @@ public class Main {
     // xxx.yyy.YourClass Adventure educator
     // args[0] = genre, args[1] = occupation
     public static void main(String[] args) {
-        Aibar
-	if (args.length != 2) {
-	//-------------------------------------------------------------------
-	//are these messages enough for case with !=2 args?		
-	//-------------------------------------------------------------------
-            System.out.println("Please, pass exactly 2 arguments!");
+	    if (args.length != 3 && args.length != 4) {
+            System.out.println("Please, pass exactly 3 or 4arguments!");
             System.out.print("Try to remove spaces between occupations consisting of several words, such as ");
             System.out.println("\"college student\" -> \"collegestudent\"");
         }
-        else{	    
-	    String[] genres = args[0].split("\\|");
-       	    String work = args[1].toLowerCase(); 
-	    //-------------------------------------------------------------------
-	    //toLowerCase may fail for ! character? or \?		
-	    //-------------------------------------------------------------------
+        else if(args.length == 3){
+	        String[] genres = args[0].split("\\|");
+       	    String work = args[1].toLowerCase();
             HashMap<String, Integer> workID = new HashMap<>();
             setOccupationHash(workID); // now workID contains all mappings
             try {
