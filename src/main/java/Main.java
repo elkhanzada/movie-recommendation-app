@@ -7,120 +7,102 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.lang.Math;
 
+//how to do autocompletion?
+
 public class Main {
-
-    /**
-     * todo: Implement the program described below
-     * That is, the input to your program is a movie category (e.g., Adventure) 
-     * and the occupation of the user (e.g., educator). The expected output is 
-     * the average rating score of all movies in the given category rated by 
-     * the given occupation. The category input can be one or more categories 
-     * with “|” as a delimiter. For example, if the input is Adventure|Comedy, 
-     * then your program must output the average rating score of those movies 
-     * that belong to both Adventure and Comedy categories. The occupation input 
-     * must be only one.
-     * @param args
-     * @throws IOException
-     */
-
-    // xxx.yyy.YourClass Adventure educator
-    // args[0] = genre, args[1] = occupation
     public static void main(String[] args) {
 	    if (args.length != 3 && args.length != 4) {
-            System.out.println("Please, pass exactly 3 or 4arguments!");
+            System.out.println("Please, pass exactly 3 or 4 arguments!");
             System.out.print("Try to remove spaces between occupations consisting of several words, such as ");
             System.out.println("\"college student\" -> \"collegestudent\"");
         }
+        //args[0] = gender, args[1] = age, args[2] = occupation
         else if(args.length == 3){
-	        String[] genres = args[0].split("\\|");
-       	    String work = args[1].toLowerCase();
-            HashMap<String, Integer> workID = new HashMap<>();
-            setOccupationHash(workID); // now workID contains all mappings
-            try {
-		Integer occup_id = workID.get(work);
-		boolean is_other = false;
-		//START CHECK FOR OCCUPATION INPUT
-		if(occup_id == null){
-			//either some wrong string, or other type of occupation
-			if(work.length() > 50){
-				System.out.println("There is no such occupation (name is too long)");
-				return;	
-			}
-			else{
-				is_other = true;
-				occup_id = 0;
-				System.out.println("Since we can't recognize occupation " + work + ", we will regard it as 'other'"); 
-			}
-		}
-		//END
-
-		//START CHECK FOR GENRE INPUT
-		if(genres.length == 0){
-			System.out.println("Please enter valid input");
-			return;
-		}
-		if(genres.length > 10){
-			//if too many genres
-			System.out.println("Input for genre is too long, please try to include a genre not more that one time.");
-			return;
-		}
-		boolean is_empty = true;
-		for(String genre : genres){
-			//if the genre string is too long
-			if(genre.length() > 50){
-				System.out.println("There are no movies with genre " + genre);
-				System.out.println("Use '|' character to split genres");
-				return;
-			}
-			if(genre.length() > 0){
-				is_empty = false;
-			}
-			
-		}
-		if(is_empty){
-			System.out.println("Please enter valid input");
-			return;
-		}
-		//END
-                ArrayList<Integer> userID = getUsers(occup_id);
-                ArrayList<Integer> movieID = getMovies(genres);
-                Collections.sort(userID);
-		//Check if movieID is empty
-		if(movieID.size() <= 0){
-			System.out.println("No movie found that satisfies requested genres: " + args[0]);
-			return;
-		}	
-                Collections.sort(movieID);
-		String output;
-		if(is_other){
-			output = "other";
-		}else{
-			output = args[1];
-		}
-                System.out.printf("The average rating for %s is: %.2f\n", output, scanRatings(userID, movieID));
-            } catch (IOException e) {
-                // todo: Proper error handling
-                System.out.println("Some error happened");
-                e.printStackTrace();
-            } catch (NullPointerException e) {
-                // todo: Find the source of a bug
-                System.out.println("Null pointer exception somewhere");
-                e.printStackTrace();
+            if(args[0].length() < 1){
+                System.out.println("First argument is empty, please provide your gender F/M as a first argument");
+                return;
+            }
+            if(args[1].length() < 1){
+                System.out.println("Second argument is empty, please provide your age as a second argument");
+                return;
+            }
+            if(args[2].length() < 1){
+                System.out.println("Third argument is empty, please provide your occupation as a third argument");
+                return;
+            }
+            //------------------
+	        String gender = args[0].toLowerCase();
+            if(!gender.equals("f") && !gender.equals("m")){
+                System.out.println("Please pass your gender as M/m if you are male and F/f if you are female");
+                return;
+            }
+            //------------------
+	        Integer age;
+	        try {
+                age = Integer.parseInt(args[1]);
+            }catch(Exception e) {
+                System.out.println("The age you provided is not a valid integer or too long. Please pass your age as an integer");
+                return;
+            }
+	        age = setAge(age);
+            //------------------
+       	    String work = args[2].toLowerCase();
+       	    HashMap<String, Integer> workID = new HashMap<>();
+            setOccupationHash(workID);
+            Integer occup_id = workID.get(work);
+            boolean is_other = false;
+            //START CHECK FOR OCCUPATION INPUT
+            if(occup_id == null){
+                //some wrong string
+                if(work.length() > 50){
+                    System.out.println("There is no such occupation (name is too long)");
+                    return;
+                }
+                //the type of occupation is - other
+                else{
+                    is_other = true;
+                    occup_id = 0;
+                    System.out.println("Since we can't recognize occupation " + work + ", we will regard it as 'other'");
+                }
+            }
+            //------------------
+            //age, occup_id, gender (in lower case)
+            ArrayList<Integer> userIds;
+            try{
+                userIds= getUsers(gender, age, occup_id);
+            }catch(Exception e){
+                System.out.println(e);
+                return;
             }
             
         }
     }
 
-    // This method scans "ratings.dat" file and returns the average
-    private static double scanRatings(ArrayList<Integer> userID, ArrayList<Integer> movieID) throws IOException {
+    private static Integer setAge(Integer age){
+        if(age < 18){
+            return 1;
+        }else if(age < 25){
+            return 18;
+        }else if(age < 35){
+            return 25;
+        }else if(age < 45){
+            return 35;
+        }else if(age < 50){
+            return 45;
+        }else if(age < 56){
+            return 50;
+        }else{
+            return 56;
+        }
+    }
+
+    // This method scans "ratings.dat" file and returns the list of MovieIds' with high ratings
+    private static ArrayList<Integer> scanRatings(ArrayList<Integer> userID) throws IOException {
         // ! --ratings.dat--
         // UserID::MovieID::Rating::Timestamp
 
-        BufferedReader scan = new BufferedReader(new FileReader(new File("data/ratings.dat")));
-        int count = 0;
-        int i = 0;
-       	int j = 0;
-        int sum = 0;
+        BufferedReader scan = new BufferedReader(new FileReader(new File("../../../data/ratings.dat")));
+        ArrayList<Integer> list = new ArrayList<Integer>();
         String line;
         while ((line = scan.readLine()) != null) {
             String[] rating = line.split("::");
@@ -138,17 +120,18 @@ public class Main {
         return (double)sum / (double)count;
     }
 
-    // This function returns userID-s with matching occupation
-    private static ArrayList<Integer> getUsers(Integer occupation) throws IOException {
+    // This function returns array of userIds' with given data
+    private static ArrayList<Integer> getUsers(String gender, Integer age, Integer occupation) throws IOException {
         // ! --users.dat--
         // UserID::Gender::Age::Occupation::Zip-code
-
-        BufferedReader scan = new BufferedReader(new FileReader( new File("data/users.dat")));
+        BufferedReader scan = new BufferedReader(new FileReader( new File("../../../data/users.dat")));
         ArrayList<Integer> list = new ArrayList<Integer>();
         String line;
         while ((line = scan.readLine()) != null) {
             String[] user = line.split("::");
-            if (Integer.parseInt(user[3]) == occupation) list.add(Integer.parseInt(user[0]));
+            if (user[1].toLowerCase().equals(gender) && Integer.parseInt(user[2]) == age && Integer.parseInt(user[3]) == occupation){
+                list.add(Integer.parseInt(user[0]));
+            }
         }
         scan.close();
         return list;
