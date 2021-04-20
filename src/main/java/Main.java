@@ -18,6 +18,7 @@ public class Main {
         }
         //args[0] = gender, args[1] = age, args[2] = occupation
         else if(args.length == 3){
+            aAAAAAAAAAAA
             if(args[0].length() < 1){
                 System.out.println("First argument is empty, please provide your gender F/M as a first argument");
                 return;
