@@ -81,7 +81,7 @@ Output:
 
 
 
-# Contribution:
+# Contribution
 - Kasymzhan Abdyldayev (20182002) - Algorithm implementation
 - Elkhan Ismayilzada (20182010) - Initial setup, Testing, readme
 - Aibar Oshakbayev (20182021) - Error handling, readme
