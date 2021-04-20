@@ -70,10 +70,20 @@ public class Main {
             ArrayList<Integer> userIds;
             try{
                 userIds= getUsers(gender, age, occup_id);
+            }catch(Exception e) {
+                System.out.println(e);
+                return;
+            }
+            //What if userIds is empty for this moment??????????????????????????????????
+            Collections.sort(userIds);
+            ArrayList<Integer> movieIds;
+            try {
+                movieIds = scanRatings(userIds);
             }catch(Exception e){
                 System.out.println(e);
                 return;
             }
+            //What if movieIds is empty for this moment??????????????????????????????????
 
         }
     }
@@ -100,24 +110,26 @@ public class Main {
     private static ArrayList<Integer> scanRatings(ArrayList<Integer> userID) throws IOException {
         // ! --ratings.dat--
         // UserID::MovieID::Rating::Timestamp
-
         BufferedReader scan = new BufferedReader(new FileReader(new File("../../../data/ratings.dat")));
         ArrayList<Integer> list = new ArrayList<Integer>();
         String line;
+        int i;
         while ((line = scan.readLine()) != null) {
             String[] rating = line.split("::");
             // Collections.binarySearch() returns a negative number if the item not found;
             i = Collections.binarySearch(userID, Integer.parseInt(rating[0]));
-            j = Collections.binarySearch(movieID, Integer.parseInt(rating[1]));
-            if (i > -1 && j > -1) { // if we find corresponding movie and user;
-                sum += Integer.parseInt(rating[2]);
-                count++;
+            if (i > -1) { // if we find corresponding and user;
+                if (Integer.parseInt(rating[2]) == 4) {
+                    list.add(Integer.parseInt(rating[1]));
+                } else if (Integer.parseInt(rating[2]) == 5) {
+                    list.add(0, Integer.parseInt(rating[1]));
+                } else {
+                    continue;
+                }
             }
         }
         scan.close();
-       // double not_rounded =  (double)(sum) / (double)(count);
-       //return Math.round(not_rounded * 100.0) / 100.0;
-        return (double)sum / (double)count;
+        return list;
     }
 
     // This function returns array of userIds' with given data
@@ -139,7 +151,6 @@ public class Main {
 
     // This function returns movieID-s with matching genres
     private static ArrayList<Integer> getMovies(String[] genres) throws IOException {
-        // ! --movies.dat--
         // MovieID::Title::Genres
         BufferedReader scan = new BufferedReader(new FileReader(new File("data/movies.dat")));
         ArrayList<Integer> list = new ArrayList<Integer>();
