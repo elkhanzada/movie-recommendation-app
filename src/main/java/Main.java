@@ -179,8 +179,33 @@ public class Main {
                 System.out.println("The forth argument is empty. Please provide the movie genre as forth argument!");
                 return;
             }
-            String genre = args[3];
-            //If genre argument is too long or if it is bad
+            String[] genres = args[3].split("\\|");
+            if(genres.length == 0){
+                System.out.println("Please enter valid input for genres field (forth field)");
+                return;
+            }
+            if(genres.length > 10){
+                //if too many genres
+                System.out.println("Input for genre is too long, please try to include a genre not more that one time.");
+                return;
+            }
+            boolean is_empty = true;
+            for(String genre : genres){
+                //if the genre string is too long
+                if(genre.length() > 50){
+                    System.out.println("There are no movies with genre " + genre);
+                    System.out.println("Use '|' character to split genres");
+                    return;
+                }
+                if(genre.length() > 0){
+                    is_empty = false;
+                }
+
+            }
+            if(is_empty){
+                System.out.println("Please enter valid input");
+                return;
+            }
             //------------------
             //age, occup_id, gender (in lower case)
             ArrayList<Integer> userIds;
@@ -194,7 +219,7 @@ public class Main {
             Collections.sort(userIds);
             ArrayList<Integer> movieIds;
             try {
-                movieIds = scanRatings2(userIds, genre);
+                movieIds = scanRatings(userIds);
             }catch(Exception e){
                 System.out.println(e);
                 return;
@@ -205,10 +230,21 @@ public class Main {
                 System.out.println("Size of movieIds is less than 10");
                 return;
             }
-            while(movieIds.size() > 10){
-                movieIds.remove(10);
+            System.out.println(movieIds);
+            try {
+                removenots(movieIds, genres);
+            }catch(Exception e){
+                System.out.println(e);
+                return;
+            }
+            System.out.println(movieIds);
+            if(movieIds.size() < 10){
+                //Do something
+                System.out.println("Size of movieIds is less than 10");
+                return;
             }
             try {
+                //What if genres is like this: adventure|lol|pol (we still count this case)
                 ArrayList<String> titles = putnames(movieIds);
                 addlinks(movieIds, titles);
                 for(int i = 0; i < 10; i++){
@@ -220,6 +256,44 @@ public class Main {
         }
     }
 
+    private static void removenots(ArrayList<Integer> movies, String[] genres) throws IOException{
+        int n = 0;
+        for(int i = 0; i < movies.size() && n < 10; i++){
+            int curid = movies.get(i);
+            BufferedReader scan = new BufferedReader(new FileReader(new File("../../../data/movies.dat")));
+            String line;
+            while ((line = scan.readLine()) != null ) {
+                String[] movie = line.split("::");
+                if(curid == Integer.parseInt(movie[0])){
+                    String[] genres_list = movie[2].split("\\|");
+                    boolean contains = false;
+                    for(String s : genres){
+                        if(s.length() == 0){
+                            continue;
+                        }
+                        boolean found = false;
+                        for(String g: genres_list){
+                            if(s.toLowerCase().equals(g.toLowerCase())){
+                                found = true;
+                            }
+                        }
+                        if(found){
+                            contains = true;
+                            break;
+                        }
+                    }
+                    if(contains){
+                        n++;
+                    }else{
+                        movies.remove(i);
+                        i--;
+                    }
+                    break;
+                }
+            }
+            scan.close();
+        }
+    }
     private static void addlinks(ArrayList<Integer> movies, ArrayList<String> titles)throws IOException{
         BufferedReader scan = new BufferedReader(new FileReader(new File("../../../data/links.dat")));
         String line;
@@ -319,33 +393,6 @@ public class Main {
 
     // This method scans "ratings.dat" file and returns the list of MovieIds' with high ratings
     private static ArrayList<Integer> scanRatings(ArrayList<Integer> userID) throws IOException {
-        // ! --ratings.dat--
-        // UserID::MovieID::Rating::Timestamp
-        BufferedReader scan = new BufferedReader(new FileReader(new File("../../../data/ratings.dat")));
-        ArrayList<Integer> list = new ArrayList<Integer>();
-        String line;
-        int i;
-        int countfives = 0;
-        while ((line = scan.readLine()) != null && countfives < 10) {
-            String[] rating = line.split("::");
-            // Collections.binarySearch() returns a negative number if the item not found;
-            i = Collections.binarySearch(userID, Integer.parseInt(rating[0]));
-            if (i > -1) { // if we find corresponding and user;
-                if (Integer.parseInt(rating[2]) == 4) {
-                    list.add(Integer.parseInt(rating[1]));
-                } else if (Integer.parseInt(rating[2]) == 5) {
-                    list.add(0, Integer.parseInt(rating[1]));
-                    countfives++;
-                } else {
-                    continue;
-                }
-            }
-        }
-        scan.close();
-        return list;
-    }
-
-    private static ArrayList<Integer> scanRatings2(ArrayList<Integer> userID, String genre) throws IOException {
         // ! --ratings.dat--
         // UserID::MovieID::Rating::Timestamp
         BufferedReader scan = new BufferedReader(new FileReader(new File("../../../data/ratings.dat")));
