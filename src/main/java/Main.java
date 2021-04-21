@@ -80,11 +80,9 @@ public class Main {
             //age, occup_id, gender (in lower case)
             ArrayList<Integer> userIds;
             try{
-                userIds= getUsers(gender, age, occup_id);
+                userIds = getUsers(gender, is_gender, age, is_age, occup_id, is_occup);
             }catch(Exception e) {
-                System.out.println(e);
-                return;
-            }
+                System.out.printl
             //What if userIds is empty for this moment??????????????????????????????????
             Collections.sort(userIds);
             ArrayList<Integer> movieIds;
@@ -144,7 +142,12 @@ public class Main {
     }
 
     // This function returns array of userIds' with given data
-    private static ArrayList<Integer> getUsers(String gender, Integer age, Integer occupation) throws IOException {
+        // This function returns array of userIds' with given data
+    private static ArrayList<Integer> getUsers(
+            String gender,
+    boolean is_g, Integer age,
+    boolean is_a, Integer occupation,
+    boolean is_o) throws IOException {
         // ! --users.dat--
         // UserID::Gender::Age::Occupation::Zip-code
         BufferedReader scan = new BufferedReader(new FileReader( new File("../../../data/users.dat")));
@@ -152,7 +155,9 @@ public class Main {
         String line;
         while ((line = scan.readLine()) != null) {
             String[] user = line.split("::");
-            if (user[1].toLowerCase().equals(gender) && Integer.parseInt(user[2]) == age && Integer.parseInt(user[3]) == occupation){
+            if ((!is_g || user[1].toLowerCase().equals(gender))
+                    && (!is_a || Integer.parseInt(user[2]) == age)
+                    && (!is_o || Integer.parseInt(user[3]) == occupation)){
                 list.add(Integer.parseInt(user[0]));
             }
         }
