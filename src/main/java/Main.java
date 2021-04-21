@@ -115,6 +115,7 @@ public class Main {
         }
     }
 
+
     // This method scans "ratings.dat" file and returns the list of MovieIds' with high ratings
     private static ArrayList<Integer> scanRatings(ArrayList<Integer> userID) throws IOException {
         // ! --ratings.dat--
@@ -123,7 +124,8 @@ public class Main {
         ArrayList<Integer> list = new ArrayList<Integer>();
         String line;
         int i;
-        while ((line = scan.readLine()) != null) {
+        int countfives = 0;
+        while ((line = scan.readLine()) != null && countfives < 10) {
             String[] rating = line.split("::");
             // Collections.binarySearch() returns a negative number if the item not found;
             i = Collections.binarySearch(userID, Integer.parseInt(rating[0]));
@@ -132,6 +134,7 @@ public class Main {
                     list.add(Integer.parseInt(rating[1]));
                 } else if (Integer.parseInt(rating[2]) == 5) {
                     list.add(0, Integer.parseInt(rating[1]));
+                    countfives++;
                 } else {
                     continue;
                 }
@@ -160,42 +163,6 @@ public class Main {
                     && (!is_o || Integer.parseInt(user[3]) == occupation)){
                 list.add(Integer.parseInt(user[0]));
             }
-        }
-        scan.close();
-        return list;
-    }
-
-    // This function returns movieID-s with matching genres
-    private static ArrayList<Integer> getMovies(String[] genres) throws IOException {
-        // MovieID::Title::Genres
-        BufferedReader scan = new BufferedReader(new FileReader(new File("data/movies.dat")));
-        ArrayList<Integer> list = new ArrayList<Integer>();
-        boolean contains;
-        String line;
-        while ((line = scan.readLine()) != null) {
-            String[] movie = line.split("::");
-	    String[] genres_list = movie[2].split("\\|");
-            contains = true;
-            for(String s : genres){
-		if(s.length() == 0){
-			continue;
-		}
-		boolean found = false;
-		for(String g: genres_list){
-			if(s.toLowerCase().equals(g.toLowerCase())){
-				found = true;
-			}
-		}
-		if(!found){
-			contains = false;
-			break;
-		}
-	    }
-	    
-            //for (String genre : genres) {
-            //    if (!movie[2].toLowerCase().contains(genre.toLowerCase())) contains = false;
-            //}
-            if (contains) list.add(Integer.parseInt(movie[0]));
         }
         scan.close();
         return list;
