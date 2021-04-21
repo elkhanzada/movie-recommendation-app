@@ -216,7 +216,7 @@ public class Main {
         scan.close();
         return list;
     }
-    
+
     // This method scans "ratings.dat" file and returns the list of MovieIds' with high ratings
     private static ArrayList<Integer> scanRatings(ArrayList<Integer> userID) throws IOException {
         // ! --ratings.dat--
@@ -245,6 +245,34 @@ public class Main {
         return list;
     }
 
+    private static ArrayList<Integer> scanRatings2(ArrayList<Integer> userID) throws IOException {
+        // ! --ratings.dat--
+        // UserID::MovieID::Rating::Timestamp
+        BufferedReader scan = new BufferedReader(new FileReader(new File("../../../data/ratings.dat")));
+        ArrayList<Integer> list = new ArrayList<Integer>();
+        String line;
+        int i;
+        int count = 0;
+        while ((line = scan.readLine()) != null && count < 2000) {
+            String[] rating = line.split("::");
+            // Collections.binarySearch() returns a negative number if the item not found;
+            i = Collections.binarySearch(userID, Integer.parseInt(rating[0]));
+            if (i > -1) { // if we find corresponding and user;
+                if (Integer.parseInt(rating[2]) == 4) {
+                    count ++;
+                    list.add(Integer.parseInt(rating[1]));
+                } else if (Integer.parseInt(rating[2]) == 5) {
+                    list.add(0, Integer.parseInt(rating[1]));
+                    count ++;
+                } else {
+                    continue;
+                }
+            }
+        }
+        scan.close();
+        return list;
+    }
+    
     // This function returns array of userIds' with given data
     private static ArrayList<Integer> getUsers(
             String gender,
