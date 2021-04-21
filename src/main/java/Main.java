@@ -18,51 +18,62 @@ public class Main {
         }
         //args[0] = gender, args[1] = age, args[2] = occupation
         else if(args.length == 3){
+            boolean is_gender = true;
+            boolean is_age = true;
+            boolean is_occup = true;
             if(args[0].length() < 1){
-                System.out.println("First argument is empty, please provide your gender F/M as a first argument");
-                return;
+                System.out.println("First argument is empty, we will provide top 10 movies ignoring the gender");
+                is_gender = false;
             }
             if(args[1].length() < 1){
-                System.out.println("Second argument is empty, please provide your age as a second argument");
-                return;
+                System.out.println("Second argument is empty, we will provide top 10 movies ignoring the age");
+                is_age = false;
             }
             if(args[2].length() < 1){
-                System.out.println("Third argument is empty, please provide your occupation as a third argument");
-                return;
+                System.out.println("Third argument is empty, we will provide top 10 movies ignoring the occupation");
+                is_occup = false;
             }
             //------------------
-	        String gender = args[0].toLowerCase();
-            if(!gender.equals("f") && !gender.equals("m")){
-                System.out.println("Please pass your gender as M/m if you are male and F/f if you are female");
-                return;
-            }
-            //------------------
-	        Integer age;
-	        try {
-                age = Integer.parseInt(args[1]);
-            }catch(Exception e) {
-                System.out.println("The age you provided is not a valid integer or too long. Please pass your age as an integer");
-                return;
-            }
-	        age = setAge(age);
-            //------------------
-       	    String work = args[2].toLowerCase();
-       	    HashMap<String, Integer> workID = new HashMap<>();
-            setOccupationHash(workID);
-            Integer occup_id = workID.get(work);
-            boolean is_other = false;
-            //START CHECK FOR OCCUPATION INPUT
-            if(occup_id == null){
-                //some wrong string
-                if(work.length() > 50){
-                    System.out.println("There is no such occupation (name is too long)");
+            String gender = "";
+            if(is_gender) {
+                gender = args[0].toLowerCase();
+                if (!gender.equals("f") && !gender.equals("m")) {
+                    System.out.println("Please pass your gender as M/m if you are male and F/f if you are female");
                     return;
                 }
-                //the type of occupation is - other
-                else{
-                    is_other = true;
-                    occup_id = 0;
-                    System.out.println("Since we can't recognize occupation " + work + ", we will regard it as 'other'");
+            }
+            //------------------
+            Integer age = 0;
+            if(is_age) {
+                try {
+                    age = Integer.parseInt(args[1]);
+                } catch (Exception e) {
+                    System.out.println("The age you provided is not a valid integer or too long. Please pass your age as an integer");
+                    return;
+                }
+                age = setAge(age);
+            }
+            //------------------
+            Integer occup_id = 0;
+            if(is_occup) {
+                String work = args[2].toLowerCase();
+                HashMap<String, Integer> workID = new HashMap<>();
+                setOccupationHash(workID);
+                occup_id = workID.get(work);
+                boolean is_other = false;
+                //START CHECK FOR OCCUPATION INPUT
+                if (occup_id == null) {
+                    //some wrong string
+                    if (work.length() > 50) {
+                        System.out.println("There is no such occupation (name is too long)");
+                        return;
+                    }
+                    //the type of occupation is - other
+                    else {
+                        is_other = true;
+                        occup_id = 0;
+                        System.out.println("Since we can't recognize occupation " + work + ", we will regard it as 'other'");
+                    }
                 }
             }
             //------------------
