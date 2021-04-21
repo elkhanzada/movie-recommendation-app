@@ -217,7 +217,6 @@ public class Main {
             ArrayList<Integer> movieIds;
             try {
                 movieIds = scanRatings2(userIds);
-                System.out.println(movieIds.size());
             }catch(Exception e){
                 System.out.println(e);
                 return;
