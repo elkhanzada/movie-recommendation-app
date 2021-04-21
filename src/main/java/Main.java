@@ -112,6 +112,156 @@ public class Main {
             }catch(Exception e){
                 System.out.println(e);
             }
+        }else{
+            boolean is_gender = true;
+            boolean is_age = true;
+            boolean is_occup = true;
+            if(args[0].length() < 1){
+                System.out.println("First argument is empty, we will provide top 10 movies ignoring the gender");
+                is_gender = false;
+            }
+            if(args[1].length() < 1){
+                System.out.println("Second argument is empty, we will provide top 10 movies ignoring the age");
+                is_age = false;
+            }
+            if(args[2].length() < 1){
+                System.out.println("Third argument is empty, we will provide top 10 movies ignoring the occupation");
+                is_occup = false;
+            }
+            //------------------
+            String gender = "";
+            if(is_gender) {
+                gender = args[0].toLowerCase();
+                if (!gender.equals("f") && !gender.equals("m")) {
+                    System.out.println("Please pass your gender as M/m if you are male and F/f if you are female");
+                    return;
+                }
+            }
+            //------------------
+            Integer age = 0;
+            if(is_age) {
+                try {
+                    age = Integer.parseInt(args[1]);
+                } catch (Exception e) {
+                    System.out.println("The age you provided is not a valid integer or too long. Please pass your age as an integer");
+                    return;
+                }
+                age = setAge(age);
+            }
+            //------------------
+            Integer occup_id = 0;
+            if(is_occup) {
+                String work = args[2].toLowerCase();
+                HashMap<String, Integer> workID = new HashMap<>();
+                setOccupationHash(workID);
+                occup_id = workID.get(work);
+                boolean is_other = false;
+                //START CHECK FOR OCCUPATION INPUT
+                if (occup_id == null) {
+                    //some wrong string
+                    if (work.length() > 50) {
+                        System.out.println("There is no such occupation (name is too long)");
+                        return;
+                    }
+                    //the type of occupation is - other
+                    else {
+                        is_other = true;
+                        occup_id = 0;
+                        System.out.println("Since we can't recognize occupation " + work + ", we will regard it as 'other'");
+                    }
+                }
+            }
+            //------------------
+            if(args[3].length() < 1){
+                System.out.println("The forth argument is empty. Please provide the movie genre as forth argument!");
+                return;
+            }
+            String[] genres = args[3].split("\\|");
+            if(genres.length == 0){
+                System.out.println("Please enter valid input for genres field (forth field)");
+                return;
+            }
+            if(genres.length > 10){
+                //if too many genres
+                System.out.println("Input for genre is too long, please try to include a genre not more that one time.");
+                return;
+            }
+            boolean is_empty = true;
+            for(String genre : genres){
+                //if the genre string is too long
+                if(genre.length() > 50){
+                    System.out.println("There are no movies with genre " + genre);
+                    System.out.println("Use '|' character to split genres");
+                    return;
+                }
+                if(genre.length() > 0){
+                    is_empty = false;
+                }
+
+            }
+            if(is_empty){
+                System.out.println("Please enter valid input");
+                return;
+            }
+            //------------------
+            //age, occup_id, gender (in lower case)
+            ArrayList<Integer> userIds;
+            try{
+                userIds= getUsers(gender, is_gender, age, is_age, occup_id, is_occup);
+            }catch(Exception e) {
+                System.out.println(e);
+                return;
+            }
+            //What if userIds is empty for this moment??????????????????????????????????
+            Collections.sort(userIds);
+            ArrayList<Integer> movieIds;
+            try {
+                movieIds = scanRatings2(userIds);
+                System.out.println(movieIds.size());
+            }catch(Exception e){
+                System.out.println(e);
+                return;
+            }
+            //What if movieIds is empty for this moment??????????????????????????????????
+            if(movieIds.size() < 10){
+                //Do something
+                System.out.println("Size of movieIds is less than 10");
+                return;
+            }
+            try {
+                removenots(movieIds, genres);
+            }catch(Exception e){
+                System.out.println(e);
+                return;
+            }
+            if(movieIds.size() < 10){
+                //Do something
+//                try{
+//                    userIds = getUsers(gender, false, age, false, occup_id, false);
+//                    Collections.sort(userIds);
+//                    movieIds = scanRatings2(userIds);
+//                }catch(Exception e){
+//                    System.out.println(e);
+//                }
+//                try{
+//                    removenots(movieIds, genres);
+//                }catch(Exception e){
+//                    System.out.println(e);
+//                    return;
+//                }
+                System.out.println("Size of movieIds is less than 10");
+                return;
+            }
+            try {
+                //What if genres is like this: adventure|lol|pol (we still count this case)
+                ArrayList<String> titles = putnames(movieIds);
+                addlinks(movieIds, titles);
+                for(int i = 0; i < 10; i++){
+                    System.out.println(titles.get(i));
+                }
+            }catch(Exception e){
+                System.out.println(e);
+            }
         }
     }
 
@@ -272,7 +422,7 @@ public class Main {
         scan.close();
         return list;
     }
-    
+
     // This function returns array of userIds' with given data
     private static ArrayList<Integer> getUsers(
             String gender,
