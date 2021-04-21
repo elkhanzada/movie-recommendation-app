@@ -82,7 +82,9 @@ public class Main {
             try{
                 userIds = getUsers(gender, is_gender, age, is_age, occup_id, is_occup);
             }catch(Exception e) {
-                System.out.printl
+                System.out.println(e);
+                return;
+            }
             //What if userIds is empty for this moment??????????????????????????????????
             Collections.sort(userIds);
             ArrayList<Integer> movieIds;
@@ -93,7 +95,23 @@ public class Main {
                 return;
             }
             //What if movieIds is empty for this moment??????????????????????????????????
-
+            if(movieIds.size() < 10){
+                //Do something
+                System.out.println("Size of movieIds is less than 10");
+                return;
+            }
+            while(movieIds.size() > 10){
+                movieIds.remove(10);
+            }
+            try {
+                ArrayList<String> titles = putnames(movieIds);
+                addlinks(movieIds, titles);
+                for(int i = 0; i < 10; i++){
+                    System.out.println(titles.get(i));
+                }
+            }catch(Exception e){
+                System.out.println(e);
+            }
         }
     }
 
@@ -115,7 +133,90 @@ public class Main {
         }
     }
 
+    private static void removenots(ArrayList<Integer> movies, String[] genres) throws IOException{
+        int n = 0;
+        for(int i = 0; i < movies.size() && n < 10; i++){
+            int curid = movies.get(i);
+            BufferedReader scan = new BufferedReader(new FileReader(new File("../../../data/movies.dat")));
+            String line;
+            boolean reduce = false;
+            while ((line = scan.readLine()) != null ) {
+                String[] movie = line.split("::");
+                if(curid == Integer.parseInt(movie[0])){
+                    String[] genres_list = movie[2].split("\\|");
+                    boolean contains = false;
+                    for(String s : genres){
+                        if(s.length() == 0){
+                            continue;
+                        }
+                        boolean found = false;
+                        for(String g: genres_list){
+                            if(s.toLowerCase().equals(g.toLowerCase())){
+                                found = true;
+                            }
+                        }
+                        if(found){
+                            contains = true;
+                            break;
+                        }
+                    }
+                    if(contains){
+                        n++;
+                        break;
+                    }else{
+                        movies.remove(i);
+                        i--;
+                        break;
+                    }
+                }
+            }
+            scan.close();
+        }
+    }
 
+    private static void addlinks(ArrayList<Integer> movies, ArrayList<String> titles)throws IOException{
+        BufferedReader scan = new BufferedReader(new FileReader(new File("../../../data/links.dat")));
+        String line;
+        int count = 0;
+        int i;
+        while ((line = scan.readLine()) != null && count < 10){
+            String[] movie = line.split("::");
+            i = Integer.parseInt(movie[0]);
+            for(int x = 0; x < 10; x++){
+                if(i == movies.get(x)){
+                    titles.set(x, titles.get(x) + " (http://www.imdb.com/title/tt" + movie[1] + ")");
+                    count ++;
+                    break;
+                }
+            }
+        }
+    }
+
+    private static ArrayList<String> putnames(ArrayList<Integer> movies)throws IOException{
+        BufferedReader scan = new BufferedReader(new FileReader(new File("../../../data/movies.dat")));
+        ArrayList<String> list = new ArrayList<String>(10);
+        for(int x = 0; x < 10; x++){
+            list.add("");
+        }
+        String line;
+        int count = 0;
+        int i;
+        while ((line = scan.readLine()) != null && count < 10) {
+            String[] movie = line.split("::");
+            i = Integer.parseInt(movie[0]);
+            for(int x = 0; x < 10; x++){
+                if(i == movies.get(x)){
+                    list.set(x, movie[1]);
+                    count++;
+                    break;
+                }
+            }
+
+        }
+        scan.close();
+        return list;
+    }
+    
     // This method scans "ratings.dat" file and returns the list of MovieIds' with high ratings
     private static ArrayList<Integer> scanRatings(ArrayList<Integer> userID) throws IOException {
         // ! --ratings.dat--
@@ -145,7 +246,6 @@ public class Main {
     }
 
     // This function returns array of userIds' with given data
-        // This function returns array of userIds' with given data
     private static ArrayList<Integer> getUsers(
             String gender,
     boolean is_g, Integer age,
