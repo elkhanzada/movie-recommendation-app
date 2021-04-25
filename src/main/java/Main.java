@@ -2,11 +2,9 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
+import java.util.*;
 import java.lang.Math;
+import java.util.stream.Collectors;
 
 public class Main {
 
@@ -132,11 +130,17 @@ public class Main {
                 for (Integer k : ratings.keySet()) {
                     scores.put(k, (double) ratings.get(k)[0] / (double) ratings.get(k)[1]);
                 }
-                for (Integer k : scores.keySet()) {
-                    if (scores.get(k) > 4) {
-                        printMovie(k, movies);
-                        count++;
-                    }
+                HashMap<Integer, Double> sortedMap = scores.entrySet().stream()
+                        .sorted(Comparator.comparingDouble(e -> -e.getValue()))
+                        .collect(Collectors.toMap(
+                                Map.Entry::getKey,
+                                Map.Entry::getValue,
+                                (a, b) -> { throw new AssertionError(); },
+                                LinkedHashMap::new
+                        ));
+                for (Integer k : sortedMap.keySet()) {
+                    printMovie(k, movies);
+                    count++;
                     if (count == 10) break;
                 }
             } catch (IOException e) {
