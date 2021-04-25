@@ -123,7 +123,7 @@ public class Main {
                 for (Integer k : ratings.keySet()) {
                     scores.put(k, (double) ratings.get(k)[0] / (double) ratings.get(k)[1]);
                 }
-                HashMap<Integer, Double> sortedMap = scores.entrySet().stream()
+                HashMap<Integer, Double> sortedScores = scores.entrySet().stream()
                         .sorted(Comparator.comparingDouble(e -> -e.getValue()))
                         .collect(Collectors.toMap(
                                 Map.Entry::getKey,
@@ -131,7 +131,9 @@ public class Main {
                                 (a, b) -> { throw new AssertionError(); },
                                 LinkedHashMap::new
                         ));
-                for (Integer k : sortedMap.keySet()) {
+                if(sortedScores.size()<10)
+                    System.out.println("The algorithm cannot recommend 10 movies, it will be less");
+                for (Integer k : sortedScores.keySet()) {
                     printMovie(k, movies);
                     count++;
                     if (count == 10) break;
@@ -187,26 +189,8 @@ public class Main {
             }
         }
         scan.close();
-        // double not_rounded =  (double)(sum) / (double)(count);
-        //return Math.round(not_rounded * 100.0) / 100.0;
         return ratingList;
     }
-
-//    // This function returns userID-s with matching occupation
-//    private static ArrayList<Integer> getUsers(Integer occupation) throws IOException {
-//        // ! --users.dat--
-//        // UserID::Gender::Age::Occupation::Zip-code
-//
-//        BufferedReader scan = new BufferedReader(new FileReader(new File("data/users.dat")));
-//        ArrayList<Integer> list = new ArrayList<Integer>();
-//        String line;
-//        while ((line = scan.readLine()) != null) {
-//            String[] user = line.split("::");
-//            if (Integer.parseInt(user[3]) == occupation) list.add(Integer.parseInt(user[0]));
-//        }
-//        scan.close();
-//        return list;
-//    }
 
     //Elkhan's code
     private static ArrayList<Integer> getUsers(String work, Integer occupation, Integer age, String gender) throws IOException {
@@ -259,10 +243,6 @@ public class Main {
                     }
                 }
             }
-
-            //for (String genre : genres) {
-            //    if (!movie[2].toLowerCase().contains(genre.toLowerCase())) contains = false;
-            //}
         }
         scan.close();
         return list;
