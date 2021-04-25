@@ -116,13 +116,6 @@ public class Main {
                 }
 
                 Collections.sort(movieID);
-                String output;
-                if (is_other) {
-                    output = "other";
-                } else {
-                    output = args[1];
-                }
-                System.out.printf("The average rating for %s is: %.2f\n", output, scanRatings(userID, movieID));
                 HashMap<Integer, Integer[]> ratings = getRatings(userID, movieID);
                 //Elkhan's code
                 int count = 0;
@@ -166,33 +159,6 @@ public class Main {
                 System.out.println(movies.get(chosenMovie) + " ( http://www.imdb.com/title/tt" + line.split("::")[1] + " )");
             }
         }
-    }
-
-    // This method scans "ratings.dat" file and returns the average
-    private static double scanRatings(ArrayList<Integer> userID, ArrayList<Integer> movieID) throws IOException {
-        // ! --ratings.dat--
-        // UserID::MovieID::Rating::Timestamp
-
-        BufferedReader scan = new BufferedReader(new FileReader(new File("data/ratings.dat")));
-        int count = 0;
-        int i = 0;
-        int j = 0;
-        int sum = 0;
-        String line;
-        while ((line = scan.readLine()) != null) {
-            String[] rating = line.split("::");
-            // Collections.binarySearch() returns a negative number if the item not found;
-            i = Collections.binarySearch(userID, Integer.parseInt(rating[0]));
-            j = Collections.binarySearch(movieID, Integer.parseInt(rating[1]));
-            if (i > -1 && j > -1) { // if we find corresponding movie and user;
-                sum += Integer.parseInt(rating[2]);
-                count++;
-            }
-        }
-        scan.close();
-        // double not_rounded =  (double)(sum) / (double)(count);
-        //return Math.round(not_rounded * 100.0) / 100.0;
-        return (double) sum / (double) count;
     }
 
     // Elkhan's code
