@@ -106,8 +106,10 @@ public class Main {
                 //END
                 //Elkhan's code
                 ArrayList<Integer> userID = getUsers(work, occup_id, age, gender);
+                ArrayList<Integer> userIDNoWork = getUsers("", occup_id, age, gender);
                 HashMap<Integer, String> movies = args.length == 4 ? getMovies(genres) : getMovies();
                 Collections.sort(userID);
+                Collections.sort(userIDNoWork);
                 ArrayList<Integer> movieID = new ArrayList<>(movies.keySet());
                 //Check if movieID is empty
                 if (movieID.size() <= 0) {
@@ -120,6 +122,13 @@ public class Main {
                 //Elkhan's code
                 int count = 0;
                 HashMap<Integer, Double> scores = new HashMap<>();
+                if(ratings.size()<10) {
+//                    System.out.println("The algorithm cannot recommend 10 movies, it will be less");
+                      HashMap<Integer, Integer[]> secondRatings = getRatings(userIDNoWork,movieID);
+                      secondRatings.keySet().removeAll(ratings.keySet());
+                      ratings.putAll(secondRatings);
+                }
+
                 for (Integer k : ratings.keySet()) {
                     scores.put(k, (double) ratings.get(k)[0] / (double) ratings.get(k)[1]);
                 }
@@ -131,8 +140,7 @@ public class Main {
                                 (a, b) -> { throw new AssertionError(); },
                                 LinkedHashMap::new
                         ));
-                if(sortedScores.size()<10)
-                    System.out.println("The algorithm cannot recommend 10 movies, it will be less");
+
                 for (Integer k : sortedScores.keySet()) {
                     printMovie(k, movies);
                     count++;
