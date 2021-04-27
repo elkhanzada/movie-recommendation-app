@@ -15,6 +15,7 @@ public class Utils {
             int movieID = Integer.parseInt(line.split("::")[0]);
             if (chosenMovie == movieID) {
                 System.out.println(movies.get(chosenMovie) + " ( http://www.imdb.com/title/tt" + line.split("::")[1] + " )");
+                break;
             }
         }
     }
@@ -23,12 +24,9 @@ public class Utils {
     public static HashMap<Integer, Integer[]> getRatings(ArrayList<Integer> userID, ArrayList<Integer> movieID) throws IOException {
         // ! --ratings.dat--
         // UserID::MovieID::Rating::Timestamp
-
         BufferedReader scan = new BufferedReader(new FileReader(new File("data/ratings.dat")));
-        int count = 0;
         int i = 0;
         int j = 0;
-        int sum = 0;
         String line;
         HashMap<Integer, Integer[]> ratingList = new HashMap<>();
         while ((line = scan.readLine()) != null) {
@@ -41,7 +39,6 @@ public class Utils {
                     ratingList.put(Integer.parseInt(rating[1]), new Integer[]{Integer.parseInt(rating[2]), 1});
                 else
                     ratingList.put(Integer.parseInt(rating[1]), new Integer[]{ratingList.get(Integer.parseInt(rating[1]))[0] + Integer.parseInt(rating[2]), ratingList.get(Integer.parseInt(rating[1]))[1] + 1});
-                count++;
             }
         }
         scan.close();
@@ -52,7 +49,6 @@ public class Utils {
     public static ArrayList<Integer> getUsers(String work, Integer occupation, Integer age, String gender) throws IOException {
         // ! --users.dat--
         // UserID::Gender::Age::Occupation::Zip-code
-
         BufferedReader scan = new BufferedReader(new FileReader(new File("data/users.dat")));
         ArrayList<Integer> list = new ArrayList<Integer>();
         HashMap<Integer, Integer[]> agelist = new HashMap<>();
@@ -82,12 +78,10 @@ public class Utils {
         // MovieID::Title::Genres
         BufferedReader scan = new BufferedReader(new FileReader(new File("data/movies.dat")));
         HashMap<Integer, String> list = new HashMap<>();
-        boolean contains;
         String line;
         while ((line = scan.readLine()) != null) {
             String[] movie = line.split("::");
             String[] genres_list = movie[2].split("\\|");
-            contains = true;
             for (String s : genres) {
                 if (s.length() == 0) {
                     continue;
@@ -110,7 +104,6 @@ public class Utils {
         // MovieID::Title::Genres
         BufferedReader scan = new BufferedReader(new FileReader(new File("data/movies.dat")));
         HashMap<Integer, String> list = new HashMap<>();
-        boolean contains;
         String line;
         while ((line = scan.readLine()) != null) {
             String[] movie = line.split("::");
@@ -123,7 +116,6 @@ public class Utils {
     // This function simply maps occupation name to its category
     public static void setOccupationHash(HashMap<String, Integer> hashmap) {
         if (hashmap.isEmpty()) {
-            // ! Subject to change depending on profs answer
             hashmap.put("other", 0);
             hashmap.put("academic", 1);
             hashmap.put("educator", 1);
@@ -147,7 +139,7 @@ public class Utils {
             hashmap.put("sales", 14);
             hashmap.put("marketing", 14);
             hashmap.put("scientist", 15);
-            hashmap.put("self-employed", 1);
+            hashmap.put("self-employed", 16);
             hashmap.put("technician", 17);
             hashmap.put("engineer", 17);
             hashmap.put("tradesman", 18);

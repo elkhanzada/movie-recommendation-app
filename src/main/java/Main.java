@@ -3,46 +3,32 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class Main {
-
-    /**
-     * todo: Implement the program described below
-     * That is, the input to your program is a movie category (e.g., Adventure)
-     * and the occupation of the user (e.g., educator). The expected output is
-     * the average rating score of all movies in the given category rated by
-     * the given occupation. The category input can be one or more categories
-     * with “|” as a delimiter. For example, if the input is Adventure|Comedy,
-     * then your program must output the average rating score of those movies
-     * that belong to both Adventure and Comedy categories. The occupation input
-     * must be only one.
-     *
-     * @param args
-     * @throws IOException
-     */
-
-    // xxx.yyy.YourClass Adventure educator
-    // args[0] = genre, args[1] = occupation
     public static void main(String[] args) {
         String gender;
         int age;
         String work;
         String[] genres = new String[5];
-        if (args.length != 3 && args.length != 4) {
+
+        HashMap<String, Integer> workID = new HashMap<>();
+        Utils.setOccupationHash(workID); // now workID contains all mappings
+
+        if (args.length < 3 || args.length > 4) {
             //-------------------------------------------------------------------
-            //are these messages enough for case with !=2 args?
+            //? are these messages enough for case with !=2 args?
             //-------------------------------------------------------------------
             System.out.println("Please, pass exactly 3 or 4 arguments!");
             System.out.print("Try to remove spaces between occupations consisting of several words, such as ");
             System.out.println("\"college student\" -> \"collegestudent\"");
-        } else {
+        } 
+        else {
             //Elkhan's code
-            if (args.length == 3) {
-                gender = args[0].toLowerCase();
-                if (args[1].length() > 0)
-                    age = Integer.parseInt(args[1]);
-                else
-                    age = -1;
-                work = args[2].toLowerCase();
-            } else {
+            gender = args[0].toLowerCase();
+            if (args[1].length() > 0)
+                age = Integer.parseInt(args[1]);
+            else
+                age = -1;
+            work = args[2].toLowerCase();
+            if (args.length == 4) {
                 gender = args[0].toLowerCase();
                 if (args[1].length() > 0)
                     age = Integer.parseInt(args[1]);
@@ -50,7 +36,7 @@ public class Main {
                     age = -1;
                 work = args[2].toLowerCase();
                 genres = args[3].toLowerCase().split("\\|");
-                //START CHECK FOR GENRE INPUT
+                //* START CHECK FOR GENRE INPUT
                 if (genres.length == 0) {
                     System.out.println("Please enter valid input");
                     return;
@@ -68,9 +54,8 @@ public class Main {
                         System.out.println("Use '|' character to split genres");
                         return;
                     }
-                    if (genre.length() > 0) {
+                    if (genre.length() > 0) 
                         is_empty = false;
-                    }
 
                 }
                 if (is_empty) {
@@ -82,11 +67,8 @@ public class Main {
             //-------------------------------------------------------------------
             //toLowerCase may fail for ! character? or \?
             //-------------------------------------------------------------------
-            HashMap<String, Integer> workID = new HashMap<>();
-            Utils.setOccupationHash(workID); // now workID contains all mappings
             try {
                 Integer occup_id = workID.get(work);
-                boolean is_other = false;
                 //START CHECK FOR OCCUPATION INPUT
                 if (occup_id == null) {
                     //either some wrong string, or other type of occupation
@@ -94,7 +76,6 @@ public class Main {
                         System.out.println("There is no such occupation (name is too long)");
                         return;
                     } else {
-                        is_other = true;
                         occup_id = 0;
                         System.out.println("Since we can't recognize occupation " + work + ", we will regard it as 'other'");
                     }
@@ -122,7 +103,7 @@ public class Main {
                 int count = 0;
                 HashMap<Integer, Double> scores = new HashMap<>();
                 if (ratings.size() < 10) {
-//                    System.out.println("The algorithm cannot recommend 10 movies, it will be less");
+                    // System.out.println("The algorithm cannot recommend 10 movies, it will be less");
                     HashMap<Integer, Integer[]> secondRatings = Utils.getRatings(userIDNoWork, movieID);
                     secondRatings.keySet().removeAll(ratings.keySet());
                     ratings.putAll(secondRatings);
