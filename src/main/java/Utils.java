@@ -2,11 +2,42 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class Utils {
+    public static void printTop10(ArrayList<ArrayList<Integer>> userLists, ArrayList<Integer> movieID, HashMap<Integer, String> movies) throws IOException {
+        int count = 0;
+        int index = 0;
+        while (count < 10) {
+            ArrayList<Integer> list = userLists.get(index);
+            Collections.sort(list);
+            HashMap<Integer, Integer[]> ratings = Utils.getRatings(list, movieID);
+            //Elkhan's code
+            HashMap<Integer, Double> scores = new HashMap<>();
+            for (Integer k : ratings.keySet()) {
+                scores.put(k, (double) ratings.get(k)[0] / (double) ratings.get(k)[1]);
+            }
+            HashMap<Integer, Double> sortedScores = scores.entrySet().stream()
+                    .sorted(Comparator.comparingDouble(e -> -e.getValue()))
+                    .collect(Collectors.toMap(
+                            Map.Entry::getKey,
+                            Map.Entry::getValue,
+                            (a, b) -> {
+                                throw new AssertionError();
+                            },
+                            LinkedHashMap::new
+                    ));
+
+            for (Integer k : sortedScores.keySet()) {
+                Utils.printMovie(k, movies);
+                count++;
+                if (count >= 10) break;
+            }
+            index += 1;
+        }
+    }
+
     //Elkhan's code
     public static void printMovie(Integer chosenMovie, HashMap<Integer, String> movies) throws IOException {
         BufferedReader scan = new BufferedReader(new FileReader(new File("data/links.dat")));
@@ -18,6 +49,19 @@ public class Utils {
                 break;
             }
         }
+    }
+
+    public static ArrayList<ArrayList<Integer>> getAllUsers(String work, Integer occupation, Integer age, String gender) throws IOException {
+        ArrayList<ArrayList<Integer>> lists = new ArrayList<>();
+        lists.add(getUsers(work, occupation, age, gender));
+        lists.add(getUsers("", occupation, age, gender));
+        lists.add(getUsers(work, occupation, -1, gender));
+        lists.add(getUsers(work, occupation, age, ""));
+        lists.add(getUsers("", occupation, -1, gender));
+        lists.add(getUsers("", occupation, age, ""));
+        lists.add(getUsers(work, occupation, -1, ""));
+        lists.add(getUsers("", occupation, -1, ""));
+        return lists;
     }
 
     // Elkhan's code

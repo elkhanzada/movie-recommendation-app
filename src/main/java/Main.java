@@ -21,7 +21,7 @@ public class Main {
             System.out.print("Try to remove spaces between occupations consisting of several words, such as ");
             System.out.println("\"college student\" -> \"collegestudent\"");
             return;
-        } 
+        }
 
         //* Gender check
         gender = args[0].toLowerCase();
@@ -45,19 +45,17 @@ public class Main {
                 }
             }
             age = Integer.parseInt(args[1]);
-        }
-        else age = -1;
+        } else age = -1;
 
         if (args.length == 4) {
             genres = args[3].toLowerCase().split("\\|");
-            
+
             //* Genres check
             if (genres.length == 0) {
                 System.out.println("Please enter valid input");
                 System.out.println("Genres field should not be empty!");
                 return;
-            }
-            else if (genres.length > 10) {
+            } else if (genres.length > 10) {
                 System.out.println("Input for genres is too long, please try to include each genre only once.");
                 return;
             }
@@ -87,22 +85,15 @@ public class Main {
                 if (work.length() > 50) {
                     System.out.println("There is no such occupation (name is too long)");
                     return;
-                } 
-                else {
+                } else {
                     occup_id = 0;
                     System.out.println("Since we can't recognize occupation " + work + ", we will regard it as 'other'");
                 }
             }
-            
+
             //* Here, real implementation begins
-            ArrayList<Integer> userID = Utils.getUsers(work, occup_id, age, gender);
-            // To ignore work -> call getUsers("", occup_id, age, gender);
-            // To ignore age -> call getUsers(work, occup_id, -1, gender);
-            // To ignore gender -> call getUsers(work, occup_id, age, "");
-            ArrayList<Integer> userIDNoWork = Utils.getUsers("", occup_id, age, gender);
+            ArrayList<ArrayList<Integer>> userLists = Utils.getAllUsers(work, occup_id, age, gender);
             HashMap<Integer, String> movies = args.length == 4 ? Utils.getMovies(genres) : Utils.getMovies();
-            Collections.sort(userID);
-            Collections.sort(userIDNoWork);
             ArrayList<Integer> movieID = new ArrayList<>(movies.keySet());
             //Check if movieID is empty
             if (movieID.size() <= 0) {
@@ -110,49 +101,19 @@ public class Main {
                 return;
             }
             Collections.sort(movieID);
-            HashMap<Integer, Integer[]> ratings = Utils.getRatings(userID, movieID);
-            //Elkhan's code
-            int count = 0;
-            HashMap<Integer, Double> scores = new HashMap<>();
-            if (ratings.size() < 10) {
-                // System.out.println("The algorithm cannot recommend 10 movies, it will be less");
-                HashMap<Integer, Integer[]> secondRatings = Utils.getRatings(userIDNoWork, movieID);
-                secondRatings.keySet().removeAll(ratings.keySet());
-                ratings.putAll(secondRatings);
-                if (ratings.size() < 10)
-                    System.out.println("less");
-            }
-            for (Integer k : ratings.keySet()) {
-                scores.put(k, (double) ratings.get(k)[0] / (double) ratings.get(k)[1]);
-            }
-            HashMap<Integer, Double> sortedScores = scores.entrySet().stream()
-                    .sorted(Comparator.comparingDouble(e -> -e.getValue()))
-                    .collect(Collectors.toMap(
-                            Map.Entry::getKey,
-                            Map.Entry::getValue,
-                            (a, b) -> {
-                                throw new AssertionError();
-                            },
-                            LinkedHashMap::new
-                    ));
-            for (Integer k : sortedScores.keySet()) {
-                Utils.printMovie(k, movies);
-                count++;
-                if (count == 10) break;
-            }
+            Utils.printTop10(userLists, movieID, movies);
         }
-        
+
         //* Developer's helpers
         catch (IOException e) {
             // todo: Proper error handling
             System.out.println("Some error happened");
             e.printStackTrace();
-        } 
-        catch (NullPointerException e) {
+        } catch (NullPointerException e) {
             // todo: Find the source of a bug
             System.out.println("Null pointer exception somewhere");
             e.printStackTrace();
         }
-        
+
     }
 }
