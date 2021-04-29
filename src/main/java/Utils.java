@@ -42,7 +42,8 @@ public class Utils {
     public static void printMovie(Integer chosenMovie, HashMap<Integer, String> movies) throws IOException {
         BufferedReader scan = new BufferedReader(new FileReader(new File("data/links.dat")));
         String line;
-        while ((line = scan.readLine()) != null) {
+        while (true) {
+            line = scan.readLine();
             int movieID = Integer.parseInt(line.split("::")[0]);
             if (chosenMovie == movieID) {
                 System.out.println(movies.get(chosenMovie) + " ( http://www.imdb.com/title/tt" + line.split("::")[1] + " )");
