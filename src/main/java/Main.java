@@ -12,6 +12,15 @@ public class Main {
         HashMap<String, Integer> workID = new HashMap<>();
         Utils.setOccupationHash(workID); // now workID contains all mappings
 
+        Set<String> genreTypes = new HashSet<String>();
+        try {
+            Utils.setGenres(genreTypes);
+        }
+        catch (Exception e) {
+            System.out.println(e.toString());
+            return;
+        }
+
         //* Args check
         if (args.length < 3 || args.length > 4) {
             //-------------------------------------------------------------------
@@ -48,18 +57,16 @@ public class Main {
             genres = args[3].toLowerCase().split("\\|");
 
             //* Genres check
-            Set<String> set = workID.keySet();
-            if (genres.length == 0) {
+            if (genres.length == 0 || genres.length > 10) {
                 System.out.println("Please enter valid input");
                 System.out.println("Genres field should not be empty!");
-                return;
-            } else if (genres.length > 10) {
-                System.out.println("Input for genres is too long, please try to include each genre only once.");
+                System.out.println("Genres should not repeat and exceed 10!");
                 return;
             }
             for (String genre : genres) {
-                if (!set.contains(genre)) {
+                if (!genreTypes.contains(genre)) {
                     System.out.println("Please enter a valid input for genres!");
+                    System.out.println("There is no such genre as " + genre);
                     System.out.println("If you want to see the ratings for other occupations, simply type \"other\"");
                     return;
                 }
@@ -74,14 +81,9 @@ public class Main {
             Integer occup_id = workID.get(work);
             //* Occupation check
             if (occup_id == null) {
-                //either some wrong string, or other type of occupation
-                if (work.length() > 50) {
-                    System.out.println("There is no such occupation (name is too long)");
-                    return;
-                } else {
-                    occup_id = 0;
-                    System.out.println("Since we can't recognize occupation " + work + ", we will regard it as 'other'");
-                }
+                System.out.println("There is no such occupation as " + work + "!");
+                System.out.println("If you want to see some other ratings, please use \"other\" as an argument");
+                return;
             }
 
             //* Here, real implementation begins
@@ -103,6 +105,5 @@ public class Main {
             System.out.println("Some error happened");
             e.printStackTrace();
         }
-
     }
 }

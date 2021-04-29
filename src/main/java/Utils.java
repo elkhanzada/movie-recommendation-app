@@ -1,11 +1,13 @@
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class Utils {
+
     public static void printTop10(ArrayList<ArrayList<Integer>> userLists, ArrayList<Integer> movieID, HashMap<Integer, String> movies) throws IOException {
         int count = 0;
         int index = 0;
@@ -190,5 +192,14 @@ public class Utils {
             hashmap.put("craftsman", 18);
             hashmap.put("unemployed", 19);
             hashmap.put("writer", 20);
+    }
+
+    public static void setGenres(Set<String> set) throws FileNotFoundException, IOException {
+        BufferedReader scan = new BufferedReader(new FileReader(new File("data/movies.dat")));
+        String line;
+        while ((line = scan.readLine()) != null) {
+            String[] genres = line.split("::")[2].split("\\|");
+            for (String genre : genres) set.add(genre.toLowerCase());
+        }
     }
 }
