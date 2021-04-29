@@ -27,7 +27,7 @@ public class Main {
         gender = args[0].toLowerCase();
         if (gender.compareTo("") != 0 // if gender is passed
                 && // and not equal to neither F nor M
-                !(gender.compareTo("F") == 0 || gender.compareTo("M") == 0)) {
+                !(gender.compareTo("f") == 0 || gender.compareTo("m") == 0)) {
 
             System.out.println("Please, provide a proper arguement for Gender");
             System.out.println("It shall be empty - \"\", male - \"M\" or female \"F\"");
@@ -109,11 +109,13 @@ public class Main {
             // todo: Proper error handling
             System.out.println("Some error happened");
             e.printStackTrace();
-        } catch (NullPointerException e) {
-            // todo: Find the source of a bug
-            System.out.println("Null pointer exception somewhere");
-            e.printStackTrace();
         }
+
+//        catch (NullPointerException e) {
+//            // todo: Find the source of a bug
+//            System.out.println("Null pointer exception somewhere");
+//            e.printStackTrace();
+//        }
 
     }
 }
