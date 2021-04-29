@@ -48,6 +48,20 @@ public class Main {
             genres = args[3].toLowerCase().split("\\|");
 
             //* Genres check
+
+            //////////////////////////////////////////////////////////////////////////////
+            Set<String> set = workID.keySet();
+            for (String genre : genres) {
+                if (!set.contains(genre)) {
+                    System.out.println("Please enter a valid input for genres!");
+                    System.out.println("If you want to see the ratings for other occupations, simply type \"other\"");
+                    return;
+                }
+            }
+            //////////////////////////////////////////////////////////////////////////////
+
+
+            //////////////////////////////////////////////////////////////////////////////
             if (genres.length == 0) {
                 System.out.println("Please enter valid input");
                 System.out.println("Genres field should not be empty!");
@@ -69,6 +83,8 @@ public class Main {
                 System.out.println("Please enter valid input");
                 return;
             }
+            //////////////////////////////////////////////////////////////////////////////
+            
         }
 
         //! toLowerCase may fail for ! character? or \?
