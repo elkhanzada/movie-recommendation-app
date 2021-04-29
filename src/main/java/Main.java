@@ -25,12 +25,9 @@ public class Main {
 
         //* Gender check
         gender = args[0].toLowerCase();
-        if (gender.compareTo("") != 0 // if gender is passed
-                && // and not equal to neither F nor M
-                !(gender.compareTo("f") == 0 || gender.compareTo("m") == 0)) {
-
+        if (!(gender.compareTo("") == 0 || gender.compareTo("f") == 0 || gender.compareTo("m") == 0)) {
             System.out.println("Please, provide a proper arguement for Gender");
-            System.out.println("It shall be empty - \"\", male - \"M\" or female \"F\"");
+            System.out.println("It shall be empty - \"\", male - \"M\" or \"m\", female \"F\" or \"f\"");
             return;
         }
 
@@ -73,9 +70,9 @@ public class Main {
                 return;
             }
         }
-        //-------------------------------------------------------------------
+
         //! toLowerCase may fail for ! character? or \?
-        //-------------------------------------------------------------------
+
         try {
             work = args[2].toLowerCase();
             Integer occup_id = workID.get(work);
