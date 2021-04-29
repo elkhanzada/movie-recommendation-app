@@ -108,11 +108,5 @@ public class Main {
             e.printStackTrace();
         }
 
-//        catch (NullPointerException e) {
-//            // todo: Find the source of a bug
-//            System.out.println("Null pointer exception somewhere");
-//            e.printStackTrace();
-//        }
-
     }
 }
