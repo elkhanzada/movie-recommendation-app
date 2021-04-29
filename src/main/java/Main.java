@@ -48,20 +48,7 @@ public class Main {
             genres = args[3].toLowerCase().split("\\|");
 
             //* Genres check
-
-            //////////////////////////////////////////////////////////////////////////////
             Set<String> set = workID.keySet();
-            for (String genre : genres) {
-                if (!set.contains(genre)) {
-                    System.out.println("Please enter a valid input for genres!");
-                    System.out.println("If you want to see the ratings for other occupations, simply type \"other\"");
-                    return;
-                }
-            }
-            //////////////////////////////////////////////////////////////////////////////
-
-
-            //////////////////////////////////////////////////////////////////////////////
             if (genres.length == 0) {
                 System.out.println("Please enter valid input");
                 System.out.println("Genres field should not be empty!");
@@ -70,21 +57,14 @@ public class Main {
                 System.out.println("Input for genres is too long, please try to include each genre only once.");
                 return;
             }
-            boolean is_empty = true;
             for (String genre : genres) {
-                if (genre.length() > 50) {
-                    System.out.println("There are no movies with genre " + genre);
-                    System.out.println("Use '|' character to split genres");
+                if (!set.contains(genre)) {
+                    System.out.println("Please enter a valid input for genres!");
+                    System.out.println("If you want to see the ratings for other occupations, simply type \"other\"");
                     return;
                 }
-                if (genre.length() > 0) is_empty = false;
             }
-            if (is_empty) {
-                System.out.println("Please enter valid input");
-                return;
-            }
-            //////////////////////////////////////////////////////////////////////////////
-            
+
         }
 
         //! toLowerCase may fail for ! character? or \?
