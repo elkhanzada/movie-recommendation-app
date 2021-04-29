@@ -159,7 +159,7 @@ public class Utils {
 
     // This function simply maps occupation name to its category
     public static void setOccupationHash(HashMap<String, Integer> hashmap) {
-        if (hashmap.isEmpty()) {
+//        if (hashmap.isEmpty()) {
             hashmap.put("other", 0);
             hashmap.put("academic", 1);
             hashmap.put("educator", 1);
@@ -190,6 +190,6 @@ public class Utils {
             hashmap.put("craftsman", 18);
             hashmap.put("unemployed", 19);
             hashmap.put("writer", 20);
-        }
+//        }
     }
 }
