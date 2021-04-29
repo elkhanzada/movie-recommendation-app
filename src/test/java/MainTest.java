@@ -206,4 +206,28 @@ public class MainTest {
 
         }
     }
+    @Test
+    public void testGenresSizeZero(){
+        try{
+            Main.main(new String[]{"M","1","Doctor", "|"});
+        }catch (Exception e){
+
+        }
+    }
+    @Test
+    public void twoArgs(){
+        try{
+            Main.main(new String[]{"",""});
+        }catch (Exception e){
+
+        }
+    }
+    @Test
+    public void nonexistingMovie(){
+        try{
+            Main.main(new String[]{"M","1","Doctor", "lolita"});
+        }catch (Exception e){
+
+        }
+    }
 }
