@@ -15,13 +15,13 @@ public class Utils {
             ArrayList<Integer> list = userLists.get(index);
             Collections.sort(list);
             HashMap<Integer, Integer[]> ratings = Utils.getRatings(list, movieID);
-            //Elkhan's code
-            HashMap<Integer, Double> scores = new HashMap<>();
+            HashMap<Integer, Double[]> scores = new HashMap<>();
             for (Integer k : ratings.keySet()) {
-                scores.put(k, (double) ratings.get(k)[0] / (double) ratings.get(k)[1]);
+                scores.put(k, new Double[]{(double) ratings.get(k)[0] / (double) ratings.get(k)[1],(double) ratings.get(k)[1]});
             }
-            HashMap<Integer, Double> sortedScores = scores.entrySet().stream()
-                    .sorted(Comparator.comparingDouble(e -> -e.getValue()))
+            LinkedHashMap<Integer, Double[]> sortedScores = scores.entrySet().stream()
+                    .sorted(Comparator.comparingDouble(e -> -e.getValue()[0]))
+                    .sorted(Comparator.comparingDouble(e -> -e.getValue()[1]))
                     .collect(Collectors.toMap(
                             Map.Entry::getKey,
                             Map.Entry::getValue,
@@ -30,8 +30,8 @@ public class Utils {
                             },
                             LinkedHashMap::new
                     ));
-
             for (Integer k : sortedScores.keySet()) {
+//                System.out.print("Average Score: "+sortedScores.get(k)[0]+ " Number of users: "+sortedScores.get(k)[1] + " --------> ");
                 Utils.printMovie(k, movies);
                 count++;
                 if (count >= 10) break;
@@ -40,7 +40,6 @@ public class Utils {
         }
     }
 
-    //Elkhan's code
     public static void printMovie(Integer chosenMovie, HashMap<Integer, String> movies) throws IOException {
         BufferedReader scan = new BufferedReader(new FileReader(new File("data/links.dat")));
         String line;
@@ -67,7 +66,6 @@ public class Utils {
         return lists;
     }
 
-    // Elkhan's code
     public static HashMap<Integer, Integer[]> getRatings(ArrayList<Integer> userID, ArrayList<Integer> movieID) throws IOException {
         // ! --ratings.dat--
         // UserID::MovieID::Rating::Timestamp
@@ -92,7 +90,6 @@ public class Utils {
         return ratingList;
     }
 
-    //Elkhan's code
     public static ArrayList<Integer> getUsers(String work, Integer occupation, Integer age, String gender) throws IOException {
         // ! --users.dat--
         // UserID::Gender::Age::Occupation::Zip-code
@@ -145,7 +142,6 @@ public class Utils {
         return list;
     }
 
-    //Elkhan's code
     public static HashMap<Integer, String> getMovies() throws IOException {
         // ! --movies.dat--
         // MovieID::Title::Genres
