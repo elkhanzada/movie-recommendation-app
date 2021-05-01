@@ -32,8 +32,8 @@ public class Utils {
                     ));
             for (Integer k : sortedScores.keySet()) {
                 // System.out.print("Average Score: "+sortedScores.get(k)[0]+ " Number of users: "+sortedScores.get(k)[1] + " --------> ");
-                Utils.printMovie(k, movies);
                 count++;
+                Utils.printMovie(k, movies);
                 if (count >= 10) break;
             }
             index += 1;
@@ -43,8 +43,7 @@ public class Utils {
     public static void printMovie(Integer chosenMovie, HashMap<Integer, String> movies) throws IOException {
         BufferedReader scan = new BufferedReader(new FileReader(new File("data/links.dat")));
         String line;
-        while (true) {
-            line = scan.readLine();
+        while ((line = scan.readLine()) != null) {
             int movieID = Integer.parseInt(line.split("::")[0]);
             if (chosenMovie == movieID) {
                 System.out.println(movies.get(chosenMovie) + " ( http://www.imdb.com/title/tt" + line.split("::")[1] + " )");
@@ -94,7 +93,7 @@ public class Utils {
         // ! --users.dat--
         // UserID::Gender::Age::Occupation::Zip-code
         BufferedReader scan = new BufferedReader(new FileReader(new File("data/users.dat")));
-        ArrayList<Integer> list = new ArrayList<Integer>();
+        ArrayList<Integer> list = new ArrayList<>();
         HashMap<Integer, Integer[]> agelist = new HashMap<>();
         agelist.put(1, new Integer[]{1, 17});
         agelist.put(18, new Integer[]{18, 24});
