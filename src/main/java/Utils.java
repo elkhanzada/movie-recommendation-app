@@ -61,9 +61,9 @@ public class Utils {
         lists.add(getUsers("", occupation, age, gender));
         lists.add(getUsers(work, occupation, -1, gender));
         lists.add(getUsers(work, occupation, age, ""));
-        lists.add(getUsers("", occupation, -1, gender));
         lists.add(getUsers("", occupation, age, ""));
         lists.add(getUsers(work, occupation, -1, ""));
+        lists.add(getUsers("", occupation, -1, gender));
         lists.add(getUsers("", occupation, -1, ""));
         return lists;
     }
