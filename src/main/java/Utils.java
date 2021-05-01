@@ -31,7 +31,7 @@ public class Utils {
                             LinkedHashMap::new
                     ));
             for (Integer k : sortedScores.keySet()) {
-//                System.out.print("Average Score: "+sortedScores.get(k)[0]+ " Number of users: "+sortedScores.get(k)[1] + " --------> ");
+                // System.out.print("Average Score: "+sortedScores.get(k)[0]+ " Number of users: "+sortedScores.get(k)[1] + " --------> ");
                 Utils.printMovie(k, movies);
                 count++;
                 if (count >= 10) break;

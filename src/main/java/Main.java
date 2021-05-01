@@ -77,7 +77,7 @@ public class Main {
 
         try {
             work = args[2].toLowerCase();
-            Integer occup_id = workID.get(work);
+            Integer occup_id = (work.compareTo("") == 0 ? 0 : workID.get(work));
             //* Occupation check
             if (occup_id == null) {
                 System.out.println("There is no such occupation as " + work + "!");
