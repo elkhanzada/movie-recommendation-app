@@ -4,32 +4,7 @@ public class MainTest {
     @Test
     public void testMoreArgs(){
         try{
-            Main.main(new String[]{"null","null","null","null","null"});
-        }catch (Exception e){
-
-        }
-    }
-
-    @Test
-    public void testNullNull(){
-        try{
-            Main.main(new String[]{null,null,null});
-        }catch (Exception e){
-
-        }
-    }
-    @Test
-    public void testNullStringNull(){
-        try{
-            Main.main(new String[]{null,"Adventure",null});
-        }
-        catch (Exception e){
-        }
-    }
-    @Test
-    public void testStringNullNull(){
-        try{
-            Main.main(new String[]{"Adventure",null,null});
+            Main.main(new String[]{"1","2","3","4","5"});
         }catch (Exception e){
 
         }
@@ -108,6 +83,14 @@ public class MainTest {
     public void testEmpyFullGenre(){
         try{
             Main.main(new String[]{"M","25","gradstudent","|Horror|"});
+        }catch (Exception e){
+
+        }
+    }
+    @Test
+    public void testFullGenreEmpty(){
+        try{
+            Main.main(new String[]{"M","25","gradstudent","Horror||"});
         }catch (Exception e){
 
         }

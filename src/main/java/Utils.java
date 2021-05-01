@@ -129,9 +129,6 @@ public class Utils {
             String[] movie = line.split("::");
             String[] genres_list = movie[2].split("\\|");
             for (String s : genres) {
-                if (s.length() == 0) {
-                    continue;
-                }
                 for (String g : genres_list) {
                     if (s.toLowerCase().equals(g.toLowerCase())) {
                         list.put(Integer.parseInt(movie[0]), movie[1]);
