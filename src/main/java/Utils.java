@@ -95,7 +95,7 @@ public class Utils {
         BufferedReader scan = new BufferedReader(new FileReader(new File("data/users.dat")));
         ArrayList<Integer> list = new ArrayList<>();
         HashMap<Integer, Integer[]> agelist = new HashMap<>();
-        agelist.put(1, new Integer[]{1, 17});
+        agelist.put(1, new Integer[]{0, 17});
         agelist.put(18, new Integer[]{18, 24});
         agelist.put(25, new Integer[]{25, 34});
         agelist.put(35, new Integer[]{35, 44});
@@ -132,7 +132,6 @@ public class Utils {
                 for (String g : genres_list) {
                     if (s.toLowerCase().equals(g.toLowerCase())) {
                         list.put(Integer.parseInt(movie[0]), movie[1]);
-                        break;
                     }
                 }
             }

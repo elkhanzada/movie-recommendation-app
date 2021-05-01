@@ -215,7 +215,7 @@ public class MainTest {
         }
     }
     @Test
-    public void twoArgs(){
+    public void testTwoArgs(){
         try{
             Main.main(new String[]{"",""});
         }catch (Exception e){
@@ -223,9 +223,17 @@ public class MainTest {
         }
     }
     @Test
-    public void nonexistingMovie(){
+    public void testNonexistingMovie(){
         try{
             Main.main(new String[]{"M","1","Doctor", "lolita"});
+        }catch (Exception e){
+
+        }
+    }
+    @Test
+    public void testMoreGenres(){
+        try{
+            Main.main(new String[]{"M","1","Doctor", "Horror"});
         }catch (Exception e){
 
         }
