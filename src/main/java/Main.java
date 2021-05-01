@@ -56,19 +56,20 @@ public class Main {
             genres = args[3].toLowerCase().split("\\|");
 
             //* Genres check
-            if (genres.length == 0 || genres.length > 10) {
-                System.out.println("Please enter valid input");
-                System.out.println("Genres field should not be empty!");
-                System.out.println("Genres should not repeat and exceed 10!");
-                return;
-            }
+            HashSet<String> set = new HashSet<>();
             for (String genre : genres) {
+                set.add(genre);
                 if (!genreTypes.contains(genre)) {
                     System.out.println("Please enter a valid input for genres!");
-                    System.out.println("There is no such genre as " + genre);
-                    System.out.println("If you want to see the ratings for other occupations, simply type \"other\"");
+                    if (genre.compareTo("") == 0) System.out.println("Genre field must not be empty");
+                    else System.out.println("There is not such registered genre as " + genre);
                     return;
                 }
+            }
+            if (set.size() != genres.length) {
+                System.out.println("Please enter valid input for genres");
+                System.out.println("Genres should not repeat");
+                return;
             }
 
         }
@@ -77,10 +78,11 @@ public class Main {
 
         try {
             work = args[2].toLowerCase();
-            Integer occup_id = (work.compareTo("") == 0 ? 0 : workID.get(work));
+            Integer occup_id = workID.get(work);
+            if (work.compareTo("") == 0) occup_id = 0;
             //* Occupation check
             if (occup_id == null) {
-                System.out.println("There is no such occupation as " + work + "!");
+                System.out.println("There is no such registered occupation as " + work + "!");
                 System.out.println("If you want to see some other ratings, please use \"other\" as an argument");
                 return;
             }
