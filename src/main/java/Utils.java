@@ -7,21 +7,32 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class Utils {
-
     public static void printTop10(ArrayList<ArrayList<Integer>> userLists, ArrayList<Integer> movieID, HashMap<Integer, String> movies) throws IOException {
         int count = 0;
         int index = 0;
+        ArrayList<Integer> printedList = new ArrayList<>();
         while (count < 10) {
+            int allvotes = 0;
+            double totalMean=0;
             ArrayList<Integer> list = userLists.get(index);
             Collections.sort(list);
             HashMap<Integer, Integer[]> ratings = Utils.getRatings(list, movieID);
             HashMap<Integer, Double[]> scores = new HashMap<>();
             for (Integer k : ratings.keySet()) {
-                scores.put(k, new Double[]{(double) ratings.get(k)[0] / (double) ratings.get(k)[1],(double) ratings.get(k)[1]});
+                allvotes+=ratings.get(k)[1];
+                totalMean+=(double) ratings.get(k)[0] / (double) ratings.get(k)[1];
+            }
+            if(allvotes!=0)
+                totalMean/=allvotes;
+            for (Integer k : ratings.keySet()) {
+                scores.put(k, new Double[]{weightedRating((double) ratings.get(k)[0] / (double) ratings.get(k)[1],
+                        (double) ratings.get(k)[1],
+                        10,
+                        totalMean),(double) ratings.get(k)[1]});
             }
             LinkedHashMap<Integer, Double[]> sortedScores = scores.entrySet().stream()
                     .sorted(Comparator.comparingDouble(e -> -e.getValue()[0]))
-                    .sorted(Comparator.comparingDouble(e -> -e.getValue()[1]))
+//                    .sorted(Comparator.comparingDouble(e -> -e.getValue()[1]))
                     .collect(Collectors.toMap(
                             Map.Entry::getKey,
                             Map.Entry::getValue,
@@ -33,6 +44,10 @@ public class Utils {
             for (Integer k : sortedScores.keySet()) {
 
                 if(sortedScores.get(k)[0]>=3.0) {
+                    if(printedList.contains(k))
+                        continue;
+                    else
+                        printedList.add(k);
 //                    System.out.print("Average Score: "+sortedScores.get(k)[0]+ " Number of users: "+sortedScores.get(k)[1] + " --------> ");
                     Utils.printMovie(k, movies);
                     count++;
@@ -42,7 +57,9 @@ public class Utils {
             index += 1;
         }
     }
-
+    public static double weightedRating(double R, double v, double m, double C){
+        return (R * v + C * m) / (v + m);
+    }
     public static void printMovie(Integer chosenMovie, HashMap<Integer, String> movies) throws IOException {
         BufferedReader scan = new BufferedReader(new FileReader(new File("data/links.dat")));
         String line;
@@ -88,6 +105,7 @@ public class Utils {
                     ratingList.put(Integer.parseInt(rating[1]), new Integer[]{ratingList.get(Integer.parseInt(rating[1]))[0] + Integer.parseInt(rating[2]), ratingList.get(Integer.parseInt(rating[1]))[1] + 1});
             }
         }
+
         scan.close();
         return ratingList;
     }
