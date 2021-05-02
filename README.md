@@ -81,15 +81,12 @@ These are the all available occupations we currently have
 # Troubleshooting
 
 Input requirements:
-1) The number of arguments passed must be exactly 2. Otherwise a warning message is outputed and program is terminated.
-2) Both genre and occupation strings are not case sensitive.
+1) The number of arguments passed must be exactly 3 or 4. Otherwise, a warning message is outputed and program is terminated.
+2) Gender, genre and occupation strings are not case sensitive.
 3) Genres must be split by '|' character, otherwise a warning message is outputed and program is terminated.
-4) If user inputs one genre multiple times, then we will regard it as one. For example, we will regard "action|action" to be same as "action"
-5) If either of occupation or genre string is too long (> 50 chars), we regard it as invalid input since there can't be such occupation or genre. In this case we terminate the program and output corresponding warning message.
-6) If occupation string is not one of specified user occupations (not an educator, student or else), then we regard it as 'others' case and we give id 0 to this occupation. The characters in the occupation string can be arbitrary, and the only restriction is in the length of string (not more than 50)
-7) If the list of genres requested does not correspond to any movie, we print out warning message and terminate program
-8) No spaces in arguments are allowed.
-
+4) User must include each possible genre maximum once, otherwise a warning message is outputed and program is terminated.
+5) If occupation string is not one of specified user occupations (not an educator, student or else) or not equal to "other", then we print the warning message and terminate the program. 
+6) All inputs may be left empty except of the genre input. It must contain at least one valid genre and will terminate program with warning message othersise.
 Output:
 1) If every input requirement is satisfied, then the program will output ten movies with their corresponding [IMDB](https://www.imdb.com/) links.
 
