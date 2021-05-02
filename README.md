@@ -1,7 +1,7 @@
 # What this repository is about
 In this repository, we recommend top 10 movies from given user data and for given genres (if applicable).
 # Algorithm
-For this milestone, we used [IMDB ranking algorithm](https://www.fxsolver.com/browse/formulas/Bayes+estimator+-+Internet+Movie+Database+%28IMDB%29) to sort the movies which are rated by people with given user data. The minimum number of votes for the movie is chosen to be 10. If we are unable to find people with given user data, we go one level down to ignore one of the inputs. We have following levels.
+For this milestone, we used [IMDB ranking algorithm](https://www.fxsolver.com/browse/formulas/Bayes+estimator+-+Internet+Movie+Database+%28IMDB%29) to sort the movies which are rated by people with given user data. The minimum number of votes for the movie is chosen to be 10. If we are unable to find people with given user data, we go one level down to ignore one of the inputs. We have following levels. Smaller number means higher priority.
 1. Gender, Age, Occupation
 2. Gender, Age, <del>Occupation</del>
 3. <del>Gender</del>, Age, Occupation
