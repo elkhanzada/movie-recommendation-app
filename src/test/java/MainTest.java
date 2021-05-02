@@ -221,4 +221,35 @@ public class MainTest {
 
         }
     }
+    public void argsThree(){
+        try{
+            Main.main(new String[]{"M", "25", "Doctor"});
+        }catch (Exception e){
+
+        }
+    }
+    @Test
+    public void emptyGenre(){
+        try{
+            Main.main(new String[]{"M", "25", "Doctor", "||Adventure| ||" });
+        }catch (Exception e){
+
+        }
+    }
+    @Test
+    public void manyGenres() {
+        try {
+            Main.main(new String[]{"M", "25", "Doctor", "Adventure|Romance|Action|Comedy|Horror|Fantasy|Musical"});
+        } catch (Exception e) {
+
+        }
+    }
+    @Test
+    public void sameGenres() {
+        try {
+            Main.main(new String[]{"M", "25", "Doctor", "Adventure|Adventure"});
+        } catch (Exception e) {
+
+        }
+    }
 }
