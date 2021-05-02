@@ -1,5 +1,15 @@
 # What this repository is about
-In this repository, we give average rating score of the movies which are rated by people with various occupations.
+In this repository, we recommend top 10 movies from given user data and for given genres (if applicable).
+# Algorithm
+For this milestone, we used [IMDB ranking algorithm](https://www.fxsolver.com/browse/formulas/Bayes+estimator+-+Internet+Movie+Database+%28IMDB%29) to sort the movies which are rated by people with given user data. The minimum number of votes for the movie is chosen to be 10. If we are unable to find people with given user data, we go one level down to ignore one of the inputs. We have following levels.
+1. Gender, Age, Occupation
+2. Gender, Age, <del>Occupation</del>
+3. <del>Gender</del>, Age, Occupation
+4. Gender, <del>Age</del>, Occupation
+5. <del>Gender</del>, Age, <del>Occupation</del>
+6. <del>Gender</del>, <del>Age</del>, Occupation
+7. Gender, <del>Age</del>, <del>Occupation</del>
+8. <del>Gender</del>, <del>Age</del>, <del>Occupation</del>
 # Instruction for those who do not use docker
 ### Requirement
 Java 1.11 (Please set ```JAVA_HOME``` before running the code)
@@ -25,19 +35,23 @@ Once you are in the container, please run ```run.sh``` script as follows
 ```bash
 $ . run.sh
 ```
-It will print output for the example arguments (Adventure educator)
+It will print output for the example arguments.
 # Usage
-Our tool takes into two arguments as follows
+Our tool takes can take either 3 or 4 arguments as follows
 ```bash
-$ java -cp target/group9-1.0-SNAPSHOT.jar Main [genre] [occupation]
+$ java -cp target/group9-1.0-SNAPSHOT.jar Main [gender] [age] [occupation]
 ```
+```bash
+$ java -cp target/group9-1.0-SNAPSHOT.jar Main [gender] [age] [occupation] [genre]
+```
+It is allowed to leave gender, age, and occupation as empty but if you opt for 4 arguments, then the genre input must not be empty. 
 If you want to give more than one genre, then separate them with "|" delimeter. 
 ```
-$ java -cp target/group9-1.0-SNAPSHOT.jar Main ["genre_1|genre_2"] [occupation]
+$ java -cp target/group9-1.0-SNAPSHOT.jar Main [gender] [age] [occupation] ["genre_1|genre_2"]
 ```
 e.g.:
 ```bash
-$ java -cp target/group9-1.0-SNAPSHOT.jar Main "action|comedy" educator
+$ java -cp target/group9-1.0-SNAPSHOT.jar Main "F" "25" "gradstudent" "action|comedy"
 ```
 These are the all available occupations we currently have
 | Occupation list      |
@@ -77,11 +91,11 @@ Input requirements:
 8) No spaces in arguments are allowed.
 
 Output:
-1) If every input requirement is satisfied, then the program will output average score rounded to 2 decimals.
+1) If every input requirement is satisfied, then the program will output ten movies with their corresponding [IMDB](https://www.imdb.com/) links.
 
 
 
 Contribution:
-- Kasymzhan Abdyldayev (20182002) - Algorithm implementation
-- Elkhan Ismayilzada (20182010) - Initial setup, Testing, readme
-- Aibar Oshakbayev (20182021) - Error handling, readme
+- Kasymzhan Abdyldayev (20182002) - Error handling
+- Elkhan Ismayilzada (20182010) - Algorithm implementation, Testing, Readme
+- Aibar Oshakbayev (20182021) - Testing, Readme
