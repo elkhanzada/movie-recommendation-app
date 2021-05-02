@@ -17,7 +17,7 @@ public class Utils {
             ArrayList<Integer> list = userLists.get(index);
             Collections.sort(list);
             HashMap<Integer, Integer[]> ratings = Utils.getRatings(list, movieID);
-            HashMap<Integer, Double[]> scores = new HashMap<>();
+            HashMap<Integer, Double> scores = new HashMap<>();
             for (Integer k : ratings.keySet()) {
                 allvotes+=ratings.get(k)[1];
                 totalMean+=(double) ratings.get(k)[0] / (double) ratings.get(k)[1];
@@ -25,13 +25,13 @@ public class Utils {
             if(allvotes!=0)
                 totalMean/=allvotes;
             for (Integer k : ratings.keySet()) {
-                scores.put(k, new Double[]{weightedRating((double) ratings.get(k)[0] / (double) ratings.get(k)[1],
+                scores.put(k, weightedRating((double) ratings.get(k)[0] / (double) ratings.get(k)[1],
                         (double) ratings.get(k)[1],
                         10,
-                        totalMean),(double) ratings.get(k)[1]});
+                        totalMean));
             }
-            LinkedHashMap<Integer, Double[]> sortedScores = scores.entrySet().stream()
-                    .sorted(Comparator.comparingDouble(e -> -e.getValue()[0]))
+            LinkedHashMap<Integer, Double> sortedScores = scores.entrySet().stream()
+                    .sorted(Comparator.comparingDouble(e -> -e.getValue()))
 //                    .sorted(Comparator.comparingDouble(e -> -e.getValue()[1]))
                     .collect(Collectors.toMap(
                             Map.Entry::getKey,
@@ -43,7 +43,7 @@ public class Utils {
                     ));
             for (Integer k : sortedScores.keySet()) {
 
-                if(sortedScores.get(k)[0]>=3.0) {
+                if(sortedScores.get(k)>=3.0) {
                     if(printedList.contains(k))
                         continue;
                     else
