@@ -92,7 +92,7 @@ Output:
 
 
 
-Contribution:
+# Contribution
 - Kasymzhan Abdyldayev (20182002) - Error handling
 - Elkhan Ismayilzada (20182010) - Algorithm implementation, Testing, Readme
 - Aibar Oshakbayev (20182021) - Testing, Readme
