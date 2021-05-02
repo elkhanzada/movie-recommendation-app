@@ -76,8 +76,8 @@ public class Utils {
         ArrayList<ArrayList<Integer>> lists = new ArrayList<>();
         lists.add(getUsers(work, occupation, age, gender));
         lists.add(getUsers("", occupation, age, gender));
-        lists.add(getUsers(work, occupation, -1, gender));
         lists.add(getUsers(work, occupation, age, ""));
+        lists.add(getUsers(work, occupation, -1, gender));
         lists.add(getUsers("", occupation, age, ""));
         lists.add(getUsers(work, occupation, -1, ""));
         lists.add(getUsers("", occupation, -1, gender));
