@@ -54,7 +54,10 @@ public class Main {
 
         if (args.length == 4) {
             genres = args[3].toLowerCase().split("\\|");
-
+            if(genres.length == 0){
+                System.out.println("Please enter a valid input for genres! The input must include at least one genre");
+                return;
+            }
             //* Genres check
             HashSet<String> set = new HashSet<>();
             for (String genre : genres) {
@@ -93,7 +96,7 @@ public class Main {
             ArrayList<Integer> movieID = new ArrayList<>(movies.keySet());
             //Check if movieID is empty
             if (movieID.size() <= 0) {
-                System.out.println("No movie found that satisfies requested genres: " + args[0]);
+                System.out.println("No movie found that satisfies requested genres: " + args[3]);
                 return;
             }
             Collections.sort(movieID);
