@@ -32,7 +32,7 @@ public class Utils {
                     ));
             for (Integer k : sortedScores.keySet()) {
 
-                if(sortedScores.get(k)[0]>3.5) {
+                if(sortedScores.get(k)[0]>=3.0) {
 //                    System.out.print("Average Score: "+sortedScores.get(k)[0]+ " Number of users: "+sortedScores.get(k)[1] + " --------> ");
                     Utils.printMovie(k, movies);
                     count++;
