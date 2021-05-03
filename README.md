@@ -90,7 +90,7 @@ Input requirements:
 3) Genres must be split by '|' character, otherwise a warning message is outputed and program is terminated.
 4) User must include each possible genre maximum once, otherwise a warning message is outputed and program is terminated.
 5) If occupation string is not one of specified user occupations (not an educator, student or else) or not equal to "other", then we print the warning message and terminate the program. 
-6) All inputs may be left empty except of the genre input. It must contain at least one valid genre and will terminate program with warning message othersise.
+6) All the inputs may be left empty except of the genre input. It must contain at least one valid genre and will terminate program with warning message otherwise.
 Output:
 1) If every input requirement is satisfied, then the program will output ten movies with their corresponding [IMDB](https://www.imdb.com/) links.
 
