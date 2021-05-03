@@ -5,7 +5,7 @@ For this milestone, here is what we did. We first got the movies based on genres
 
 <img src="https://render.githubusercontent.com/render/math?math=WR%20=\frac{(v*R%20%2B%20m*C)}{(v%2Bm)}" width="150" height="150">
 
-Where ```v``` is the number of votes for the movie, ```m``` is minimum votes required to be listed in the Top 10, ```R``` is the average for the movie as a decimal number from 0 to 5 and ```C``` is the average rating of all movies grouped by genre and user data. The minimum number of votes for the movie is chosen to be 10. If we are unable to find people with given user data, we go one level down to ignore one of the inputs. We have following levels. Smaller number means higher priority.
+Where ```v``` is the number of votes for the movie, ```m``` is minimum votes required to be listed in the Top 10, ```R``` is the average for the movie as a decimal number from 0 to 5 and ```C``` is the average rating of all movies grouped by genre and user data. The minimum number of votes for the movie is chosen to be 10 and the minimum weighted rating (```WR```) is 3.0. If we are unable to find people with given user data, we go one level down to ignore one of the inputs. We have following levels. Smaller number means higher priority.
 1. Gender, Age, Occupation
 2. Gender, Age, <del>Occupation</del>
 3. <del>Gender</del>, Age, Occupation
@@ -91,6 +91,7 @@ Input requirements:
 4) User must include each possible genre maximum once, otherwise a warning message is outputed and program is terminated.
 5) If occupation string is not one of specified user occupations (not an educator, student or else) or not equal to "other", then we print the warning message and terminate the program. 
 6) All the inputs may be left empty except of the genre input. It must contain at least one valid genre and will terminate program with warning message otherwise.
+
 Output:
 1) If every input requirement is satisfied, then the program will output ten movies with their corresponding [IMDB](https://www.imdb.com/) links.
 
