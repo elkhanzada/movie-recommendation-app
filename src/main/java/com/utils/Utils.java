@@ -74,10 +74,10 @@ public class Utils {
         while ((line = scan.readLine()) != null) {
             int movieID = Integer.parseInt(line.split("::")[0]);
             if (chosenMovie == movieID) {
-                System.out.println(movies.get(chosenMovie) + " ( http://www.imdb.com/title/tt" + line.split("::")[1] + " )");
+//                System.out.println(movies.get(chosenMovie) + " ( http://www.imdb.com/title/tt" + line.split("::")[1] + " )");
                 jsonObject.put("title", movies.get(chosenMovie)[0]);
                 jsonObject.put("genre", movies.get(chosenMovie)[1]);
-                jsonObject.put("imdb", " ( http://www.imdb.com/title/tt" + line.split("::")[1]);
+                jsonObject.put("imdb", "http://www.imdb.com/title/tt" + line.split("::")[1]);
                 return jsonObject;
             }
         }

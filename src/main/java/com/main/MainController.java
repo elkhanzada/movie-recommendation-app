@@ -1,8 +1,7 @@
 package com.main;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
+import java.lang.reflect.Field;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 
 import com.utils.Utils;
@@ -16,11 +15,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class MainController {
     @GetMapping("/users/recommend")
-    public String getMovies(@RequestBody String name) {
-        JSONObject js = new JSONObject(name);
-        ArrayList<String> args = new ArrayList<>();
+    public String getMovies(@RequestBody String input) {
+        JSONObject js = new JSONObject(input);
+        HashMap<String,String> args = new HashMap<>();
         for(String key: js.keySet())
-            args.add(js.getString(key));
-        return Main.getMovies((String[]) args.toArray());
+            args.put(key,js.getString(key));
+        return Main.getMovies(args);
     }
 }
