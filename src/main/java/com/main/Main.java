@@ -1,6 +1,7 @@
 package com.main;
 
 import com.utils.Utils;
+import org.json.JSONArray;
 
 import java.io.IOException;
 import java.util.*;
@@ -13,6 +14,7 @@ public class Main {
         String gender;
         int age;
         String work;
+        boolean is_empty = false;
         String[] genres = new String[5];
         StringBuilder errorMessage = new StringBuilder();
         HashMap<String, Integer> workID = new HashMap<>();
@@ -80,7 +82,10 @@ public class Main {
                 if (!genreTypes.contains(genre)) {
                     errorMessage.append("Please enter a valid input for genres!\n");
 //                    System.out.println("Please enter a valid input for genres!");
-                    if (genre.compareTo("") == 0) continue;
+                    if (genre.compareTo("") == 0) {
+                        is_empty = true;
+                        continue;
+                    }
                     else {
                         errorMessage.append("There is not such registered genre as ").append(genre).append("\n");
 //                        System.out.println("There is not such registered genre as " + genre);
@@ -115,7 +120,7 @@ public class Main {
 
             //* Here, real implementation begins
             ArrayList<ArrayList<Integer>> userLists = Utils.getAllUsers(work, occup_id, age, gender);
-            HashMap<Integer, String> movies = args.length == 4 ? Utils.getMovies(genres) : Utils.getMovies();
+            HashMap<Integer, String[]> movies = !is_empty ? Utils.getMovies(genres) : Utils.getMovies();
             ArrayList<Integer> movieID = new ArrayList<>(movies.keySet());
             //Check if movieID is empty
             if (movieID.size() <= 0) {
@@ -124,7 +129,8 @@ public class Main {
                 return errorMessage.toString();
             }
             Collections.sort(movieID);
-            Utils.printTop10(userLists, movieID, movies);
+            JSONArray top10 = Utils.printTop10(userLists, movieID, movies);
+            top10.toString(2);
         }
 
         //* Developer's helpers

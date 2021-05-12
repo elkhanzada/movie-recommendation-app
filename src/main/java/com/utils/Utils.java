@@ -1,5 +1,8 @@
 package com.utils;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -9,10 +12,11 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class Utils {
-    public static void printTop10(ArrayList<ArrayList<Integer>> userLists, ArrayList<Integer> movieID, HashMap<Integer, String> movies) throws IOException {
+    public static JSONArray printTop10(ArrayList<ArrayList<Integer>> userLists, ArrayList<Integer> movieID, HashMap<Integer, String[]> movies) throws IOException {
         int count = 0;
         int index = 0;
         ArrayList<Integer> printedList = new ArrayList<>();
+        JSONArray jsonArray = new JSONArray();
         while (count < 10) {
             int allvotes = 0;
             double totalMean=0;
@@ -51,27 +55,33 @@ public class Utils {
                     else
                         printedList.add(k);
 //                    System.out.print("Average Score: "+sortedScores.get(k)[0]+ " Number of users: "+sortedScores.get(k)[1] + " --------> ");
-                    Utils.printMovie(k, movies);
+                    jsonArray.put(Utils.printMovie(k, movies));
                     count++;
                 }
                 if (count >= 10) break;
             }
             index += 1;
         }
+        return jsonArray;
     }
     public static double weightedRating(double R, double v, double m, double C){
         return (R * v + C * m) / (v + m);
     }
-    public static void printMovie(Integer chosenMovie, HashMap<Integer, String> movies) throws IOException {
+    public static JSONObject printMovie(Integer chosenMovie, HashMap<Integer, String[]> movies) throws IOException {
         BufferedReader scan = new BufferedReader(new FileReader(new File("data/links.dat")));
         String line;
+        JSONObject jsonObject = new JSONObject();
         while ((line = scan.readLine()) != null) {
             int movieID = Integer.parseInt(line.split("::")[0]);
             if (chosenMovie == movieID) {
                 System.out.println(movies.get(chosenMovie) + " ( http://www.imdb.com/title/tt" + line.split("::")[1] + " )");
-                break;
+                jsonObject.put("title", movies.get(chosenMovie)[0]);
+                jsonObject.put("genre", movies.get(chosenMovie)[1]);
+                jsonObject.put("imdb", " ( http://www.imdb.com/title/tt" + line.split("::")[1]);
+                return jsonObject;
             }
         }
+        return null;
     }
 
     public static ArrayList<ArrayList<Integer>> getAllUsers(String work, Integer occupation, Integer age, String gender) throws IOException {
@@ -139,11 +149,11 @@ public class Utils {
     }
 
     // This function returns movieID-s with matching genres
-    public static HashMap<Integer, String> getMovies(String[] genres) throws IOException {
+    public static HashMap<Integer, String[]> getMovies(String[] genres) throws IOException {
         // ! --movies.dat--
         // MovieID::Title::Genres
         BufferedReader scan = new BufferedReader(new FileReader(new File("data/movies.dat")));
-        HashMap<Integer, String> list = new HashMap<>();
+        HashMap<Integer, String[]> list = new HashMap<>();
         String line;
         while ((line = scan.readLine()) != null) {
             String[] movie = line.split("::");
@@ -151,7 +161,7 @@ public class Utils {
             for (String s : genres) {
                 for (String g : genres_list) {
                     if (s.toLowerCase().equals(g.toLowerCase())) {
-                        list.put(Integer.parseInt(movie[0]), movie[1]);
+                        list.put(Integer.parseInt(movie[0]), new String[]{movie[1],movie[2]});
                     }
                 }
             }
@@ -160,15 +170,15 @@ public class Utils {
         return list;
     }
 
-    public static HashMap<Integer, String> getMovies() throws IOException {
+    public static HashMap<Integer, String[]> getMovies() throws IOException {
         // ! --movies.dat--
         // MovieID::Title::Genres
         BufferedReader scan = new BufferedReader(new FileReader(new File("data/movies.dat")));
-        HashMap<Integer, String> list = new HashMap<>();
+        HashMap<Integer, String[]> list = new HashMap<>();
         String line;
         while ((line = scan.readLine()) != null) {
             String[] movie = line.split("::");
-            list.put(Integer.parseInt(movie[0]), movie[1]);
+            list.put(Integer.parseInt(movie[0]), new String[]{movie[1],movie[2]});
         }
         scan.close();
         return list;
