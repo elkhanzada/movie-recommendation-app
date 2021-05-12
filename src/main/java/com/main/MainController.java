@@ -16,7 +16,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class MainController {
     @GetMapping("/users/recommend")
-    public String greeting(@RequestBody String[] name) {
-        return Main.getMovies(name);
+    public String getMovies(@RequestBody String name) {
+        JSONObject js = new JSONObject(name);
+        ArrayList<String> args = new ArrayList<>();
+        for(String key: js.keySet())
+            args.add(js.getString(key));
+        return Main.getMovies((String[]) args.toArray());
     }
 }
