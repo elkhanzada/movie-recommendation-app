@@ -4,6 +4,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.lang.IllegalArgumentException;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -12,12 +13,12 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class Utils {
-    public static JSONArray printTop10(ArrayList<ArrayList<Integer>> userLists, ArrayList<Integer> movieID, HashMap<Integer, String[]> movies) throws IOException {
+    public static JSONArray printTopN(ArrayList<ArrayList<Integer>> userLists, ArrayList<Integer> movieID, HashMap<Integer, String[]> movies, int n) throws IOException {
         int count = 0;
         int index = 0;
         ArrayList<Integer> printedList = new ArrayList<>();
         JSONArray jsonArray = new JSONArray();
-        while (count < 10) {
+        while (count < n) {
             int allvotes = 0;
             double totalMean=0;
             ArrayList<Integer> list = userLists.get(index);
@@ -58,9 +59,9 @@ public class Utils {
                     jsonArray.put(Utils.printMovie(k, movies));
                     count++;
                 }
-                if (count >= 10) break;
+                if (count >= n) break;
             }
-            index += 1;
+            index++;
         }
         return jsonArray;
     }
@@ -146,6 +147,28 @@ public class Utils {
         }
         scan.close();
         return list;
+    }
+
+    // This function returns genres of the provided movie
+    public static String[] getGenres(String movieName) throws IllegalArgumentException, IOException {
+        BufferedReader scan = new BufferedReader(new FileReader(new File("data/movies.dat")));
+        movieName = movieName.toLowerCase();
+        String[] result = new String[5];
+        String line;
+        boolean found = false;
+        while ((line = scan.readLine()) != null) {
+            String[] movies = line.split("::");
+            if (movieName.equals(movies[1].toLowerCase())) {
+                result = movies[2].split("\\|");
+                found = true;
+                break;
+            }
+        }
+        scan.close();
+        if (!found) {
+            throw new IllegalArgumentException("Movie doesn't exist in the movies.dat");
+        }
+        return result;
     }
 
     // This function returns movieID-s with matching genres

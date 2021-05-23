@@ -12,6 +12,34 @@ public class Main {
     public static void main(String[] args) {
         SpringApplication.run(Main.class,args);
     }
+
+    public static String recommendMovies(HashMap<String, String> args) throws IOException {
+        int limit = 10;
+        if (args.get("limit") != null) limit = Integer.parseInt(args.get("limit"));
+        try {
+            StringBuilder errorMessage = new StringBuilder();
+            String[] genres = Utils.getGenres(args.get("title"));
+            ArrayList<ArrayList<Integer>> userLists = new ArrayList<ArrayList<Integer>>();
+            userLists.add(Utils.getUsers("", -1, -1, ""));
+            HashMap<Integer, String[]> movies = Utils.getMovies(genres);
+            ArrayList<Integer> movieID = new ArrayList<>(movies.keySet());
+            //Check if movieID is empty
+            if (movieID.size() <= 0) {
+                errorMessage.append("No movie found that satisfies requested genres: ").append(args.get("genre")).append("\n");
+                return errorMessage.toString();
+            }
+            Collections.sort(movieID);
+            JSONArray topN = Utils.printTopN(userLists, movieID, movies, limit);
+            return topN.toString(2);
+        } 
+        catch (IllegalArgumentException e) {
+            return e.getMessage();
+        }
+        catch (IOException e) {
+            return e.toString();
+        }
+    }
+
     public static String getMovies(String[] args){
         String gender;
         int age;
@@ -27,7 +55,6 @@ public class Main {
             Utils.setGenres(genreTypes);
         }
         catch (Exception e) {
-//            System.out.println(e.toString());
             return e.toString();
         }
 
@@ -38,9 +65,6 @@ public class Main {
             //-------------------------------------------------------------------
             errorMessage.append("Please, pass exactly 3 or 4 arguments!\n");
             errorMessage.append("Try to remove spaces between occupations consisting of several words, such as \"college student\" -> \"collegestudent\"\n");
-//            System.out.println("Please, pass exactly 3 or 4 arguments!");
-//            System.out.print("Try to remove spaces between occupations consisting of several words, such as ");
-//            System.out.println("\"college student\" -> \"collegestudent\"");
             return errorMessage.toString();
         }
 
@@ -49,8 +73,6 @@ public class Main {
         if (!(gender.compareTo("") == 0 || gender.compareTo("f") == 0 || gender.compareTo("m") == 0)) {
             errorMessage.append("Please, provide a proper arguement for Gender\n");
             errorMessage.append("It shall be empty - \"\", male - \"M\" or \"m\", female \"F\" or \"f\"\n");
-//            System.out.println("Please, provide a proper arguement for Gender");
-//            System.out.println("It shall be empty - \"\", male - \"M\" or \"m\", female \"F\" or \"f\"");
             return errorMessage.toString();
         }
 
@@ -61,9 +83,6 @@ public class Main {
                     errorMessage.append("Please, enter a valid argument for age!\n");
                     errorMessage.append("It should be a positive integer, containing only digits!\n");
                     errorMessage.append("Age shall not exceed "+Integer.MAX_VALUE+"\n");
-//                    System.out.println("Please, enter a valid argument for age!");
-//                    System.out.println("It should be a positive integer, containing only digits!");
-//                    System.out.printf("Age shall not exceed %d\n", Integer.MAX_VALUE);
                     return errorMessage.toString();
                 }
             }
@@ -74,7 +93,6 @@ public class Main {
             genres = args[3].toLowerCase().split("\\|");
             if(genres.length == 0){
                 errorMessage.append("Please enter a valid input for genres! The input must include at least one genre\n");
-//                System.out.println("Please enter a valid input for genres! The input must include at least one genre");
                 return errorMessage.toString();
             }
             //* Genres check
@@ -83,14 +101,12 @@ public class Main {
                 set.add(genre);
                 if (!genreTypes.contains(genre)) {
                     errorMessage.append("Please enter a valid input for genres!\n");
-//                    System.out.println("Please enter a valid input for genres!");
                     if (genre.compareTo("") == 0) {
                         is_empty = true;
                         continue;
                     }
                     else {
                         errorMessage.append("There is not such registered genre as ").append(genre).append("\n");
-//                        System.out.println("There is not such registered genre as " + genre);
                         return errorMessage.toString();
                     }
                 }
@@ -98,8 +114,6 @@ public class Main {
             if (set.size() != genres.length) {
                 errorMessage.append("Please enter valid input for genres\n");
                 errorMessage.append("Genres should not repeat\n");
-//                System.out.println("Please enter valid input for genres");
-//                System.out.println("Genres should not repeat");
                 return errorMessage.toString();
             }
 
@@ -115,8 +129,6 @@ public class Main {
             if (occup_id == null) {
                 errorMessage.append("There is no such registered occupation as ").append(work).append("!\n");
                 errorMessage.append("If you want to see some other ratings, please use \"other\" as an argument\n");
-//                System.out.println("There is no such registered occupation as " + work + "!");
-//                System.out.println("If you want to see some other ratings, please use \"other\" as an argument");
                 return errorMessage.toString();
             }
 
@@ -127,18 +139,16 @@ public class Main {
             //Check if movieID is empty
             if (movieID.size() <= 0) {
                 errorMessage.append("No movie found that satisfies requested genres: ").append(args[3]).append("\n");
-//                System.out.println("No movie found that satisfies requested genres: " + args[3]).;
                 return errorMessage.toString();
             }
             Collections.sort(movieID);
-            JSONArray top10 = Utils.printTop10(userLists, movieID, movies);
+            JSONArray top10 = Utils.printTopN(userLists, movieID, movies, 10);
             top10.toString(2);
         }
 
         //* Developer's helpers
         catch (IOException e) {
             // todo: Proper error handling
-//            System.out.println("Some error happened");
             return e.toString();
         }
         return "Some error happened\n";
@@ -158,7 +168,6 @@ public class Main {
             Utils.setGenres(genreTypes);
         }
         catch (Exception e) {
-//            System.out.println(e.toString());
             return e.toString();
         }
 
@@ -169,9 +178,6 @@ public class Main {
             //-------------------------------------------------------------------
             errorMessage.append("Please, pass exactly 3 or 4 arguments!\n");
             errorMessage.append("Try to remove spaces between occupations consisting of several words, such as \"college student\" -> \"collegestudent\"\n");
-//            System.out.println("Please, pass exactly 3 or 4 arguments!");
-//            System.out.print("Try to remove spaces between occupations consisting of several words, such as ");
-//            System.out.println("\"college student\" -> \"collegestudent\"");
             return errorMessage.toString();
         }
 
@@ -180,8 +186,6 @@ public class Main {
         if (!(gender.compareTo("") == 0 || gender.compareTo("f") == 0 || gender.compareTo("m") == 0)) {
             errorMessage.append("Please, provide a proper arguement for Gender\n");
             errorMessage.append("It shall be empty - \"\", male - \"M\" or \"m\", female \"F\" or \"f\"\n");
-//            System.out.println("Please, provide a proper arguement for Gender");
-//            System.out.println("It shall be empty - \"\", male - \"M\" or \"m\", female \"F\" or \"f\"");
             return errorMessage.toString();
         }
 
@@ -192,9 +196,6 @@ public class Main {
                     errorMessage.append("Please, enter a valid argument for age!\n");
                     errorMessage.append("It should be a positive integer, containing only digits!\n");
                     errorMessage.append("Age shall not exceed "+Integer.MAX_VALUE+"\n");
-//                    System.out.println("Please, enter a valid argument for age!");
-//                    System.out.println("It should be a positive integer, containing only digits!");
-//                    System.out.printf("Age shall not exceed %d\n", Integer.MAX_VALUE);
                     return errorMessage.toString();
                 }
             }
@@ -205,7 +206,6 @@ public class Main {
             genres = args.get("genre").toLowerCase().split("\\|");
             if(genres.length == 0){
                 errorMessage.append("Please enter a valid input for genres! The input must include at least one genre\n");
-//                System.out.println("Please enter a valid input for genres! The input must include at least one genre");
                 return errorMessage.toString();
             }
             //* Genres check
@@ -214,14 +214,12 @@ public class Main {
                 set.add(genre);
                 if (!genreTypes.contains(genre)) {
                     errorMessage.append("Please enter a valid input for genres!\n");
-//                    System.out.println("Please enter a valid input for genres!");
                     if (genre.compareTo("") == 0) {
                         is_empty = true;
                         break;
                     }
                     else {
                         errorMessage.append("There is not such registered genre as ").append(genre).append("\n");
-//                        System.out.println("There is not such registered genre as " + genre);
                         return errorMessage.toString();
                     }
                 }
@@ -229,8 +227,6 @@ public class Main {
             if (set.size() != genres.length) {
                 errorMessage.append("Please enter valid input for genres\n");
                 errorMessage.append("Genres should not repeat\n");
-//                System.out.println("Please enter valid input for genres");
-//                System.out.println("Genres should not repeat");
                 return errorMessage.toString();
             }
 
@@ -246,8 +242,6 @@ public class Main {
             if (occup_id == null) {
                 errorMessage.append("There is no such registered occupation as ").append(work).append("!\n");
                 errorMessage.append("If you want to see some other ratings, please use \"other\" as an argument\n");
-//                System.out.println("There is no such registered occupation as " + work + "!");
-//                System.out.println("If you want to see some other ratings, please use \"other\" as an argument");
                 return errorMessage.toString();
             }
 
@@ -258,18 +252,16 @@ public class Main {
             //Check if movieID is empty
             if (movieID.size() <= 0) {
                 errorMessage.append("No movie found that satisfies requested genres: ").append(args.get("genre")).append("\n");
-//                System.out.println("No movie found that satisfies requested genres: " + args[3]).;
                 return errorMessage.toString();
             }
             Collections.sort(movieID);
-            JSONArray top10 = Utils.printTop10(userLists, movieID, movies);
+            JSONArray top10 = Utils.printTopN(userLists, movieID, movies, 10);
             return top10.toString(2);
         }
 
         //* Developer's helpers
         catch (IOException e) {
             // todo: Proper error handling
-//            System.out.println("Some error happened");
             return e.toString();
         }
     }
