@@ -13,7 +13,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class Utils {
-    public static JSONArray printTopN(ArrayList<ArrayList<Integer>> userLists, ArrayList<Integer> movieID, HashMap<Integer, String[]> movies, int n) throws IOException {
+    public static JSONArray getTopN(ArrayList<ArrayList<Integer>> userLists, ArrayList<Integer> movieID, HashMap<Integer, String[]> movies, int n) throws IOException {
         int count = 0;
         int index = 0;
         ArrayList<Integer> printedList = new ArrayList<>();
@@ -21,6 +21,7 @@ public class Utils {
         while (count < n) {
             int allvotes = 0;
             double totalMean=0;
+            if(index>=userLists.size()) break;
             ArrayList<Integer> list = userLists.get(index);
             Collections.sort(list);
             HashMap<Integer, Integer[]> ratings = Utils.getRatings(list, movieID);
@@ -172,7 +173,7 @@ public class Utils {
     }
 
     // This function returns movieID-s with matching genres
-    public static HashMap<Integer, String[]> getMovies(String[] genres) throws IOException {
+    public static HashMap<Integer, String[]> getMovies(String[] genres, String exclude) throws IOException {
         // ! --movies.dat--
         // MovieID::Title::Genres
         BufferedReader scan = new BufferedReader(new FileReader(new File("data/movies.dat")));
@@ -184,6 +185,7 @@ public class Utils {
             for (String s : genres) {
                 for (String g : genres_list) {
                     if (s.toLowerCase().equals(g.toLowerCase())) {
+                        if(movie[1].toLowerCase().equals(exclude)) continue;
                         list.put(Integer.parseInt(movie[0]), new String[]{movie[1],movie[2]});
                     }
                 }
@@ -193,7 +195,7 @@ public class Utils {
         return list;
     }
 
-    public static HashMap<Integer, String[]> getMovies() throws IOException {
+    public static HashMap<Integer, String[]> getMovies(String exclude) throws IOException {
         // ! --movies.dat--
         // MovieID::Title::Genres
         BufferedReader scan = new BufferedReader(new FileReader(new File("data/movies.dat")));
@@ -201,6 +203,7 @@ public class Utils {
         String line;
         while ((line = scan.readLine()) != null) {
             String[] movie = line.split("::");
+            if(movie[1].toLowerCase().equals(exclude)) continue;
             list.put(Integer.parseInt(movie[0]), new String[]{movie[1],movie[2]});
         }
         scan.close();

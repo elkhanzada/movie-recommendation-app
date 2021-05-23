@@ -7,40 +7,40 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.io.IOException;
 import java.util.*;
+
 @SpringBootApplication
 public class Main {
     public static void main(String[] args) {
-        SpringApplication.run(Main.class,args);
+        SpringApplication.run(Main.class, args);
     }
 
     public static String recommendMovies(HashMap<String, String> args) throws IOException {
         int limit = 10;
         if (args.get("limit") != null) limit = Integer.parseInt(args.get("limit"));
         try {
-            StringBuilder errorMessage = new StringBuilder();
             String[] genres = Utils.getGenres(args.get("title"));
             ArrayList<ArrayList<Integer>> userLists = new ArrayList<ArrayList<Integer>>();
             userLists.add(Utils.getUsers("", -1, -1, ""));
-            HashMap<Integer, String[]> movies = Utils.getMovies(genres);
-            ArrayList<Integer> movieID = new ArrayList<>(movies.keySet());
-            //Check if movieID is empty
-            if (movieID.size() <= 0) {
-                errorMessage.append("No movie found that satisfies requested genres: ").append(args.get("genre")).append("\n");
-                return errorMessage.toString();
-            }
-            Collections.sort(movieID);
-            JSONArray topN = Utils.printTopN(userLists, movieID, movies, limit);
-            return topN.toString(2);
-        } 
-        catch (IllegalArgumentException e) {
+            HashMap<Integer, String[]> first_movies = Utils.getMovies(genres, args.get("title").toLowerCase());
+            HashMap<Integer, String[]> second_movies = Utils.getMovies(args.get("title").toLowerCase());
+            ArrayList<Integer> firstMovieID = new ArrayList<>(first_movies.keySet());
+            ArrayList<Integer> secondMovieID = new ArrayList<>(second_movies.keySet());
+            Collections.sort(firstMovieID);
+            Collections.sort(secondMovieID);
+            JSONArray topN1 = Utils.getTopN(userLists, firstMovieID, first_movies, limit);
+            JSONArray topN2 = Utils.getTopN(userLists, secondMovieID, second_movies, limit - topN1.length());
+            topN1.putAll(topN2);
+            return topN1.toString(2);
+        } catch (IllegalArgumentException e) {
             return e.getMessage();
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             return e.toString();
+        } catch (NullPointerException e) {
+            return "Title is not given\n";
         }
     }
 
-    public static String getMovies(String[] args){
+    public static String getMovies(String[] args) {
         String gender;
         int age;
         String work;
@@ -53,8 +53,7 @@ public class Main {
         Set<String> genreTypes = new HashSet<String>();
         try {
             Utils.setGenres(genreTypes);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             return e.toString();
         }
 
@@ -82,7 +81,7 @@ public class Main {
                 if (!Character.isDigit(args[1].charAt(i))) {
                     errorMessage.append("Please, enter a valid argument for age!\n");
                     errorMessage.append("It should be a positive integer, containing only digits!\n");
-                    errorMessage.append("Age shall not exceed "+Integer.MAX_VALUE+"\n");
+                    errorMessage.append("Age shall not exceed " + Integer.MAX_VALUE + "\n");
                     return errorMessage.toString();
                 }
             }
@@ -91,7 +90,7 @@ public class Main {
 
         if (args.length == 4) {
             genres = args[3].toLowerCase().split("\\|");
-            if(genres.length == 0){
+            if (genres.length == 0) {
                 errorMessage.append("Please enter a valid input for genres! The input must include at least one genre\n");
                 return errorMessage.toString();
             }
@@ -104,8 +103,7 @@ public class Main {
                     if (genre.compareTo("") == 0) {
                         is_empty = true;
                         continue;
-                    }
-                    else {
+                    } else {
                         errorMessage.append("There is not such registered genre as ").append(genre).append("\n");
                         return errorMessage.toString();
                     }
@@ -134,7 +132,7 @@ public class Main {
 
             //* Here, real implementation begins
             ArrayList<ArrayList<Integer>> userLists = Utils.getAllUsers(work, occup_id, age, gender);
-            HashMap<Integer, String[]> movies = !is_empty ? Utils.getMovies(genres) : Utils.getMovies();
+            HashMap<Integer, String[]> movies = !is_empty ? Utils.getMovies(genres, "") : Utils.getMovies("");
             ArrayList<Integer> movieID = new ArrayList<>(movies.keySet());
             //Check if movieID is empty
             if (movieID.size() <= 0) {
@@ -142,7 +140,7 @@ public class Main {
                 return errorMessage.toString();
             }
             Collections.sort(movieID);
-            JSONArray top10 = Utils.printTopN(userLists, movieID, movies, 10);
+            JSONArray top10 = Utils.getTopN(userLists, movieID, movies, 10);
             top10.toString(2);
         }
 
@@ -153,7 +151,8 @@ public class Main {
         }
         return "Some error happened\n";
     }
-    public static String getMovies(HashMap<String,String> args){
+
+    public static String getMovies(HashMap<String, String> args) {
         String gender;
         int age;
         String work;
@@ -166,17 +165,23 @@ public class Main {
         Set<String> genreTypes = new HashSet<String>();
         try {
             Utils.setGenres(genreTypes);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             return e.toString();
         }
-
+        if (args.get("gender") == null)
+            return "Gender key is not given\n";
+        else if (args.get("age") == null)
+            return "Age key is not given\n";
+        else if (args.get("occupation") == null)
+            return "Occupation key is not given\n";
+        else if (args.get("genre") == null)
+            return "Genre key is not given\n";
         //* Args check
-        if (args.size() < 3 || args.size() > 4) {
+        if (args.size() != 4) {
             //-------------------------------------------------------------------
             //? are these messages enough for case with !=2 args?
             //-------------------------------------------------------------------
-            errorMessage.append("Please, pass exactly 3 or 4 arguments!\n");
+            errorMessage.append("Please, pass exactly 4 keys to JSON!\n");
             errorMessage.append("Try to remove spaces between occupations consisting of several words, such as \"college student\" -> \"collegestudent\"\n");
             return errorMessage.toString();
         }
@@ -195,42 +200,34 @@ public class Main {
                 if (!Character.isDigit(args.get("age").charAt(i))) {
                     errorMessage.append("Please, enter a valid argument for age!\n");
                     errorMessage.append("It should be a positive integer, containing only digits!\n");
-                    errorMessage.append("Age shall not exceed "+Integer.MAX_VALUE+"\n");
+                    errorMessage.append("Age shall not exceed " + Integer.MAX_VALUE + "\n");
                     return errorMessage.toString();
                 }
             }
             age = Integer.parseInt(args.get("age"));
         } else age = -1;
 
-        if (args.size() == 4) {
+        //* Genres check
+        if (args.get("genre").length() == 0) {
+            is_empty = true;
+        }else {
             genres = args.get("genre").toLowerCase().split("\\|");
-            if(genres.length == 0){
-                errorMessage.append("Please enter a valid input for genres! The input must include at least one genre\n");
-                return errorMessage.toString();
-            }
-            //* Genres check
             HashSet<String> set = new HashSet<>();
             for (String genre : genres) {
                 set.add(genre);
                 if (!genreTypes.contains(genre)) {
-                    errorMessage.append("Please enter a valid input for genres!\n");
-                    if (genre.compareTo("") == 0) {
-                        is_empty = true;
-                        break;
-                    }
-                    else {
                         errorMessage.append("There is not such registered genre as ").append(genre).append("\n");
                         return errorMessage.toString();
-                    }
                 }
             }
+
             if (set.size() != genres.length) {
                 errorMessage.append("Please enter valid input for genres\n");
                 errorMessage.append("Genres should not repeat\n");
                 return errorMessage.toString();
             }
-
         }
+
 
         //! toLowerCase may fail for ! character? or \?
 
@@ -247,7 +244,7 @@ public class Main {
 
             //* Here, real implementation begins
             ArrayList<ArrayList<Integer>> userLists = Utils.getAllUsers(work, occup_id, age, gender);
-            HashMap<Integer, String[]> movies = !is_empty ? Utils.getMovies(genres) : Utils.getMovies();
+            HashMap<Integer, String[]> movies = !is_empty ? Utils.getMovies(genres, "") : Utils.getMovies("");
             ArrayList<Integer> movieID = new ArrayList<>(movies.keySet());
             //Check if movieID is empty
             if (movieID.size() <= 0) {
@@ -255,7 +252,7 @@ public class Main {
                 return errorMessage.toString();
             }
             Collections.sort(movieID);
-            JSONArray top10 = Utils.printTopN(userLists, movieID, movies, 10);
+            JSONArray top10 = Utils.getTopN(userLists, movieID, movies, 10);
             return top10.toString(2);
         }
 

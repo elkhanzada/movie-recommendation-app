@@ -28,7 +28,7 @@ public class MainController {
         JSONObject js = new JSONObject(input.toLowerCase());
         HashMap<String,String> args = new HashMap<>();
         for(String key: js.keySet()) {
-            if (key.equals("limit")) args.put(key, new Integer(js.getInt(key)).toString());
+            if (key.equals("limit")) args.put(key, Integer.toString(js.getInt(key)));
             else args.put(key,js.getString(key));
         }
         return Main.recommendMovies(args);
