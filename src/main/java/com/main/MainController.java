@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class MainController {
     @GetMapping("/users/recommend")
     public String getMovies(@RequestBody String input) {
-        JSONObject js = new JSONObject(input);
+        JSONObject js = new JSONObject(input.toLowerCase());
         HashMap<String,String> args = new HashMap<>();
         for(String key: js.keySet())
             args.put(key,js.getString(key));
