@@ -31,9 +31,13 @@ public class MainController {
             return "Please pass json in right format\n";
         }
         HashMap<String,String> args = new HashMap<>();
-        for(String key: js.keySet()) {
-            if (key.equals("limit")) args.put(key, Integer.toString(js.getInt(key)));
-            else args.put(key,js.getString(key));
+        try {
+            for (String key : js.keySet()) {
+                if (key.equals("limit")) args.put(key, Integer.toString(js.getInt(key)));
+                else args.put(key, js.getString(key));
+            }
+        }catch (NumberFormatException e) {
+            return "Value of limit must be integer!\n";
         }
         return Main.recommendMovies(args);
     }
