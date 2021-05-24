@@ -103,6 +103,7 @@ Input requirements:
 5) If occupation string is not one of specified user occupations (not an educator, student or else) or not equal to "other", then appropriate error message will be given. 
 6) All the values of key may be left empty except of the title key. It must contain at least one movie. Otherwise, an appropriate error message will be given.
 7) If you pass json string in wrong format, then an appropriate error message will be given.
+8) If chosen movie title is not found in our dataset, then an appropriate error message will be given.
 
 Output:
 1) If every input requirement is satisfied, then the program will return json array that contains movies with their titles, genres, corresponding [IMDB](https://www.imdb.com/) links.

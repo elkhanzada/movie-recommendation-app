@@ -20,18 +20,18 @@ public class Utils {
         JSONArray jsonArray = new JSONArray();
         while (count < n) {
             int allvotes = 0;
-            double totalMean=0;
-            if(index>=userLists.size()) break;
+            double totalMean = 0;
+            if (index >= userLists.size()) break;
             ArrayList<Integer> list = userLists.get(index);
             Collections.sort(list);
             HashMap<Integer, Integer[]> ratings = Utils.getRatings(list, movieID);
             HashMap<Integer, Double> scores = new HashMap<>();
             for (Integer k : ratings.keySet()) {
-                allvotes+=ratings.get(k)[1];
-                totalMean+=(double) ratings.get(k)[0] / (double) ratings.get(k)[1];
+                allvotes += ratings.get(k)[1];
+                totalMean += (double) ratings.get(k)[0] / (double) ratings.get(k)[1];
             }
-            if(allvotes!=0)
-                totalMean/=allvotes;
+            if (allvotes != 0)
+                totalMean /= allvotes;
             for (Integer k : ratings.keySet()) {
                 scores.put(k, weightedRating((double) ratings.get(k)[0] / (double) ratings.get(k)[1],
                         (double) ratings.get(k)[1],
@@ -51,8 +51,8 @@ public class Utils {
                     ));
             for (Integer k : sortedScores.keySet()) {
 
-                if(sortedScores.get(k)>=3.0) {
-                    if(printedList.contains(k))
+                if (sortedScores.get(k) >= 3.0) {
+                    if (printedList.contains(k))
                         continue;
                     else
                         printedList.add(k);
@@ -66,9 +66,11 @@ public class Utils {
         }
         return jsonArray;
     }
-    public static double weightedRating(double R, double v, double m, double C){
+
+    public static double weightedRating(double R, double v, double m, double C) {
         return (R * v + C * m) / (v + m);
     }
+
     public static JSONObject printMovie(Integer chosenMovie, HashMap<Integer, String[]> movies) throws IOException {
         BufferedReader scan = new BufferedReader(new FileReader(new File("data/links.dat")));
         String line;
@@ -167,7 +169,7 @@ public class Utils {
         }
         scan.close();
         if (!found) {
-            throw new IllegalArgumentException("Movie doesn't exist in the movies.dat");
+            throw new IllegalArgumentException("Movie doesn't exist in the movies.dat\n");
         }
         return result;
     }
@@ -185,8 +187,8 @@ public class Utils {
             for (String s : genres) {
                 for (String g : genres_list) {
                     if (s.toLowerCase().equals(g.toLowerCase())) {
-                        if(movie[1].toLowerCase().equals(exclude)) continue;
-                        list.put(Integer.parseInt(movie[0]), new String[]{movie[1],movie[2]});
+                        if (movie[1].toLowerCase().equals(exclude)) continue;
+                        list.put(Integer.parseInt(movie[0]), new String[]{movie[1], movie[2]});
                     }
                 }
             }
@@ -203,8 +205,8 @@ public class Utils {
         String line;
         while ((line = scan.readLine()) != null) {
             String[] movie = line.split("::");
-            if(movie[1].toLowerCase().equals(exclude)) continue;
-            list.put(Integer.parseInt(movie[0]), new String[]{movie[1],movie[2]});
+            if (movie[1].toLowerCase().equals(exclude)) continue;
+            list.put(Integer.parseInt(movie[0]), new String[]{movie[1], movie[2]});
         }
         scan.close();
         return list;
@@ -212,36 +214,36 @@ public class Utils {
 
     // This function simply maps occupation name to its category
     public static void setOccupationHash(HashMap<String, Integer> hashmap) {
-            hashmap.put("other", 0);
-            hashmap.put("academic", 1);
-            hashmap.put("educator", 1);
-            hashmap.put("artist", 2);
-            hashmap.put("clerical", 3);
-            hashmap.put("admin", 3);
-            hashmap.put("collegestudent", 4);
-            hashmap.put("college", 4);
-            hashmap.put("gradstudent", 4);
-            hashmap.put("customerservice", 5);
-            hashmap.put("doctor", 6);
-            hashmap.put("healthcare", 6);
-            hashmap.put("executive", 7);
-            hashmap.put("managerial", 7);
-            hashmap.put("farmer", 8);
-            hashmap.put("homemaker", 9);
-            hashmap.put("k-12student", 10);
-            hashmap.put("lawyer", 11);
-            hashmap.put("programmer", 12);
-            hashmap.put("retired", 13);
-            hashmap.put("sales", 14);
-            hashmap.put("marketing", 14);
-            hashmap.put("scientist", 15);
-            hashmap.put("self-employed", 16);
-            hashmap.put("technician", 17);
-            hashmap.put("engineer", 17);
-            hashmap.put("tradesman", 18);
-            hashmap.put("craftsman", 18);
-            hashmap.put("unemployed", 19);
-            hashmap.put("writer", 20);
+        hashmap.put("other", 0);
+        hashmap.put("academic", 1);
+        hashmap.put("educator", 1);
+        hashmap.put("artist", 2);
+        hashmap.put("clerical", 3);
+        hashmap.put("admin", 3);
+        hashmap.put("collegestudent", 4);
+        hashmap.put("college", 4);
+        hashmap.put("gradstudent", 4);
+        hashmap.put("customerservice", 5);
+        hashmap.put("doctor", 6);
+        hashmap.put("healthcare", 6);
+        hashmap.put("executive", 7);
+        hashmap.put("managerial", 7);
+        hashmap.put("farmer", 8);
+        hashmap.put("homemaker", 9);
+        hashmap.put("k-12student", 10);
+        hashmap.put("lawyer", 11);
+        hashmap.put("programmer", 12);
+        hashmap.put("retired", 13);
+        hashmap.put("sales", 14);
+        hashmap.put("marketing", 14);
+        hashmap.put("scientist", 15);
+        hashmap.put("self-employed", 16);
+        hashmap.put("technician", 17);
+        hashmap.put("engineer", 17);
+        hashmap.put("tradesman", 18);
+        hashmap.put("craftsman", 18);
+        hashmap.put("unemployed", 19);
+        hashmap.put("writer", 20);
     }
 
     public static void setGenres(Set<String> set) throws FileNotFoundException, IOException {

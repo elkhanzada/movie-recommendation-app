@@ -2,6 +2,7 @@ package com.main;
 
 import com.utils.Utils;
 import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -16,6 +17,7 @@ public class Main {
 
     public static String recommendMovies(HashMap<String, String> args) throws IOException {
         int limit = 10;
+        if (args.size() > 2) return "Please, pass exactly 1 or 2 keys to JSON!\n";
         if (args.get("limit") != null) limit = Integer.parseInt(args.get("limit"));
         try {
             String[] genres = Utils.getGenres(args.get("title"));
@@ -77,7 +79,7 @@ public class Main {
         //* Gender check
         gender = args.get("gender").toLowerCase();
         if (!(gender.compareTo("") == 0 || gender.compareTo("f") == 0 || gender.compareTo("m") == 0)) {
-            errorMessage.append("Please, provide a proper arguement for Gender\n");
+            errorMessage.append("Please, provide a proper argument for Gender\n");
             errorMessage.append("It shall be empty - \"\", male - \"M\" or \"m\", female \"F\" or \"f\"\n");
             return errorMessage.toString();
         }
@@ -98,14 +100,14 @@ public class Main {
         //* Genres check
         if (args.get("genre").length() == 0) {
             is_empty = true;
-        }else {
+        } else {
             genres = args.get("genre").toLowerCase().split("\\|");
             HashSet<String> set = new HashSet<>();
             for (String genre : genres) {
                 set.add(genre);
                 if (!genreTypes.contains(genre)) {
-                        errorMessage.append("There is not such registered genre as ").append(genre).append("\n");
-                        return errorMessage.toString();
+                    errorMessage.append("There is not such registered genre as ").append(genre).append("\n");
+                    return errorMessage.toString();
                 }
             }
 

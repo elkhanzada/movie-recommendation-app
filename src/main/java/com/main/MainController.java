@@ -1,23 +1,21 @@
 package com.main;
-
-import java.lang.reflect.Field;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicLong;
-
-import com.utils.Utils;
-import org.json.JSONArray;
 import org.json.JSONObject;
 import java.io.IOException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class MainController {
     @GetMapping("/users/recommendations")
     public String getMovies(@RequestBody String input) {
-        JSONObject js = new JSONObject(input.toLowerCase());
+        JSONObject js = null;
+        try{
+            js = new JSONObject(input.toLowerCase());
+        }catch (Exception e){
+            return "Please pass json in right format\n";
+        }
         HashMap<String,String> args = new HashMap<>();
         for(String key: js.keySet())
             args.put(key,js.getString(key));
@@ -25,7 +23,13 @@ public class MainController {
     }
     @GetMapping("/movies/recommendations")
     public String getRecommendations(@RequestBody String input) throws IOException {
-        JSONObject js = new JSONObject(input.toLowerCase());
+        JSONObject js = null;
+        try {
+            js = new JSONObject(input.toLowerCase());
+        }catch (Exception e){
+            e.printStackTrace();
+            return "Please pass json in right format\n";
+        }
         HashMap<String,String> args = new HashMap<>();
         for(String key: js.keySet()) {
             if (key.equals("limit")) args.put(key, Integer.toString(js.getInt(key)));
