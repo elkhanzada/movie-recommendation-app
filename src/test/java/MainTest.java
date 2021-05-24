@@ -1,13 +1,23 @@
 import com.main.Main;
+import com.main.MainController;
 import org.junit.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.runner.RunWith;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.context.junit4.SpringRunner;
+
+import java.sql.SQLOutput;
+
 
 public class MainTest {
     @Test
     public void testMoreArgs(){
         try{
-            Main.getMovies(new String[]{"1","2","3","4","5"});
+            MainController mainController = new MainController();
+            String result = mainController.getMovies("{gender: 'F'}");
         }catch (Exception e){
-
+            System.out.println(e.toString());
         }
     }
     @Test
