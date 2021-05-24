@@ -27,7 +27,6 @@ public class MainController {
         try {
             js = new JSONObject(input.toLowerCase());
         }catch (Exception e){
-            e.printStackTrace();
             return "Please pass json in right format\n";
         }
         HashMap<String,String> args = new HashMap<>();
