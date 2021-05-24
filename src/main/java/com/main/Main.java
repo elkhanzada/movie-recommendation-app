@@ -25,6 +25,8 @@ public class Main {
             userLists.add(Utils.getUsers("", -1, -1, ""));
             HashMap<Integer, String[]> first_movies = Utils.getMovies(genres, args.get("title").toLowerCase());
             HashMap<Integer, String[]> second_movies = Utils.getMovies(args.get("title").toLowerCase());
+            for(Integer k: first_movies.keySet())
+                    second_movies.remove(k);
             ArrayList<Integer> firstMovieID = new ArrayList<>(first_movies.keySet());
             ArrayList<Integer> secondMovieID = new ArrayList<>(second_movies.keySet());
             Collections.sort(firstMovieID);

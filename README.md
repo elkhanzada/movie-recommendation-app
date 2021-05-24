@@ -18,7 +18,14 @@ Where ```v``` is the number of votes for the movie, ```m``` is minimum votes req
 7. Gender, <del>Age</del>, <del>Occupation</del>
 8. <del>Gender</del>, <del>Age</del>, <del>Occupation</del>
 
-For the second part, we get the genres of chosen movie, take the movies based on the genres, and use the same algorithm to recommend **N** movies decided by the user. If we do not have enough movies for given genres, then we take the other movies to fulfill the number **N**. However, priority is given to the movies which have at least one common genre with the chosen movie.
+For the second part, we have two levels. Smaller number means higher priority.
+1. Movies that have at least one common genre with the chosen movie
+2. Other movies
+
+We get the genres of chosen movie, take the movies based on the genres, 
+and use the same algorithm to recommend **N** movies 
+decided by the user. If we do not have enough movies 
+for given genres,then we print the other movies (second priority) based on the same algorithm  to fulfill the number **N** after printing the first priority movies. 
 # Instruction for those who do not use docker
 ### Requirement
 Java 1.11 (Please set ```JAVA_HOME``` before running the code)
@@ -104,6 +111,7 @@ Input requirements:
 6) All the values of key may be left empty except of the title key. It must contain at least one movie. Otherwise, an appropriate error message will be given.
 7) If you pass json string in wrong format, then an appropriate error message will be given.
 8) If chosen movie title is not found in our dataset, then an appropriate error message will be given.
+9) If the value of limit is not an integer, then an appropriate error message will be given.
 
 Output:
 1) If every input requirement is satisfied, then the program will return json array that contains movies with their titles, genres, corresponding [IMDB](https://www.imdb.com/) links.
