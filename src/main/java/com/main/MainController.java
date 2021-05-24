@@ -35,7 +35,7 @@ public class MainController {
                 if (key.equals("limit")) args.put(key, Integer.toString(js.getInt(key)));
                 else args.put(key, js.getString(key));
             }
-        }catch (NumberFormatException e) {
+        }catch (Exception e) {
             return "Value of limit must be integer!\n";
         }
         return Main.recommendMovies(args);
