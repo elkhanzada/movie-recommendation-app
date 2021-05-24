@@ -111,7 +111,6 @@ Input requirements:
 6) All the values of key may be left empty except of the title key. It must contain at least one movie. Otherwise, an appropriate error message will be given.
 7) If you pass json string in wrong format, then an appropriate error message will be given.
 8) If chosen movie title is not found in our dataset, then an appropriate error message will be given.
-9) If the value of limit is not an integer, then an appropriate error message will be given.
 
 Output:
 1) If every input requirement is satisfied, then the program will return json array that contains movies with their titles, genres, corresponding [IMDB](https://www.imdb.com/) links.
