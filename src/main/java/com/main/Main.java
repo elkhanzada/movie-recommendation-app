@@ -18,7 +18,11 @@ public class Main {
     public static String recommendMovies(HashMap<String, String> args) throws IOException {
         int limit = 10;
         if (args.size() > 2) return "Please, pass exactly 1 or 2 keys to JSON!\n";
-        if (args.get("limit") != null) limit = Integer.parseInt(args.get("limit"));
+        try {
+            if (args.get("limit") != null) limit = Integer.parseInt(args.get("limit"));
+        }catch (NumberFormatException e){
+            return "Value of limit must be integer!\n";
+        }
         try {
             String[] genres = Utils.getGenres(args.get("title"));
             ArrayList<ArrayList<Integer>> userLists = new ArrayList<ArrayList<Integer>>();
