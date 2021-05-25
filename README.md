@@ -1,7 +1,10 @@
 # What this repository is about
-In this repository, we recommend top 10 movies from given user data and for given genres (if applicable).
+In this repository, we recommend top 10 movies from given user data and for given genres (if applicable) and suggest top **N** (given by user) movies based on chosen movie.
 # Algorithm
-For this milestone, here is what we did. We first got the movies based on genres (if given) as well as the users based on given user data. After grouping them, we used [IMDB ranking formula](https://www.fxsolver.com/browse/formulas/Bayes+estimator+-+Internet+Movie+Database+%28IMDB%29) to sort the movies which are rated by people with given user data. The formula is as follows
+The implementation of our algorithm is located in [Utils.java](src/main/java/com/utils/Utils.java)
+
+
+For this milestone, here is what we did for first part. We first got the movies based on genres (if given) as well as the users based on given user data. After grouping them, we used [IMDB ranking formula](https://www.fxsolver.com/browse/formulas/Bayes+estimator+-+Internet+Movie+Database+%28IMDB%29) to sort the movies which are rated by people with given user data. The formula is as follows
 
 <img src="https://render.githubusercontent.com/render/math?math=WR%20=\frac{(v*R%20%2B%20m*C)}{(v%2Bm)}" width="150" height="150">
 
@@ -14,6 +17,15 @@ Where ```v``` is the number of votes for the movie, ```m``` is minimum votes req
 6. <del>Gender</del>, <del>Age</del>, Occupation
 7. Gender, <del>Age</del>, <del>Occupation</del>
 8. <del>Gender</del>, <del>Age</del>, <del>Occupation</del>
+
+For the second part, we have two levels. Smaller number means higher priority.
+1. Movies that have at least one common genre with the chosen movie
+2. Other movies
+
+We get the genres of chosen movie, take the movies based on the genres, 
+and use the same algorithm to recommend **N** movies 
+decided by the user. If we do not have enough movies 
+for given genres,then we print the other movies (second priority) based on the same algorithm  to fulfill the number **N** after printing the first priority movies. 
 # Instruction for those who do not use docker
 ### Requirement
 Java 1.11 (Please set ```JAVA_HOME``` before running the code)
@@ -26,7 +38,7 @@ $ cd [destinationPath]
 ```
 ### Build
 ```bash
-$ mvn install
+$ mvn package
 ```
 # Instruction for docker users
 ### Building the image and accessing to the container
@@ -41,22 +53,28 @@ $ . run.sh
 ```
 It will print output for the example arguments.
 # Usage
-Our tool takes can take either 3 or 4 arguments as follows
+We integrated Spring. First, you need to run the server with following command.
 ```bash
-$ java -cp target/group9-1.0-SNAPSHOT.jar Main [gender] [age] [occupation]
+$ java -jar target/group9-1.0-SNAPSHOT.jar
 ```
+If you want to get movies based on user data and genres, run this command.
 ```bash
-$ java -cp target/group9-1.0-SNAPSHOT.jar Main [gender] [age] [occupation] [genre]
-```
-It is allowed to leave gender, age, and occupation as empty but if you opt for 4 arguments, then the genre input must not be empty. 
-If you want to give more than one genre, then separate them with "|" delimeter. 
-```
-$ java -cp target/group9-1.0-SNAPSHOT.jar Main [gender] [age] [occupation] ["genre_1|genre_2"]
+$ curl -X GET http://localhost:8080/users/recommendations -H 'Content-type:application/json' -d '{"gender" : "[gender]", "age" :"[age]", "occupation" : "[occupation]", "genre" : "[genre_1|genre_2]"}'
 ```
 e.g.:
 ```bash
-$ java -cp target/group9-1.0-SNAPSHOT.jar Main "F" "25" "gradstudent" "action|comedy"
+$ curl -X GET http://localhost:8080/users/recommendations -H 'Content-type:application/json' -d '{"gender" : "F", "age" :"25", "occupation" : "gradstudent", "genre" : "Action|War"}'
 ```
+If you want to get movies based on the movie title, run this command.
+```bash
+$ curl -X GET http://localhost:8080/movies/recommendations -H 'Content-type:application/json' -d '{"title" : "[movie_title]", "limit":[limit]}'
+```
+e.g.:
+```bash
+$ curl -X GET http://localhost:8080/movies/recommendations -H 'Content-type:application/json' -d '{"title" : "Toy Story (1995)", "limit": 20}'
+```
+It is allowed to leave the values of ```gender```, ```age```, ```occupation```, ```genre``` keys as empty. Passing ```limit``` key (default is 10) is optional.
+
 These are the all available occupations we currently have
 | Occupation list      |
 |----------------------|
@@ -85,19 +103,22 @@ These are the all available occupations we currently have
 # Troubleshooting
 
 Input requirements:
-1) The number of arguments passed must be exactly 3 or 4. Otherwise, a warning message is outputed and program is terminated.
-2) Gender, genre and occupation strings are not case sensitive.
-3) Genres must be split by '|' character, otherwise a warning message is outputed and program is terminated.
-4) User must include each possible genre maximum once, otherwise a warning message is outputed and program is terminated.
-5) If occupation string is not one of specified user occupations (not an educator, student or else) or not equal to "other", then we print the warning message and terminate the program. 
-6) All the inputs may be left empty except of the genre input. It must contain at least one valid genre and will terminate program with warning message otherwise.
+1) All the keys in the first part and title in the second part are required. Otherwise, an appropriate error message will be given.
+2) Gender, genre, occupation, title strings are not case sensitive.
+3) Genres must be split by '|' character, otherwise an appropriate error message will be given.
+4) User must include each possible genre maximum once, otherwise an appropriate error message will be given.
+5) If occupation string is not one of specified user occupations (not an educator, student or else) or not equal to "other", then appropriate error message will be given. 
+6) All the values of key may be left empty except of the title key. It must contain at least one movie. Otherwise, an appropriate error message will be given.
+7) If you pass json string in wrong format, then an appropriate error message will be given.
+8) If chosen movie title is not found in our dataset, then an appropriate error message will be given.
+9) For the first part,  you must pass exactly 4 keys and for the second part you must pass either 1 or 2 keys. Otherwise, an appropriate error message will be given.
 
 Output:
-1) If every input requirement is satisfied, then the program will output ten movies with their corresponding [IMDB](https://www.imdb.com/) links.
+1) If every input requirement is satisfied, then the program will return json array that contains movies with their titles, genres, corresponding [IMDB](https://www.imdb.com/) links.
 
 
 
 # Contribution
-- Kasymzhan Abdyldayev (20182002) - Error handling
-- Elkhan Ismayilzada (20182010) - Algorithm implementation, Testing, Readme
-- Aibar Oshakbayev (20182021) - Testing, Readme
+- Kasymzhan Abdyldayev (20182002) - Algorithm implementation (Part II)
+- Elkhan Ismayilzada (20182010) - Spring Integration, Error Handling, README
+- Aibar Oshakbayev (20182021) - Testing

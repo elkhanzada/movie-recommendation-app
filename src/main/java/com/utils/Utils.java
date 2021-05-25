@@ -1,4 +1,10 @@
+package com.utils;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
+import java.lang.IllegalArgumentException;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -7,23 +13,25 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class Utils {
-    public static void printTop10(ArrayList<ArrayList<Integer>> userLists, ArrayList<Integer> movieID, HashMap<Integer, String> movies) throws IOException {
+    public static JSONArray getTopN(ArrayList<ArrayList<Integer>> userLists, ArrayList<Integer> movieID, HashMap<Integer, String[]> movies, int n) throws IOException {
         int count = 0;
         int index = 0;
         ArrayList<Integer> printedList = new ArrayList<>();
-        while (count < 10) {
+        JSONArray jsonArray = new JSONArray();
+        while (count < n) {
             int allvotes = 0;
-            double totalMean=0;
+            double totalMean = 0;
+            if (index >= userLists.size()) break;
             ArrayList<Integer> list = userLists.get(index);
             Collections.sort(list);
             HashMap<Integer, Integer[]> ratings = Utils.getRatings(list, movieID);
             HashMap<Integer, Double> scores = new HashMap<>();
             for (Integer k : ratings.keySet()) {
-                allvotes+=ratings.get(k)[1];
-                totalMean+=(double) ratings.get(k)[0] / (double) ratings.get(k)[1];
+                allvotes += ratings.get(k)[1];
+                totalMean += (double) ratings.get(k)[0] / (double) ratings.get(k)[1];
             }
-            if(allvotes!=0)
-                totalMean/=allvotes;
+            if (allvotes != 0)
+                totalMean /= allvotes;
             for (Integer k : ratings.keySet()) {
                 scores.put(k, weightedRating((double) ratings.get(k)[0] / (double) ratings.get(k)[1],
                         (double) ratings.get(k)[1],
@@ -43,33 +51,41 @@ public class Utils {
                     ));
             for (Integer k : sortedScores.keySet()) {
 
-                if(sortedScores.get(k)>=3.0) {
-                    if(printedList.contains(k))
+                if (sortedScores.get(k) >= 3.0) {
+                    if (printedList.contains(k))
                         continue;
                     else
                         printedList.add(k);
 //                    System.out.print("Average Score: "+sortedScores.get(k)[0]+ " Number of users: "+sortedScores.get(k)[1] + " --------> ");
-                    Utils.printMovie(k, movies);
+                    jsonArray.put(Utils.printMovie(k, movies));
                     count++;
                 }
-                if (count >= 10) break;
+                if (count >= n) break;
             }
-            index += 1;
+            index++;
         }
+        return jsonArray;
     }
-    public static double weightedRating(double R, double v, double m, double C){
+
+    public static double weightedRating(double R, double v, double m, double C) {
         return (R * v + C * m) / (v + m);
     }
-    public static void printMovie(Integer chosenMovie, HashMap<Integer, String> movies) throws IOException {
+
+    public static JSONObject printMovie(Integer chosenMovie, HashMap<Integer, String[]> movies) throws IOException {
         BufferedReader scan = new BufferedReader(new FileReader(new File("data/links.dat")));
         String line;
+        JSONObject jsonObject = new JSONObject();
         while ((line = scan.readLine()) != null) {
             int movieID = Integer.parseInt(line.split("::")[0]);
             if (chosenMovie == movieID) {
-                System.out.println(movies.get(chosenMovie) + " ( http://www.imdb.com/title/tt" + line.split("::")[1] + " )");
-                break;
+//                System.out.println(movies.get(chosenMovie) + " ( http://www.imdb.com/title/tt" + line.split("::")[1] + " )");
+                jsonObject.put("title", movies.get(chosenMovie)[0]);
+                jsonObject.put("genre", movies.get(chosenMovie)[1]);
+                jsonObject.put("imdb", "http://www.imdb.com/title/tt" + line.split("::")[1]);
+                return jsonObject;
             }
         }
+        return null;
     }
 
     public static ArrayList<ArrayList<Integer>> getAllUsers(String work, Integer occupation, Integer age, String gender) throws IOException {
@@ -136,12 +152,34 @@ public class Utils {
         return list;
     }
 
+    // This function returns genres of the provided movie
+    public static String[] getGenres(String movieName) throws IllegalArgumentException, IOException {
+        BufferedReader scan = new BufferedReader(new FileReader(new File("data/movies.dat")));
+        movieName = movieName.toLowerCase();
+        String[] result = new String[5];
+        String line;
+        boolean found = false;
+        while ((line = scan.readLine()) != null) {
+            String[] movies = line.split("::");
+            if (movieName.equals(movies[1].toLowerCase())) {
+                result = movies[2].split("\\|");
+                found = true;
+                break;
+            }
+        }
+        scan.close();
+        if (!found) {
+            throw new IllegalArgumentException("Movie doesn't exist in the movies.dat\n");
+        }
+        return result;
+    }
+
     // This function returns movieID-s with matching genres
-    public static HashMap<Integer, String> getMovies(String[] genres) throws IOException {
+    public static HashMap<Integer, String[]> getMovies(String[] genres, String exclude) throws IOException {
         // ! --movies.dat--
         // MovieID::Title::Genres
         BufferedReader scan = new BufferedReader(new FileReader(new File("data/movies.dat")));
-        HashMap<Integer, String> list = new HashMap<>();
+        HashMap<Integer, String[]> list = new HashMap<>();
         String line;
         while ((line = scan.readLine()) != null) {
             String[] movie = line.split("::");
@@ -149,7 +187,8 @@ public class Utils {
             for (String s : genres) {
                 for (String g : genres_list) {
                     if (s.toLowerCase().equals(g.toLowerCase())) {
-                        list.put(Integer.parseInt(movie[0]), movie[1]);
+                        if (movie[1].toLowerCase().equals(exclude)) continue;
+                        list.put(Integer.parseInt(movie[0]), new String[]{movie[1], movie[2]});
                     }
                 }
             }
@@ -158,15 +197,16 @@ public class Utils {
         return list;
     }
 
-    public static HashMap<Integer, String> getMovies() throws IOException {
+    public static HashMap<Integer, String[]> getMovies(String exclude) throws IOException {
         // ! --movies.dat--
         // MovieID::Title::Genres
         BufferedReader scan = new BufferedReader(new FileReader(new File("data/movies.dat")));
-        HashMap<Integer, String> list = new HashMap<>();
+        HashMap<Integer, String[]> list = new HashMap<>();
         String line;
         while ((line = scan.readLine()) != null) {
             String[] movie = line.split("::");
-            list.put(Integer.parseInt(movie[0]), movie[1]);
+            if (movie[1].toLowerCase().equals(exclude)) continue;
+            list.put(Integer.parseInt(movie[0]), new String[]{movie[1], movie[2]});
         }
         scan.close();
         return list;
@@ -174,36 +214,36 @@ public class Utils {
 
     // This function simply maps occupation name to its category
     public static void setOccupationHash(HashMap<String, Integer> hashmap) {
-            hashmap.put("other", 0);
-            hashmap.put("academic", 1);
-            hashmap.put("educator", 1);
-            hashmap.put("artist", 2);
-            hashmap.put("clerical", 3);
-            hashmap.put("admin", 3);
-            hashmap.put("collegestudent", 4);
-            hashmap.put("college", 4);
-            hashmap.put("gradstudent", 4);
-            hashmap.put("customerservice", 5);
-            hashmap.put("doctor", 6);
-            hashmap.put("healthcare", 6);
-            hashmap.put("executive", 7);
-            hashmap.put("managerial", 7);
-            hashmap.put("farmer", 8);
-            hashmap.put("homemaker", 9);
-            hashmap.put("k-12student", 10);
-            hashmap.put("lawyer", 11);
-            hashmap.put("programmer", 12);
-            hashmap.put("retired", 13);
-            hashmap.put("sales", 14);
-            hashmap.put("marketing", 14);
-            hashmap.put("scientist", 15);
-            hashmap.put("self-employed", 16);
-            hashmap.put("technician", 17);
-            hashmap.put("engineer", 17);
-            hashmap.put("tradesman", 18);
-            hashmap.put("craftsman", 18);
-            hashmap.put("unemployed", 19);
-            hashmap.put("writer", 20);
+        hashmap.put("other", 0);
+        hashmap.put("academic", 1);
+        hashmap.put("educator", 1);
+        hashmap.put("artist", 2);
+        hashmap.put("clerical", 3);
+        hashmap.put("admin", 3);
+        hashmap.put("collegestudent", 4);
+        hashmap.put("college", 4);
+        hashmap.put("gradstudent", 4);
+        hashmap.put("customerservice", 5);
+        hashmap.put("doctor", 6);
+        hashmap.put("healthcare", 6);
+        hashmap.put("executive", 7);
+        hashmap.put("managerial", 7);
+        hashmap.put("farmer", 8);
+        hashmap.put("homemaker", 9);
+        hashmap.put("k-12student", 10);
+        hashmap.put("lawyer", 11);
+        hashmap.put("programmer", 12);
+        hashmap.put("retired", 13);
+        hashmap.put("sales", 14);
+        hashmap.put("marketing", 14);
+        hashmap.put("scientist", 15);
+        hashmap.put("self-employed", 16);
+        hashmap.put("technician", 17);
+        hashmap.put("engineer", 17);
+        hashmap.put("tradesman", 18);
+        hashmap.put("craftsman", 18);
+        hashmap.put("unemployed", 19);
+        hashmap.put("writer", 20);
     }
 
     public static void setGenres(Set<String> set) throws FileNotFoundException, IOException {
