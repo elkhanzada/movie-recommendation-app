@@ -120,5 +120,5 @@ Output:
 
 # Contribution
 - Kasymzhan Abdyldayev (20182002) - Algorithm implementation (Part II)
-- Elkhan Ismayilzada (20182010) - Spring Integration, Error Handling
+- Elkhan Ismayilzada (20182010) - Spring Integration, Error Handling, README
 - Aibar Oshakbayev (20182021) - Testing
