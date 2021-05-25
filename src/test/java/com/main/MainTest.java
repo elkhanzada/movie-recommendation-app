@@ -309,7 +309,7 @@ public class MainTest {
     public void testLimitNull() {
         try {
             JSONObject json = new JSONObject();
-            json.put("title", "kl");
+            json.put("title", "Bratan");
             String actual = getResult("movies", json.toString());
             String expected = "Movie doesn't exist in the movies.dat\n";
             assertEquals(expected, actual);
