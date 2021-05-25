@@ -332,4 +332,17 @@ public class MainTest {
             fail();
         }
     }
+    @Test
+    public void testWrongLimit() {
+        try {
+            JSONObject json = new JSONObject();
+            json.put("title", "Across the Sea of Time (1995)");
+            json.put("limit", "50bratan");
+            String actual = getResult("movies", json.toString());
+            String expected = "Please pass json in right format\n";
+            assertEquals(expected, actual);
+        } catch (Exception e) {
+            fail();
+        }
+    }
 }
