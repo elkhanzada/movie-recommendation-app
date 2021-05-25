@@ -112,6 +112,8 @@ Input requirements:
 7) If you pass json string in wrong format, then an appropriate error message will be given.
 8) If chosen movie title is not found in our dataset, then an appropriate error message will be given.
 9) For the first part,  you must pass exactly 4 keys and for the second part you must pass either 1 or 2 keys. Otherwise, an appropriate error message will be given.
+10) Passing floating numbers to the limit key will result in flooring the number passed and using the obtained value.
+11) No spaces are allowed
 
 Output:
 1) If every input requirement is satisfied, then the program will return json array that contains movies with their titles, genres, corresponding [IMDB](https://www.imdb.com/) links.
