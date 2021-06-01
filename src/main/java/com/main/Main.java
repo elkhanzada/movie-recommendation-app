@@ -2,37 +2,31 @@ package com.main;
 
 import com.utils.Utils;
 import org.json.JSONArray;
-import org.json.JSONObject;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 
 import java.io.IOException;
 import java.util.*;
 
 @SpringBootApplication
-public class Main {
-    public static void main(String[] args) {
+public class Main extends SpringBootServletInitializer {
+    public static void main(String[] args)  {
         SpringApplication.run(Main.class, args);
     }
-
-    public static String recommendMovies(HashMap<String, String> args) throws IOException {
+    public static String recommendMovies(HashMap<String, String> args,UserDAL userDAL,MovieDAL movieDAL,RatingDAL ratingDAL) {
         int limit = 10;
         if (args.size() > 2) return "Please, pass exactly 1 or 2 keys to JSON!\n";
         if (args.get("limit") != null) limit = Integer.parseInt(args.get("limit"));
         try {
             String[] genres = Utils.getGenres(args.get("title"));
-            ArrayList<ArrayList<Integer>> userLists = new ArrayList<ArrayList<Integer>>();
-            userLists.add(Utils.getUsers("", -1, -1, ""));
-            HashMap<Integer, String[]> first_movies = Utils.getMovies(genres, args.get("title").toLowerCase());
-            HashMap<Integer, String[]> second_movies = Utils.getMovies(args.get("title").toLowerCase());
-            for(Integer k: first_movies.keySet())
-                    second_movies.remove(k);
-            ArrayList<Integer> firstMovieID = new ArrayList<>(first_movies.keySet());
-            ArrayList<Integer> secondMovieID = new ArrayList<>(second_movies.keySet());
-            Collections.sort(firstMovieID);
-            Collections.sort(secondMovieID);
-            JSONArray topN1 = Utils.getTopN(userLists, firstMovieID, first_movies, limit);
-            JSONArray topN2 = Utils.getTopN(userLists, secondMovieID, second_movies, limit - topN1.length());
+            List<List<User>> userLists = new ArrayList<>();
+            userLists.add(userDAL.getAllUsers());
+            List<Movie> first_movies = Utils.getMovies(genres, args.get("title").toLowerCase(),movieDAL);
+            List<Movie> second_movies = Utils.getMovies(genres, args.get("title").toLowerCase(),movieDAL);
+            second_movies.removeAll(first_movies);
+            JSONArray topN1 = Utils.getTopN(userLists, first_movies,ratingDAL , limit);
+            JSONArray topN2 = Utils.getTopN(userLists, second_movies,ratingDAL, limit - topN1.length());
             topN1.putAll(topN2);
             return topN1.toString(2);
         } catch (IllegalArgumentException e) {
@@ -44,7 +38,7 @@ public class Main {
         }
     }
 
-    public static String getMovies(HashMap<String, String> args) {
+    public static String getMovies(HashMap<String, String> args, UserDAL userDAL, MovieDAL movieDAL, RatingDAL ratingDAL) {
         String gender;
         int age;
         String work;
@@ -101,7 +95,7 @@ public class Main {
 
         //* Genres check
         if (args.get("genre").length() == 0) {
-            is_empty = true;
+//            genres = args.get("genre").toLowerCase().split("\\|");
         } else {
             genres = args.get("genre").toLowerCase().split("\\|");
             HashSet<String> set = new HashSet<>();
@@ -135,16 +129,14 @@ public class Main {
             }
 
             //* Here, real implementation begins
-            ArrayList<ArrayList<Integer>> userLists = Utils.getAllUsers(work, occup_id, age, gender);
-            HashMap<Integer, String[]> movies = !is_empty ? Utils.getMovies(genres, "") : Utils.getMovies("");
-            ArrayList<Integer> movieID = new ArrayList<>(movies.keySet());
+            List<List<User>> userLists = Utils.getAllUsers(work, occup_id, age, gender,userDAL);
+           List<Movie> movies = Utils.getMovies(genres, "",movieDAL);
             //Check if movieID is empty
-            if (movieID.size() <= 0) {
+            if (movies.size() <= 0) {
                 errorMessage.append("No movie found that satisfies requested genres: ").append(args.get("genre")).append("\n");
                 return errorMessage.toString();
             }
-            Collections.sort(movieID);
-            JSONArray top10 = Utils.getTopN(userLists, movieID, movies, 10);
+            JSONArray top10 = Utils.getTopN(userLists, movies,ratingDAL, 10);
             return top10.toString(2);
         }
 
