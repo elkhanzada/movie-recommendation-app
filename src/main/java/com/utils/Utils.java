@@ -93,7 +93,6 @@ public class Utils {
     public static List<Rating> getRatings(List<User>users,List<Movie> movies, RatingDAL ratingDAL) {
         // ! --ratings.dat--
         // UserID::MovieID::Rating::Timestamp
-
         return ratingDAL.getSpecificRatings(users,movies);
     }
     // This function returns genres of the provided movie
@@ -119,28 +118,11 @@ public class Utils {
     }
 
     // This function returns movieID-s with matching genres
-    public static List<Movie> getMovies(String[] genres, String exclude, MovieDAL movieDAL) throws IOException {
+    public static List<Movie> getMovies(String[] genres, String exclude, MovieDAL movieDAL) {
         // ! --movies.dat--
         // MovieID::Title::Genres
-
         return movieDAL.getSpecificMovies(genres,exclude);
     }
-
-    public static HashMap<Integer, String[]> getMovies(String exclude) throws IOException {
-        // ! --movies.dat--
-        // MovieID::Title::Genres
-        BufferedReader scan = new BufferedReader(new FileReader(new File("data/movies.dat")));
-        HashMap<Integer, String[]> list = new HashMap<>();
-        String line;
-        while ((line = scan.readLine()) != null) {
-            String[] movie = line.split("::");
-            if (movie[1].toLowerCase().equals(exclude)) continue;
-            list.put(Integer.parseInt(movie[0]), new String[]{movie[1], movie[2]});
-        }
-        scan.close();
-        return list;
-    }
-
     // This function simply maps occupation name to its category
     public static void setOccupationHash(HashMap<String, Integer> hashmap) {
         hashmap.put("other", 0);
@@ -175,7 +157,7 @@ public class Utils {
         hashmap.put("writer", 20);
     }
 
-    public static void setGenres(Set<String> set) throws FileNotFoundException, IOException {
+    public static void setGenres(Set<String> set) throws IOException {
         BufferedReader scan = new BufferedReader(new FileReader(new File("data/movies.dat")));
         String line;
         while ((line = scan.readLine()) != null) {
