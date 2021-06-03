@@ -79,7 +79,7 @@ public class MainController {
             String[] movie = line.split("::");
             String poster = moviePosters.get(Integer.parseInt(movie[0]));
             String link = movieLinks.get(Integer.parseInt(movie[0]));
-            Movie mv = new Movie(Integer.parseInt(movie[0]),movie[1].toLowerCase(),movie[2].toLowerCase(),poster==null?"":poster, link==null?"":"http://www.imdb.com/title/tt"+link);
+            Movie mv = new Movie(Integer.parseInt(movie[0]),movie[1].toLowerCase(),movie[2].toLowerCase(),poster==null?"https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1200px-No-Image-Placeholder.svg.png":poster, link==null?"":"http://www.imdb.com/title/tt"+link);
             movieDAL.addNewMovie(mv);
         }
         scan3.close();

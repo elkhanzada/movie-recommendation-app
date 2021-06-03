@@ -37,8 +37,6 @@ public class Main extends SpringBootServletInitializer {
             return e.getMessage();
         } catch (IOException e) {
             return e.toString();
-        } catch (NullPointerException e) {
-            return "Title is not given\n";
         }
     }
 
@@ -58,14 +56,6 @@ public class Main extends SpringBootServletInitializer {
         } catch (Exception e) {
             return e.toString();
         }
-        if (args.get("gender") == null)
-            return "Gender key is not given\n";
-        else if (args.get("age") == null)
-            return "Age key is not given\n";
-        else if (args.get("occupation") == null)
-            return "Occupation key is not given\n";
-        else if (args.get("genre") == null)
-            return "Genre key is not given\n";
         //* Args check
         if (args.size() != 4) {
             //-------------------------------------------------------------------
@@ -124,7 +114,7 @@ public class Main extends SpringBootServletInitializer {
         try {
             work = args.get("occupation").toLowerCase();
             Integer occup_id = workID.get(work);
-            if (work.compareTo("") == 0) occup_id = 0;
+            if (work.compareTo("") == 0) occup_id = -1;
             //* Occupation check
             if (occup_id == null) {
                 errorMessage.append("There is no such registered occupation as ").append(work).append("!\n");
