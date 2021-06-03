@@ -37,22 +37,15 @@ public class RatingDALImpl implements RatingDAL{
         for(Movie movie: movies){
             Query query = new Query();
             query.addCriteria(Criteria.where("movieId").is(movie.getMovieID()));
-            ratings.addAll(mt.find(query,Rating.class));
-        }
-        Set<Rating> set = new HashSet<>(ratings);
-        ratings.clear();
-        ratings.addAll(set);
-        int i = 0;
-        while(i<ratings.size()) {
-            boolean isFound = false;
-            for (User user : users) {
-                if (ratings.get(i).getUserId() == user.getUserId()) {
-                    isFound = true;
-                    break;
+            Rating rt = mt.findOne(query,Rating.class);
+            if(rt!=null) {
+                for (User user : users) {
+                    if (rt.getUserIds().contains(user.getUserId())) {
+                        ratings.add(rt);
+                        break;
+                    }
                 }
             }
-            if (!isFound) ratings.remove(i);
-            i++;
         }
         return ratings;
     }

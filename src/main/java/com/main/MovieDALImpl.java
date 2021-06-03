@@ -29,6 +29,13 @@ public class MovieDALImpl implements MovieDAL{
     }
 
     @Override
+    public Movie findMovie(String name) {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("title").is(name.toLowerCase()));
+        return mt.findOne(query,Movie.class);
+    }
+
+    @Override
     public List<Movie> getSpecificMovies(String[] genres, String exclude) {
 
         List<Movie> movies = new ArrayList<>();

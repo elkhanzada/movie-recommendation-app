@@ -11,6 +11,10 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+
+import java.util.HashMap;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
@@ -22,16 +26,27 @@ public class MainTest {
     private MockMvc mvc;
 
     private String getResult(String channel, String input) throws Exception {
-        return this.mvc.perform(get("/" + channel + "/recommendations")
-                .content(input))
-                .andReturn().getResponse().getContentAsString();
+        JSONObject js = new JSONObject(input);
+        MultiValueMap<String,String> args = new LinkedMultiValueMap<>();
+        for(String k: js.keySet())
+            args.add(k,js.getString(k));
+        if(channel.equals("movies")){
+            return this.mvc.perform(get("/" + channel + "/recommendations")
+                    .params(args))
+                    .andReturn().getResponse().getContentAsString();
+        }else {
+            return this.mvc.perform(get("/" + channel + "/recommendations")
+                    .params(args))
+                    .andReturn().getResponse().getContentAsString();
+        }
+
     }
 
     @Test
     public void testMoreArgsInMovies() {
         try {
             String actual = getResult("movies", "{'title':'Toy Story', 'bla1': 'bla', 'bla2': 'bla'}");
-            String expected = "Please, pass exactly 1 or 2 keys to JSON!\n";
+            String expected = "Movie does not exist!\n";
             assertEquals(expected, actual);
         } catch (Exception e) {
             fail();
@@ -311,7 +326,7 @@ public class MainTest {
             JSONObject json = new JSONObject();
             json.put("title", "Bratan");
             String actual = getResult("movies", json.toString());
-            String expected = "Movie doesn't exist in the movies.dat\n";
+            String expected = "Movie does not exist\n";
             assertEquals(expected, actual);
         } catch (Exception e) {
             fail();
@@ -339,7 +354,7 @@ public class MainTest {
             json.put("title", "Across the Sea of Time (1995)");
             json.put("limit", "50bratan");
             String actual = getResult("movies", json.toString());
-            String expected = "Please pass json in right format\n";
+            String expected = "Limit must be an integer!\n";
             assertEquals(expected, actual);
         } catch (Exception e) {
             fail();

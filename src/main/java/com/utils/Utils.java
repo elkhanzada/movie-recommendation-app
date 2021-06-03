@@ -27,14 +27,14 @@ public class Utils {
             List<Rating> ratings = Utils.getRatings(list,movies,ratingDAL);
             HashMap<Integer, Double> scores = new HashMap<>();
             for (Rating rating: ratings) {
-                allvotes += rating.getVotes();
-                totalMean += rating.getAverage();
+                allvotes += rating.getVotes(list);
+                totalMean += rating.getAverage(list);
             }
             if (allvotes != 0)
                 totalMean /= allvotes;
             for (Rating rating: ratings) {
-                scores.put(rating.getMovieId(), weightedRating(rating.getAverage(),
-                        rating.getVotes(),
+                scores.put(rating.getMovieId(), weightedRating(rating.getAverage(list),
+                        rating.getVotes(list),
                         10,
                         totalMean));
             }
@@ -96,25 +96,10 @@ public class Utils {
         return ratingDAL.getSpecificRatings(users,movies);
     }
     // This function returns genres of the provided movie
-    public static String[] getGenres(String movieName) throws IllegalArgumentException, IOException {
-        BufferedReader scan = new BufferedReader(new FileReader(new File("data/movies.dat")));
-        movieName = movieName.toLowerCase();
-        String[] result = new String[5];
-        String line;
-        boolean found = false;
-        while ((line = scan.readLine()) != null) {
-            String[] movies = line.split("::");
-            if (movieName.equals(movies[1].toLowerCase())) {
-                result = movies[2].toLowerCase().split("\\|");
-                found = true;
-                break;
-            }
-        }
-        scan.close();
-        if (!found) {
-            throw new IllegalArgumentException("Movie doesn't exist in the movies.dat\n");
-        }
-        return result;
+    public static String[] getGenres(String movieName,MovieDAL movieDAL) throws IllegalArgumentException, IOException {
+        Movie mv = movieDAL.findMovie(movieName);
+        if (mv==null) throw new IllegalArgumentException("Movie does not exist!\n");
+        else return mv.getGenres().split("\\|");
     }
 
     // This function returns movieID-s with matching genres

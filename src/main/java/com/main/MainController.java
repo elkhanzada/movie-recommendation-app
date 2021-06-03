@@ -103,20 +103,25 @@ public class MainController {
         List<Rating> ratings  = new ArrayList<>();
         while ((line = scan.readLine()) != null) {
             String[] rating = line.split("::");
-            Rating rat = new Rating(Integer.parseInt(rating[0]),Integer.parseInt(rating[1]),Integer.parseInt(rating[2]));
+            Rating rat = new Rating(Integer.parseInt(rating[1]),Integer.parseInt(rating[2]));
             boolean isFound = false;
             for(int i = 0; i<ratings.size();i++){
                 Rating rating1 = ratings.get(i);
                 if(rating1.getMovieId()==rat.getMovieId()){
                     rating1.setScore(rating1.getScore()+rat.getScore());
                     rating1.setVotes(rating1.getVotes()+1);
+                    rating1.addUser(Integer.parseInt(rating[0]));
+                    rating1.addUserScore(Integer.parseInt(rating[0]),rat.getScore());
                     ratings.set(i,rating1);
                     isFound = true;
                     break;
                 }
             }
-            if(!isFound)ratings.add(rat);
-//            ratingDAL.addNewRating(new Rating(Integer.parseInt(rating[0]),Integer.parseInt(rating[1]),Integer.parseInt(rating[2])));
+            if(!isFound){
+                rat.addUser(Integer.parseInt(rating[0]));
+                rat.addUserScore(Integer.parseInt(rating[0]),rat.getScore());
+                ratings.add(rat);
+            }
         }
         ratingDAL.addNewRating(ratings);
     }
@@ -124,7 +129,7 @@ public class MainController {
 
     @GetMapping("/movies/recommendations")
     public String getRecommendations( @RequestParam(value = "title", defaultValue = "") String title,
-                                      @RequestParam(value = "limit", defaultValue = "") String limit
+                                      @RequestParam(value = "limit", defaultValue = "10") String limit
                                       ) {
         try {
             HashMap<String,String> args = new HashMap<>();
@@ -132,6 +137,7 @@ public class MainController {
             args.put("limit",limit);
             return Main.recommendMovies(args,userDAL,movieDAL,ratingDAL);
         }catch (Exception e){
+            e.printStackTrace();
             return "Please pass json in right format\n";
         }
     }

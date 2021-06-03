@@ -17,9 +17,13 @@ public class Main extends SpringBootServletInitializer {
     public static String recommendMovies(HashMap<String, String> args,UserDAL userDAL,MovieDAL movieDAL,RatingDAL ratingDAL) {
         int limit = 10;
         if (args.size() > 2) return "Please, pass exactly 1 or 2 keys to JSON!\n";
-        if (args.get("limit") != null) limit = Integer.parseInt(args.get("limit"));
         try {
-            String[] genres = Utils.getGenres(args.get("title"));
+            limit = Integer.parseInt(args.get("limit"));
+        }catch (NumberFormatException e){
+            return "Limit must be an integer!\n";
+        }
+        try {
+            String[] genres = Utils.getGenres(args.get("title"),movieDAL);
             List<List<User>> userLists = new ArrayList<>();
             userLists.add(userDAL.getAllUsers());
             List<Movie> first_movies = Utils.getMovies(genres, args.get("title").toLowerCase(),movieDAL);
