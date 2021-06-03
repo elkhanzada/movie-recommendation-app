@@ -14,8 +14,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
-import java.util.HashMap;
-
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 @RunWith(SpringRunner.class)
@@ -80,66 +78,6 @@ public class MainTest {
             json.put("genre", "");
             String actual = getResult("users", json.toString());
             String expected = "There is no such registered occupation as sasklasjfasdsadasfsafsafasfsafsafsafsfasfaskjflfkjasfklsfjaslkfjasflkjaasd!\nIf you want to see some other ratings, please use \"other\" as an argument\n";
-            assertEquals(expected, actual);
-        } catch (Exception e) {
-            fail();
-        }
-    }
-
-    @Test
-    public void testNullOccup() {
-        try {
-            JSONObject json = new JSONObject();
-            json.put("gender", "F");
-            json.put("age", "25");
-            json.put("genre", "null");
-            String actual = getResult("users", json.toString());
-            String expected = "Occupation key is not given\n";
-            assertEquals(expected, actual);
-        } catch (Exception e) {
-            fail();
-        }
-    }
-
-    @Test
-    public void testNullGenre() {
-        try {
-            JSONObject json = new JSONObject();
-            json.put("gender", "F");
-            json.put("age", "25");
-            json.put("occupation", "");
-            String actual = getResult("users", json.toString());
-            String expected = "Genre key is not given\n";
-            assertEquals(expected, actual);
-        } catch (Exception e) {
-            fail();
-        }
-    }
-
-    @Test
-    public void testNullAge() {
-        try {
-            JSONObject json = new JSONObject();
-            json.put("gender", "F");
-            json.put("occupation", "");
-            json.put("genre", "null");
-            String actual = getResult("users", json.toString());
-            String expected = "Age key is not given\n";
-            assertEquals(expected, actual);
-        } catch (Exception e) {
-            fail();
-        }
-    }
-
-    @Test
-    public void testNullGender() {
-        try {
-            JSONObject json = new JSONObject();
-            json.put("age", "25");
-            json.put("occupation", "");
-            json.put("genre", "null");
-            String actual = getResult("users", json.toString());
-            String expected = "Gender key is not given\n";
             assertEquals(expected, actual);
         } catch (Exception e) {
             fail();
