@@ -4,12 +4,8 @@ import com.main.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
+import java.io.*;
 import java.lang.IllegalArgumentException;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -143,7 +139,7 @@ public class Utils {
     }
 
     public static void setGenres(Set<String> set) throws IOException {
-        BufferedReader scan = new BufferedReader(new FileReader(new File("data/movies.dat")));
+        BufferedReader scan = new BufferedReader(new InputStreamReader(Utils.class.getClassLoader().getResourceAsStream("data/movies.dat")));
         String line;
         while ((line = scan.readLine()) != null) {
             String[] genres = line.split("::")[2].split("\\|");

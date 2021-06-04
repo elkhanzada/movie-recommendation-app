@@ -6,18 +6,19 @@
     <groupId>org.cse364</groupId>
     <artifactId>group9</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <packaging>war</packaging>
+<!--    <packaging>war</packaging>-->
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>2.4.3</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <relativePath/>
     </parent>
     <properties>
         <java.version>1.11</java.version>
         <maven.compiler.version>3.8.1</maven.compiler.version>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
+        <start-class>com.main.Main</start-class>
     </properties>
 <build>
 <plugins>
@@ -27,7 +28,7 @@
         <executions>
             <execution>
                 <id>copy-dependencies</id>
-                <phase>prepare-package</phase>
+                <phase>compile</phase>
                 <goals>
                     <goal>copy-dependencies</goal>
                 </goals>
@@ -37,19 +38,6 @@
                     <overWriteSnapshots>false</overWriteSnapshots>
                     <overWriteIfNewer>true</overWriteIfNewer>
                 </configuration>
-            </execution>
-        </executions>
-    </plugin>
-    <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-jar-plugin</artifactId>
-        <executions>
-            <execution>
-                <id>make-a-jar</id>
-                <phase>compile</phase>
-                <goals>
-                    <goal>jar</goal>
-                </goals>
             </execution>
         </executions>
     </plugin>
@@ -77,6 +65,15 @@
         </executions>
     </plugin>
     <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+    </plugin>
+    <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-war-plugin</artifactId>
+        <version>3.3.1</version>
+    </plugin>
+    <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
     </plugin>
@@ -85,7 +82,6 @@
         <artifactId>maven-surefire-plugin</artifactId>
         <version>2.21.0</version>
     </plugin>
-
 </plugins>
 </build>
     <dependencies>

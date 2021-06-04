@@ -59,9 +59,9 @@ public class MainController {
     private void saveMovies() throws IOException {
         // ! --movies.dat--
         // MovieID::Title::Genres
-        BufferedReader scan1 = new BufferedReader(new FileReader(new File("data/movie_poster.csv")));
-        BufferedReader scan2 = new BufferedReader(new FileReader(new File("data/links.dat")));
-        BufferedReader scan3 = new BufferedReader(new FileReader(new File("data/movies.dat")));
+        BufferedReader scan1 = new BufferedReader(new InputStreamReader(getClass().getClassLoader().getResourceAsStream("data/movie_poster.csv")));
+        BufferedReader scan2 = new BufferedReader(new InputStreamReader(getClass().getClassLoader().getResourceAsStream("data/links.dat")));
+        BufferedReader scan3 = new BufferedReader(new InputStreamReader(getClass().getClassLoader().getResourceAsStream("data/movies.dat")));
         String line;
         HashMap<Integer,String > moviePosters = new HashMap<>();
         HashMap<Integer,String > movieLinks = new HashMap<>();
@@ -88,7 +88,7 @@ public class MainController {
     private void saveUsers() throws IOException {
         // ! --users.dat--
         // UserID::Gender::Age::Occupation::Zip-code
-        BufferedReader scan = new BufferedReader(new FileReader(new File("data/users.dat")));
+        BufferedReader scan = new BufferedReader(new InputStreamReader(getClass().getClassLoader().getResourceAsStream("data/users.dat")));
         String line;
         while ((line = scan.readLine()) != null) {
             String[] user = line.split("::");
@@ -98,7 +98,7 @@ public class MainController {
     private void saveRatings() throws IOException {
         // ! --ratings.dat--
         // UserID::MovieID::Rating::Timestamp
-        BufferedReader scan = new BufferedReader(new FileReader(new File("data/ratings.dat")));
+        BufferedReader scan = new BufferedReader(new InputStreamReader(getClass().getClassLoader().getResourceAsStream("data/ratings.dat")));
         String line;
         List<Rating> ratings  = new ArrayList<>();
         while ((line = scan.readLine()) != null) {
