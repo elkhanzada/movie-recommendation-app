@@ -10,11 +10,11 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class Utils {
-    public static JSONArray getTopN(List<List<User>> userLists, List<Movie> movies, RatingDAL ratingDAL, int n) throws IOException {
+    public static List<Movie> getTopN(List<List<User>> userLists, List<Movie> movies, RatingDAL ratingDAL, int n) throws IOException {
         int count = 0;
         int index = 0;
         ArrayList<Integer> printedList = new ArrayList<>();
-        JSONArray movieArray = new JSONArray();
+        List<Movie> movieArray = new ArrayList<>();
         while (count < n) {
             int allvotes = 0;
             double totalMean = 0;
@@ -51,7 +51,7 @@ public class Utils {
                         continue;
                     else
                         printedList.add(k);
-                    movieArray.put(new JSONObject(Utils.getMovieDetails(k, movies)));
+                    movieArray.add(Utils.getMovieDetails(k, movies));
                     count++;
                 }
                 if (count >= n) break;
@@ -104,40 +104,6 @@ public class Utils {
         // MovieID::Title::Genres
         return movieDAL.getSpecificMovies(genres,exclude);
     }
-    // This function simply maps occupation name to its category
-    public static void setOccupationHash(HashMap<String, Integer> hashmap) {
-        hashmap.put("other", 0);
-        hashmap.put("academic", 1);
-        hashmap.put("educator", 1);
-        hashmap.put("artist", 2);
-        hashmap.put("clerical", 3);
-        hashmap.put("admin", 3);
-        hashmap.put("collegestudent", 4);
-        hashmap.put("college", 4);
-        hashmap.put("gradstudent", 4);
-        hashmap.put("customerservice", 5);
-        hashmap.put("doctor", 6);
-        hashmap.put("healthcare", 6);
-        hashmap.put("executive", 7);
-        hashmap.put("managerial", 7);
-        hashmap.put("farmer", 8);
-        hashmap.put("homemaker", 9);
-        hashmap.put("k-12student", 10);
-        hashmap.put("lawyer", 11);
-        hashmap.put("programmer", 12);
-        hashmap.put("retired", 13);
-        hashmap.put("sales", 14);
-        hashmap.put("marketing", 14);
-        hashmap.put("scientist", 15);
-        hashmap.put("self-employed", 16);
-        hashmap.put("technician", 17);
-        hashmap.put("engineer", 17);
-        hashmap.put("tradesman", 18);
-        hashmap.put("craftsman", 18);
-        hashmap.put("unemployed", 19);
-        hashmap.put("writer", 20);
-    }
-
     public static void setGenres(Set<String> set) throws IOException {
         BufferedReader scan = new BufferedReader(new InputStreamReader(Utils.class.getClassLoader().getResourceAsStream("data/movies.dat")));
         String line;

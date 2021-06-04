@@ -2,11 +2,10 @@ package com.main;
 import java.io.*;
 import java.util.*;
 import org.json.JSONObject;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.junit.internal.runners.ErrorReportingRunner;
+import org.springframework.web.bind.annotation.*;
 
+@CrossOrigin(origins = "*")
 @RestController
 public class MainController {
 
@@ -24,15 +23,15 @@ public class MainController {
         saveMovies();
         saveRatings();
     }
-
-
+    @ResponseBody
     @GetMapping("/users/recommendations")
-    public String getMovies(
+    public List<?> getMovies(
             @RequestParam(value = "gender", defaultValue = "") String gender,
             @RequestParam(value = "age", defaultValue = "") String age,
             @RequestParam(value = "occupation", defaultValue = "") String occupation,
             @RequestParam(value = "genre", defaultValue = "") String genre
     ) {
+        List<Error> err = new ArrayList<>();
         try{
             HashMap<String,String> args = new HashMap<>();
             args.put("gender",gender);
@@ -41,8 +40,8 @@ public class MainController {
             args.put("genre",genre);
             return Main.getMovies(args,userDAL,movieDAL,ratingDAL);
         }catch (Exception e){
-            e.printStackTrace();
-            return e.getMessage()+" Please pass json in right format\n";
+            err.add(new Error(e.getMessage()));
+            return err;
         }
     }
     @GetMapping("/users")
@@ -128,9 +127,10 @@ public class MainController {
 
 
     @GetMapping("/movies/recommendations")
-    public String getRecommendations( @RequestParam(value = "title", defaultValue = "") String title,
+    public List<?> getRecommendations( @RequestParam(value = "title", defaultValue = "") String title,
                                       @RequestParam(value = "limit", defaultValue = "10") String limit
                                       ) {
+        List<Error> err = new ArrayList<>();
         try {
             HashMap<String,String> args = new HashMap<>();
             args.put("title",title);
@@ -138,7 +138,8 @@ public class MainController {
             return Main.recommendMovies(args,userDAL,movieDAL,ratingDAL);
         }catch (Exception e){
             e.printStackTrace();
-            return "Please pass json in right format\n";
+            err.add(new Error("Please pass json in right format\n"));
+            return err;
         }
     }
 }

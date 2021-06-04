@@ -30,7 +30,7 @@
     <br> <br> <br>
     
     <div id="body1">
-      <form action="movies/recommendations" method="GET" >
+      <form id="movies" action="movies/recommendations" method="GET" >
       <label for="title">Enter movie title:</label>
       <input name="title" type="text"><br>
       <label for="limit">Enter movie number limit:</label>
@@ -41,7 +41,7 @@
     </div>
   
     <div id="body2" style="display: none;">
-      <form action="users/recommendations" method="GET">
+      <form id="users" action="users/recommendations" method="GET">
         <label for="gender">Gender:</label>
         <select name="gender" id="Gender">
           <option value="m">Male</option>
@@ -95,16 +95,13 @@
       </form>
     </div>
 
-    <div class="card" style="width: 18rem;">
-      <img src="https://m.media-amazon.com/images/M/MV5BMDU2ZWJlMjktMTRhMy00ZTA5LWEzNDgtYmNmZTEwZTViZWJkXkEyXkFqcGdeQXVyNDQ2OTk4MzI@..jpg" class="card-img-top">
-      <div class="card-body">
-        <h5 class="card-title">Toy Story</h5>
-        <p class="card-text">Watch me, please!</p>
-        <a target="_blank" href="https://www.imdb.com/title/tt0114709/" class="btn btn-primary">Watch</a>
-      </div>
-    </div>
-
-
+<!--    <div class="card" style="width: 18rem;">-->
+<!--      <img src="https://m.media-amazon.com/images/M/MV5BMDU2ZWJlMjktMTRhMy00ZTA5LWEzNDgtYmNmZTEwZTViZWJkXkEyXkFqcGdeQXVyNDQ2OTk4MzI@..jpg" class="card-img-top">-->
+<!--      <div class="card-body">-->
+<!--        <h5 class="card-title">Toy Story</h5>-->
+<!--        <p class="card-text">Watch me, please!</p>-->
+<!--        <a target="_blank" href="https://www.imdb.com/title/tt0114709/" class="btn btn-primary">Watch</a>-->
+<!--      </div>-->
+<!--    </div>-->
   </body>
-
-</html>
+  <script src="index.js"></script>
