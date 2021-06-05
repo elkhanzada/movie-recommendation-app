@@ -32,11 +32,10 @@
     <div id="body1">
       <form id="movies" action="movies/recommendations" method="GET" >
       <label for="title">Enter movie title:</label>
-      <input name="title" type="text"><br>
+      <input required name="title" type="text"><br>
       <label for="limit">Enter movie number limit:</label>
-      <input name="limit" type="number" value="10"> <br>
+      <input name="limit" type="number" value="10"> <br> <br>
       <input class="btn btn-primary" type="submit" value="Search">
-      <br> <br>
     </form>
     </div>
   
@@ -44,12 +43,14 @@
       <form id="users" action="users/recommendations" method="GET">
         <label for="gender">Gender:</label>
         <select name="gender" id="Gender">
+          <option value="">All</option>
           <option value="m">Male</option>
           <option value="f">Female</option>
         </select>
 
         <label for="age">Age:</label>
         <select name="age">
+          <option value="">All</option>
           <option value="1">0-17</option>
           <option value="18">18-24</option>
           <option value="25">25-34</option>
@@ -61,6 +62,7 @@
 
         <label for="occupation">Occupation:</label>
         <select name="occupation">
+          <option value="">All</option>
           <option value="1">Academic/Educator</option>
           <option value="2">Artist</option>
           <option value="3">Clerical/Admin</option>
