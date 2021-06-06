@@ -73,10 +73,14 @@ public class Utils {
         return null;
     }
 
-    public static List<List<User>> getAllUsers(String work, Integer occupation, Integer age, String gender, UserDAL userDAL) throws IOException {
+    public static List<List<User>> getAllUsers(Integer occupation, Integer age, String gender, UserDAL userDAL) throws IOException {
         List<List<User>> lists = new ArrayList<>();
+        if(occupation==-1&&age==-1&&gender.equals("")) {
+            lists.add(userDAL.getSpecificUsers(occupation, age, gender));
+            return lists;
+        }
         lists.add(userDAL.getSpecificUsers(occupation, age, gender));
-        lists.add(userDAL.getSpecificUsers(occupation, age, gender));
+        lists.add(userDAL.getSpecificUsers(-1, age, gender));
         lists.add(userDAL.getSpecificUsers(occupation, age, ""));
         lists.add(userDAL.getSpecificUsers(occupation, -1, gender));
         lists.add(userDAL.getSpecificUsers(-1, age, ""));

@@ -29,7 +29,7 @@
     <button id="titleButton" onclick="showTitle()">Title based recommendation</button> 
     <br> <br> <br>
     
-    <div id="body1">
+    <div id="body1"  style="display: none;">
       <form id="movies" action="movies/recommendations" method="GET" >
       <label for="title">Enter movie title:</label>
       <input required name="title" type="text"><br>
@@ -39,7 +39,7 @@
     </form>
     </div>
   
-    <div id="body2" style="display: none;">
+    <div id="body2">
       <form id="users" action="users/recommendations" method="GET">
         <label for="gender">Gender:</label>
         <select name="gender" id="Gender">

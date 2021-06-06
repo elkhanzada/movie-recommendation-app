@@ -123,20 +123,12 @@ public class Main extends SpringBootServletInitializer {
         //! toLowerCase may fail for ! character? or \?
 
         try {
-            Integer occup_id = -1;
+            int occup_id = -1;
             work = args.get("occupation").toLowerCase();
             if (work.compareTo("") != 0)
                 occup_id = Integer.parseInt(args.get("occupation"));
-            //* Occupation check
-            if (occup_id == null) {
-                errorMessage.append("There is no such registered occupation as ").append(work).append("!\n");
-                errorMessage.append("If you want to see some other ratings, please use \"other\" as an argument\n");
-                err.add(new Error(errorMessage.toString()));
-                return err;
-            }
-
             //* Here, real implementation begins
-            List<List<User>> userLists = Utils.getAllUsers(work, occup_id, age, gender,userDAL);
+            List<List<User>> userLists = Utils.getAllUsers(occup_id, age, gender,userDAL);
            List<Movie> movies = Utils.getMovies(genres, "",movieDAL);
             //Check if movieID is empty
             if (movies.size() <= 0) {
@@ -144,8 +136,7 @@ public class Main extends SpringBootServletInitializer {
                 err.add(new Error(errorMessage.toString()));
                 return err;
             }
-            List<Movie> top10 = Utils.getTopN(userLists, movies,ratingDAL, 10);
-            return top10;
+            return Utils.getTopN(userLists, movies,ratingDAL, 10);
         }
 
         //* Developer's helpers
