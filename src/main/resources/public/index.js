@@ -28,7 +28,6 @@ $(document).ready(function() {
     function selectMovie(value) {
         $("#title").val(value);
         $("#suggestion-box").hide();
-        console.log("I am here")
     }
     $('#users').submit(function() { // catch the form's submit event
         $.ajax({ // create an AJAX call...
