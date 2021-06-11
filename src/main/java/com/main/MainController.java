@@ -31,6 +31,7 @@ public class MainController {
             @RequestParam(value = "genre", defaultValue = "") String genre
     ) {
         List<Error> err = new ArrayList<>();
+        genre = genre.replace(",","|");
         try{
             HashMap<String,String> args = new HashMap<>();
             args.put("gender",gender);
