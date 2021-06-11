@@ -8,4 +8,5 @@ public interface MovieDAL {
     void deleteAll();
     Movie findMovie(String name);
     List<Movie> getSpecificMovies(String[] genres, String exclude);
+    List<Movie> getSuggestions(String key);
 }

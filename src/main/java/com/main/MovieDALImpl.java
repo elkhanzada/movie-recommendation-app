@@ -7,6 +7,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;
+import java.util.regex.Pattern;
 
 @Repository
 public class MovieDALImpl implements MovieDAL{
@@ -50,5 +51,13 @@ public class MovieDALImpl implements MovieDAL{
        movies.clear();
        movies.addAll(set);
         return movies;
+    }
+
+    @Override
+    public List<Movie> getSuggestions(String key) {
+        Query query = new Query();
+        Pattern pattern = Pattern.compile(Pattern.quote(key));
+        query.addCriteria(Criteria.where("title").regex(pattern));
+        return mt.find(query,Movie.class);
     }
 }

@@ -34,14 +34,16 @@
     <div id="body1"  style="display: none;">
       <form id="movies" action="movies/recommendations" method="GET" >
         <!-- <label for="title">Enter movie title:</label> -->
-        <div class="input-group mb-3">
-          <span class="input-group-text" id="inputGroup-sizing-default">Enter movie title</span>
-          <input  required name="title" type="text" class="form-inline">
-        </div>
         <!-- <input required name="title" type="text"><br> -->
         <div class="input-group mb-3">
-          <span class="input-group-text" id="inputGroup-sizing-default">Number of movies:</span>
+          <span class="input-group-text">Number of movies:</span>
           <input value="10" name="limit" type="number" class="form-inline">
+        </div>
+        <div class="input-group mb-3">
+          <span class="input-group-text">Enter movie title</span>
+          <input  required id = "title" name="title" type="text" class="form-inline">
+          <div id="suggestion-box">
+          </div>
         </div>
         <!-- <label for="limit">Enter movie number limit:</label> -->
         <!-- <input name="limit" type="number" value="10">  -->
@@ -62,7 +64,7 @@
         </select>
 
         <label for="age">Age:</label>
-        <select name="age">
+        <select id = "age" name="age">
           <option value="">All</option>
           <option value="1">0-17</option>
           <option value="18">18-24</option>
@@ -74,7 +76,7 @@
         </select> <br>
 
         <label for="occupation">Occupation:</label>
-        <select name="occupation">
+        <select id = "occupation" name="occupation">
           <option value="">All</option>
           <option value="1">Academic/Educator</option>
           <option value="2">Artist</option>

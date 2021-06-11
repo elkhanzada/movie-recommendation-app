@@ -44,6 +44,10 @@ public class MainController {
             return err;
         }
     }
+    @PostMapping("/autocomplete")
+    public List<Movie> getSpecificMovies(@RequestParam(value = "keyword",defaultValue = "") String key){
+        return movieDAL.getSuggestions(key.toLowerCase());
+    }
     @GetMapping("/movies")
     public List<Movie> getAllMovies() {
         return movieDAL.getAllMovies();

@@ -19,6 +19,17 @@ $(document).ready(function() {
             makeCards(value)
         });
     }
+
+    function makeLists(value) {
+        return $("<li>").html(value).bind("click",function () {
+            selectMovie(value)
+        })
+    }
+    function selectMovie(value) {
+        $("#title").val(value);
+        $("#suggestion-box").hide();
+        console.log("I am here")
+    }
     $('#users').submit(function() { // catch the form's submit event
         $.ajax({ // create an AJAX call...
             data: $(this).serialize(), // get the form data
@@ -40,5 +51,28 @@ $(document).ready(function() {
             }
         });
         return false; // cancel original event to prevent form submitting
+    });
+    $("#title").keyup(function(){
+        $.ajax({
+            type: "POST",
+            url: "autocomplete",
+            data:'keyword='+$(this).val(),
+            beforeSend: function(){
+                $("#title").css("background","#FFF url(LoaderIcon.gif) no-repeat 165px");
+            },
+            success: function(data){
+                $("#movie-list").remove()
+                $("#suggestion-box").show()
+                var ul = $("<ul>").attr("id","movie-list").appendTo("#suggestion-box");
+                var i  = 0;
+                $.each(data, function(key,value) {
+                    var li = makeLists(value.title.toUpperCase());
+                    li.appendTo(ul)
+                    i+=1
+                    return i<10;
+                });
+                $("#title").css("background","#FFF");
+            }
+        });
     });
 });

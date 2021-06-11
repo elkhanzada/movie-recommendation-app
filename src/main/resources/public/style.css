@@ -13,10 +13,8 @@ body {
     
 }
 
-/* #body1 {
-    margin: 500px;
-}
-
-#body1 {
-    margin: 500px;
-} */
+.frmSearch {border: 1px solid #a8d4b1;background-color: #c6f7d0;margin: 2px 0px;padding:40px;border-radius:4px;}
+#movie-list{float:left;list-style:none;margin-top:-3px;padding:0;width:190px;position: absolute;}
+#movie-list li{padding: 10px; background: #f0f0f0; border-bottom: #bbb9b9 1px solid;}
+#movie-list li:hover{background:#ece3d2;cursor: pointer;}
+#title{padding: 10px;border: #a8d4b1 1px solid;border-radius:4px;}
