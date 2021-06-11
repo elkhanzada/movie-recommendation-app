@@ -1,8 +1,9 @@
 $(document).ready(function() {
     function makeCards(value){
-        if(value.hasOwnProperty("error")){
+        if (value.hasOwnProperty("error")) {
             alert(value.error)
-        }else {
+        }
+        else {
             var main = $("<div>").addClass("card").css("width","18rem")
             var img = $("<img>").attr("src",value.poster).attr("onerror", "this.src = 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1200px-No-Image-Placeholder.svg.png'").appendTo(main);
             var child = $("<div>").addClass("card-body").appendTo(main)
