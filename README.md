@@ -2,7 +2,7 @@
 In this repository, we recommend top 10 movies from given user data and for given genres (if applicable) and suggest top **N** (given by user) movies based on chosen movie.
 # Algorithm
 The implementation of our algorithm is located in [Utils.java](src/main/java/com/utils/Utils.java)
-
+ 
 
 For this milestone, here is what we did for first part. We first got the movies based on genres (if given) as well as the users based on given user data. After grouping them, we used [IMDB ranking formula](https://www.fxsolver.com/browse/formulas/Bayes+estimator+-+Internet+Movie+Database+%28IMDB%29) to sort the movies which are rated by people with given user data. The formula is as follows
 
