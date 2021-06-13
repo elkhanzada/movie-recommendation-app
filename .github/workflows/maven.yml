@@ -19,5 +19,11 @@ jobs:
         java-version: '11'
         distribution: adopt
         architecture: x64
+    - name: Start MongoDB
+      uses: supercharge/mongodb-github-action@1.6.0
+      with:
+        mongodb-version: ${{ matrix.mongodb-version }}
+        mongodb-replica-set: test-rs
+        mongodb-port: 27017
     - name: Test with maven
       run: mvn -B test --file pom.xml
