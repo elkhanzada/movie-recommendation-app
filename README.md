@@ -34,7 +34,7 @@ Java 1.11 (Please set ```JAVA_HOME``` before running the code)
 \
 Maven
 \
-MongoDB
+MongoDB (Please run mongodb at port number 27017)
 ### Check out the source code
 ```bash
 $ git clone https://github.com/elkhan199/group9.git [destinationPath]
@@ -50,8 +50,8 @@ $ java -jar target/group9-1.0-SNAPSHOT.jar
 ```
 It will run the server locally and in your browser, go to this link -> http://localhost:8080/ 
 # Instruction for docker users
-### Building the image and accessing to the container
-```Dockerfile``` and the script to access the container is located in ```scripts``` folder
+### Building the image and running the server
+```Dockerfile``` and the script to run the server in container is located in ```scripts``` folder
 ```bash
 $ cd scripts/ && sh docker_run.sh [image_name]
 ```
