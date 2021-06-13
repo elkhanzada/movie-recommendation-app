@@ -1,5 +1,7 @@
 # What this repository is about
-In this repository, we recommend top 10 movies from given user data and for given genres (if applicable) and suggest top **N** (given by user) movies based on chosen movie.
+In this repository, we developed a website in which we recommend top 10 movies from given user data and for given genres (if chosen) and suggest top **N** (given by user) movies based on chosen movie.
+User data contains attributes such as ```gender```,```age```, and ```occupation```. Each recommended movie will have its name, poster (if available),
+genre information and a button that will take you to its IMDB profile.
 # Algorithm
 The implementation of our algorithm is located in [Utils.java](src/main/java/com/utils/Utils.java)
  
@@ -31,6 +33,8 @@ for given genres,then we print the other movies (second priority) based on the s
 Java 1.11 (Please set ```JAVA_HOME``` before running the code)
 \
 Maven
+\
+MongoDB
 ### Check out the source code
 ```bash
 $ git clone https://github.com/elkhan199/group9.git [destinationPath]
@@ -40,84 +44,24 @@ $ cd [destinationPath]
 ```bash
 $ mvn package
 ```
+### Usage
+```bash
+$ java -jar target/group9-1.0-SNAPSHOT.jar
+```
+It will run the server locally and in your browser, go to this link -> http://localhost:8080/ 
 # Instruction for docker users
 ### Building the image and accessing to the container
 ```Dockerfile``` and the script to access the container is located in ```scripts``` folder
 ```bash
 $ cd scripts/ && sh docker_run.sh [image_name]
 ```
-### Build and run
-Once you are in the container, please run ```run.sh``` script as follows
-```bash
-$ . run.sh
-```
-It will print output for the example arguments.
-# Usage
-We integrated Spring. First, you need to run the server with following command.
-```bash
-$ java -jar target/group9-1.0-SNAPSHOT.jar
-```
-If you want to get movies based on user data and genres, run this command.
-```bash
-$ curl -X GET http://localhost:8080/users/recommendations -H 'Content-type:application/json' -d '{"gender" : "[gender]", "age" :"[age]", "occupation" : "[occupation]", "genre" : "[genre_1|genre_2]"}'
-```
-e.g.:
-```bash
-$ curl -X GET http://localhost:8080/users/recommendations -H 'Content-type:application/json' -d '{"gender" : "F", "age" :"25", "occupation" : "gradstudent", "genre" : "Action|War"}'
-```
-If you want to get movies based on the movie title, run this command.
-```bash
-$ curl -X GET http://localhost:8080/movies/recommendations -H 'Content-type:application/json' -d '{"title" : "[movie_title]", "limit":[limit]}'
-```
-e.g.:
-```bash
-$ curl -X GET http://localhost:8080/movies/recommendations -H 'Content-type:application/json' -d '{"title" : "Toy Story (1995)", "limit": 20}'
-```
-It is allowed to leave the values of ```gender```, ```age```, ```occupation```, ```genre``` keys as empty. Passing ```limit``` key (default is 10) is optional.
-
-These are the all available occupations we currently have
-| Occupation list      |
-|----------------------|
-| academic/educator    |
-| artist               |
-| clerical/admin       |
-| college/gradstudent  |
-| customerservice      |
-| doctor/healthcare    |
-| executive/managerial |
-| farmer               |
-| homemaker            |
-| K-12student          |
-| lawyer               |
-| programmer           |
-| retired              |
-| sales/marketing      |
-| scientist            |
-| self-employed        |
-| technician/engineer  |
-| tradesman/craftsman  |
-| unemployed           |
-| writer               |
-| other                |
-
+### Usage
+If the image is successfully built and run, in your browser go to the following link -> http://localhost:8080/group9
 # Troubleshooting
 
-Input requirements:
-1) All the keys in the first part and title in the second part are required. Otherwise, an appropriate error message will be given.
-2) Gender, genre, occupation, title strings are not case sensitive.
-3) Genres must be split by '|' character, otherwise an appropriate error message will be given.
-4) User must include each possible genre maximum once, otherwise an appropriate error message will be given.
-5) If occupation string is not one of specified user occupations (not an educator, student or else) or not equal to "other", then appropriate error message will be given. 
-6) All the values of key may be left empty except of the title key. It must contain at least one movie. Otherwise, an appropriate error message will be given.
-7) If you pass json string in wrong format, then an appropriate error message will be given.
-8) If chosen movie title is not found in our dataset, then an appropriate error message will be given.
-9) For the first part,  you must pass exactly 4 keys and for the second part you must pass either 1 or 2 keys. Otherwise, an appropriate error message will be given.
-10) Passing floating numbers to the limit key will result in flooring the number passed and using the obtained value.
-11) No spaces are allowed
-
-Output:
-1) If every input requirement is satisfied, then the program will return json array that contains movies with their titles, genres, corresponding [IMDB](https://www.imdb.com/) links.
-
+Important notes:
+1) Our algorithm is slow. It might take 30-40 seconds to get the movie list.
+2) If the chosen movie does not exist, the user will be alarmed
 
 
 # Contribution
