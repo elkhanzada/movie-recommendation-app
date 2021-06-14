@@ -4,10 +4,13 @@ User data contains attributes such as ```gender```,```age```, and ```occupation`
 genre information and a button that will take you to its IMDB profile.
 
 # Overview of the website
-User based recommendation will print 10 movies based on the information provided by user
-<img src="https://user-images.githubusercontent.com/56426592/121847680-ec7b8700-cd23-11eb-9e67-710988f02e79.png" width="150" height="150">
+User based recommendation will print 10 movies based on the information provided by user:
 
-Title based recommendation will print specified number of movies that similar to the movie in title
+<img width="1440" alt="Screen Shot 2021-06-14 at 15 01 16" src="https://user-images.githubusercontent.com/56426592/121857942-112a2b80-cd31-11eb-9a94-dc99831526ef.png">
+
+Title based recommendation will print specified number of movies that similar to the movie in title:
+
+<img width="1440" alt="Screen Shot 2021-06-14 at 15 08 09" src="https://user-images.githubusercontent.com/56426592/121858064-31f28100-cd31-11eb-8aa8-6c5484cb195f.png">
 
 # Algorithm
 The implementation of our algorithm is located in [Utils.java](src/main/java/com/utils/Utils.java)
