@@ -8,7 +8,10 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin(origins = "*")
 @RestController
 public class MainController {
-
+    // Useful information for fast
+    public static List<Rating> allRatings;
+    public static int numOfMovies = 0;
+    public static int numOfUsers = 0;
     private final UserDAL userDAL;
     private final MovieDAL movieDAL;
     private final RatingDAL ratingDAL;
@@ -78,6 +81,7 @@ public class MainController {
             String poster = moviePosters.get(Integer.parseInt(movie[0]));
             String link = movieLinks.get(Integer.parseInt(movie[0]));
             Movie mv = new Movie(Integer.parseInt(movie[0]),movie[1].toLowerCase(),movie[2].toLowerCase(),poster==null?"https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1200px-No-Image-Placeholder.svg.png":poster, link==null?"http://www.imdb.com/":"http://www.imdb.com/title/tt"+link);
+            numOfMovies+=1;
             movieDAL.addNewMovie(mv);
         }
         scan3.close();
@@ -90,6 +94,7 @@ public class MainController {
         String line;
         while ((line = scan.readLine()) != null) {
             String[] user = line.split("::");
+            numOfUsers+=1;
             userDAL.addNewUser(new User(Integer.parseInt(user[0]),user[1].toLowerCase(),Integer.parseInt(user[2]),Integer.parseInt(user[3])));
         }
     }
@@ -121,6 +126,7 @@ public class MainController {
                 ratings.add(rat);
             }
         }
+        allRatings = ratings;
         ratingDAL.addNewRating(ratings);
     }
 

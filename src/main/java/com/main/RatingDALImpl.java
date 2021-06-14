@@ -34,6 +34,8 @@ public class RatingDALImpl implements RatingDAL{
     @Override
     public List<Rating> getSpecificRatings(List<User> users, List<Movie> movies) {
         List<Rating> ratings = new ArrayList<>();
+        if(users.size()+movies.size()==MainController.numOfUsers+MainController.numOfMovies)
+            return MainController.allRatings;
         for(Movie movie: movies){
             Query query = new Query();
             query.addCriteria(Criteria.where("movieId").is(movie.getMovieID()));

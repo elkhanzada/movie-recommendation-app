@@ -52,7 +52,7 @@ public class Main extends SpringBootServletInitializer {
         int age;
         String work;
         boolean is_empty = false;
-        String[] genres = new String[5];
+        String[] genres = null;
         StringBuilder errorMessage = new StringBuilder();
         List<Error> err = new ArrayList<>();
         Set<String> genreTypes = new HashSet<String>();
@@ -129,7 +129,7 @@ public class Main extends SpringBootServletInitializer {
                 occup_id = Integer.parseInt(args.get("occupation"));
             //* Here, real implementation begins
             List<List<User>> userLists = Utils.getAllUsers(occup_id, age, gender,userDAL);
-           List<Movie> movies = Utils.getMovies(genres, "",movieDAL);
+            List<Movie> movies = genres==null?movieDAL.getAllMovies():Utils.getMovies(genres, "",movieDAL);
             //Check if movieID is empty
             if (movies.size() <= 0) {
                 errorMessage.append("No movie found that satisfies requested genres: ").append(args.get("genre")).append("\n");

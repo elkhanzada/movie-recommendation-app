@@ -23,12 +23,23 @@ public class Utils {
             List<Rating> ratings = Utils.getRatings(list,movies,ratingDAL);
             HashMap<Integer, Double> scores = new HashMap<>();
             for (Rating rating: ratings) {
-                allvotes += rating.getVotes(list);
-                totalMean += rating.getAverage(list);
+                if(list.size()==MainController.numOfUsers){
+                    allvotes+=rating.getVotes();
+                    totalMean+=rating.getAverage();
+                }else {
+                    allvotes += rating.getVotes(list);
+                    totalMean += rating.getAverage(list);
+                }
             }
             if (allvotes != 0)
                 totalMean /= allvotes;
             for (Rating rating: ratings) {
+                if(list.size()==MainController.numOfUsers){
+                    scores.put(rating.getMovieId(), weightedRating(rating.getAverage(),
+                            rating.getVotes(list),
+                            10,
+                            totalMean));
+                }else
                 scores.put(rating.getMovieId(), weightedRating(rating.getAverage(list),
                         rating.getVotes(list),
                         10,
