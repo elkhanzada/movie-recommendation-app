@@ -5,6 +5,7 @@ genre information and a button that will take you to its IMDB profile.
 
 # Overview of the website
 User based recommendation will print 10 movies based on the information provided by user
+<img src="https://user-images.githubusercontent.com/56426592/121847680-ec7b8700-cd23-11eb-9e67-710988f02e79.png" width="150" height="150">
 
 Title based recommendation will print specified number of movies that similar to the movie in title
 
