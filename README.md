@@ -4,6 +4,9 @@ User data contains attributes such as ```gender```,```age```, and ```occupation`
 genre information and a button that will take you to its IMDB profile.
 
 # Overview of the website
+User based recommendation will print 10 movies based on the information provided by user
+
+Title based recommendation will print specified number of movies that similar to the movie in title
 
 # Algorithm
 The implementation of our algorithm is located in [Utils.java](src/main/java/com/utils/Utils.java)
