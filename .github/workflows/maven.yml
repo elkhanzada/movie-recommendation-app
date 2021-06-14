@@ -26,4 +26,4 @@ jobs:
         mongodb-replica-set: test-rs
         mongodb-port: 27017
     - name: Test with maven
-      run: mvn -B test --file pom.xml
+      run: mvn -B package --file pom.xml
