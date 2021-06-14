@@ -2,6 +2,9 @@
 In this repository, we developed a website in which we recommend top 10 movies from given user data and for given genres (if chosen) and suggest top **N** (given by user) movies based on chosen movie.
 User data contains attributes such as ```gender```,```age```, and ```occupation```. Each recommended movie will have its name, poster (if available),
 genre information and a button that will take you to its IMDB profile.
+
+# Overview of the website
+
 # Algorithm
 The implementation of our algorithm is located in [Utils.java](src/main/java/com/utils/Utils.java)
  
