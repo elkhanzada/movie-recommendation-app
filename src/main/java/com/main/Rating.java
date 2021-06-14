@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+//This class is to query rating information from the db
 public class Rating {
     private ArrayList<Integer> userIds;
     private int score;
