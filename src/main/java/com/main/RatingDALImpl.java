@@ -42,7 +42,7 @@ public class RatingDALImpl implements RatingDAL{
             Rating rt = mt.findOne(query,Rating.class);
             if(rt!=null) {
                 for (User user : users) {
-                    if (rt.getUserIds().contains(user.getUserId())) {
+                    if (rt.getUserIds().get(user.getUserId())!=null) {
                         ratings.add(rt);
                         break;
                     }

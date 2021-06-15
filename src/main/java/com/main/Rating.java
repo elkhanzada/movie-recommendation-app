@@ -6,7 +6,7 @@ import java.util.List;
 
 //This class is to query rating information from the db
 public class Rating {
-    private ArrayList<Integer> userIds;
+    private HashMap<Integer,Integer> userIds;
     private int score;
     private HashMap<Integer, Integer> userScores;
     private int movieId;
@@ -32,7 +32,7 @@ public class Rating {
     public int getVotes(List<User> users) {
         int votes = 0;
         for(User user: users){
-            if(userIds.contains(user.getUserId()))
+            if(userIds.get(user.getUserId())!=null)
                 votes++;
         }
         return votes;
@@ -41,7 +41,7 @@ public class Rating {
         this.movieId = movieId;
         this.score = score;
         this.votes = 1;
-        userIds = new ArrayList<>();
+        userIds = new HashMap<>();
         userScores = new HashMap<>();
     }
 
@@ -49,7 +49,7 @@ public class Rating {
         this.score = score;
     }
 
-    public ArrayList<Integer> getUserIds() {
+    public HashMap<Integer, Integer> getUserIds() {
         return userIds;
     }
     public int getScore() {
@@ -79,7 +79,7 @@ public class Rating {
     }
 
     public void addUser(int id) {
-        userIds.add(id);
+        userIds.put(id,id);
     }
     public void addUserScore(int id, int score) {
         userScores.put(id,score);

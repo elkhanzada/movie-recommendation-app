@@ -36,7 +36,7 @@ public class Utils {
             for (Rating rating: ratings) {
                 if(list.size()==MainController.numOfUsers){
                     scores.put(rating.getMovieId(), weightedRating(rating.getAverage(),
-                            rating.getVotes(list),
+                            rating.getVotes(),
                             10,
                             totalMean));
                 }else
