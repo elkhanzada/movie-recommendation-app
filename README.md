@@ -70,7 +70,7 @@ If the image is successfully built and run, in your browser go to the following 
 # Troubleshooting
 
 Important notes:
-1) Our algorithm is slow. It might take 30-40 seconds to get the movie list.
+1) Our algorithm is slow. It might take 5-10 seconds to get the movie list.
 2) If the chosen movie does not exist, the user will be alarmed
 
 
