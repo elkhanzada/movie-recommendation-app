@@ -14,7 +14,6 @@ $(document).ready(function() {
         }
     }
     function startBuilding(res) {
-        $(".card").remove();
         $.each(res, function(key,value) {
             makeCards(value)
         });
@@ -34,7 +33,12 @@ $(document).ready(function() {
             data: $(this).serialize(), // get the form data
             type: $(this).attr('method'), // GET or POST
             url: $(this).attr('action'), // the file to call
+            beforeSend: function () {
+                $(".card").remove();
+                $("#loading").show()
+            },
             success: function(res) { // on success..
+                $("#loading").hide()
                 startBuilding(res)
             }
         });
@@ -45,7 +49,12 @@ $(document).ready(function() {
             data: $(this).serialize(), // get the form data
             type: $(this).attr('method'), // GET or POST
             url: $(this).attr('action'), // the file to call
+            beforeSend: function () {
+                $(".card").remove();
+                $("#loading").show()
+            },
             success: function(res) { // on success..
+                $("#loading").hide()
                 startBuilding(res)
             }
         });
