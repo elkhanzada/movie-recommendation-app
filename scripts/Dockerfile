@@ -11,7 +11,7 @@ RUN wget http://mirror.23media.de/apache/tomcat/tomcat-8/v8.5.30/bin/apache-tomc
 RUN cd /tmp && tar xvfz tomcat.tar.gz
 RUN mkdir /usr/local/tomcat
 RUN cp -Rv /tmp/apache-tomcat-8.5.30/* /usr/local/tomcat/
-COPY group9-1.0-SNAPSHOT.war /usr/local/tomcat/webapps/group9.war
+COPY group9.war /usr/local/tomcat/webapps/
 WORKDIR /root/project
 ENV JAVA_HOME /usr/lib/jvm/java-11-openjdk-amd64/
 COPY run.sh .
