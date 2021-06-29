@@ -75,6 +75,6 @@ Important notes:
 
 
 # Contribution
-- Kasymzhan Abdyldayev (20182002) - Algorithm implementation (Part II)
-- Elkhan Ismayilzada (20182010) - Spring Integration, Error Handling, README
-- Aibar Oshakbayev (20182021) - Testing
+- Kasymzhan Abdyldayev (20182002) - Frontend
+- Elkhan Ismayilzada (20182010) - Spring, MongoDB
+- Aibar Oshakbayev (20182021) - Error Handling,Testing
