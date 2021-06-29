@@ -77,4 +77,4 @@ Important notes:
 # Contribution
 - Kasymzhan Abdyldayev (20182002) - Frontend
 - Elkhan Ismayilzada (20182010) - Spring, MongoDB
-- Aibar Oshakbayev (20182021) - Error Handling,Testing
+- Aibar Oshakbayev (20182021) - Error Handling, Testing
