@@ -47,7 +47,7 @@ Maven
 MongoDB (Please run mongodb at port number 27017)
 ### Check out the source code
 ```bash
-$ git clone https://github.com/elkhan199/group9.git [destinationPath]
+$ git clone https://github.com/elkhanzada/movie-recommendation-app.git [destinationPath]
 $ cd [destinationPath]
 ```
 ### Build
